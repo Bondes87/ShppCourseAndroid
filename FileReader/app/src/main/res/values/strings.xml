@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FileReader</string>
+    <string name="read_file">Read File</string>
+    <string name="file_name">"poem.txt"</string>
 </resources>
