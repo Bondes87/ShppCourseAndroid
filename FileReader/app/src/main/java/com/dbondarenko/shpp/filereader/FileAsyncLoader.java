@@ -37,13 +37,13 @@ public class FileAsyncLoader extends AsyncTaskLoader<String> {
         AssetManager assetManager = getContext().getAssets();
         String result = null;
         if (!TextUtils.isEmpty(fileName)) {
-            InputStream inputStream = null;
-            try {
-                inputStream = assetManager.open(fileName);
+            //InputStream inputStream = null;
+            try ( InputStream inputStream=assetManager.open(fileName)){
+                //inputStream = ;
                 result = convertStreamToString(inputStream);
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
+            }/* finally {
                 try {
                     if (inputStream != null) {
                         inputStream.close();
@@ -51,7 +51,7 @@ public class FileAsyncLoader extends AsyncTaskLoader<String> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
         }
         return result;
     }
