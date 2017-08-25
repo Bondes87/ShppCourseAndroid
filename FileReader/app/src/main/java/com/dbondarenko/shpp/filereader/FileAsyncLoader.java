@@ -14,6 +14,8 @@ import java.io.Writer;
 
 /**
  * File: FileAsyncLoader.java
+ * The class in which the content is downloaded from the file.
+ * The file is located in the Assets folder.
  * Created by Dmitro Bondarenko on 24.08.2017.
  */
 public class FileAsyncLoader extends AsyncTaskLoader<String> {
@@ -37,21 +39,11 @@ public class FileAsyncLoader extends AsyncTaskLoader<String> {
         AssetManager assetManager = getContext().getAssets();
         String result = null;
         if (!TextUtils.isEmpty(fileName)) {
-            //InputStream inputStream = null;
-            try ( InputStream inputStream=assetManager.open(fileName)){
-                //inputStream = ;
+            try (InputStream inputStream = assetManager.open(fileName)) {
                 result = convertStreamToString(inputStream);
             } catch (IOException e) {
                 e.printStackTrace();
-            }/* finally {
-                try {
-                    if (inputStream != null) {
-                        inputStream.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }*/
+            }
         }
         return result;
     }
