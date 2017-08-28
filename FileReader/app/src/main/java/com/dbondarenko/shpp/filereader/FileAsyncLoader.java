@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,10 +19,13 @@ import java.io.Writer;
  * The file is located in the Assets folder.
  * Created by Dmitro Bondarenko on 24.08.2017.
  */
-public class FileAsyncLoader extends AsyncTaskLoader<String> {
+class FileAsyncLoader extends AsyncTaskLoader<String> {
+
+    private static final String LOG_TAG = "file_async_loader";
+
     private String fileName;
 
-    public FileAsyncLoader(Context context, String fileName) {
+    FileAsyncLoader(Context context, String fileName) {
         super(context);
         this.fileName = fileName;
         onContentChanged();
@@ -29,6 +33,7 @@ public class FileAsyncLoader extends AsyncTaskLoader<String> {
 
     @Override
     public void onStartLoading() {
+        Log.d(LOG_TAG, "onStartLoading");
         if (takeContentChanged()) {
             forceLoad();
         }
@@ -36,6 +41,7 @@ public class FileAsyncLoader extends AsyncTaskLoader<String> {
 
     @Override
     public String loadInBackground() {
+        Log.d(LOG_TAG, "loadInBackground");
         AssetManager assetManager = getContext().getAssets();
         String result = null;
         if (!TextUtils.isEmpty(fileName)) {
@@ -50,6 +56,7 @@ public class FileAsyncLoader extends AsyncTaskLoader<String> {
 
     @Override
     public void onStopLoading() {
+        Log.d(LOG_TAG, "onStopLoading");
         cancelLoad();
     }
 
