@@ -26,7 +26,4 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Hello World!"/>
     </ScrollView>
-
-
-
 </android.support.constraint.ConstraintLayout>
