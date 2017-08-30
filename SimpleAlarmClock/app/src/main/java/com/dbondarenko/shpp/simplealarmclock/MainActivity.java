@@ -2,18 +2,12 @@ package com.dbondarenko.shpp.simplealarmclock;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -59,15 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             hour = timePicker.getCurrentHour();
             minute = timePicker.getCurrentMinute();
         }
-        tvAlarmTime.clearComposingText();
-        /*long time = Calendar.getInstance().getTimeInMillis();
-        DateFormat simpleDateFormat = new SimpleDateFormat("HH:MM", Locale.US);
-        String date = simpleDateFormat.format(time);*/
         tvAlarmTime.setText(getResources().getString(R.string.turn_on, String.valueOf(hour),
                 minute < 10 ? "0" + minute : minute));
-        //System.currentTimeMillis();
-        //SystemClock.currentThreadTimeMillis();
-        //SimpleDateFormat("HH:MM", Locale.getDefault()).format(Calendar.getInstance().getTimeInMillis())
+        AlarmClockIntentService.startActionTurnOnAlarmClock(getApplicationContext(), String.valueOf(hour),
+                String.valueOf(minute < 10 ? "0" + minute : minute));
     }
 
     private void initViews() {
