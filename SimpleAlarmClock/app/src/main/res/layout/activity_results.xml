@@ -5,48 +5,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dbondarenko.shpp.simplealarmclock.MainActivity">
+    tools:context="com.dbondarenko.shpp.simplealarmclock.ResultsActivity">
 
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="0dp"
+    <ImageView
+        android:id="@+id/imageViewAlarm"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewAlarmTime"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/alarm"
+        />
 
     <TextView
         android:id="@+id/textViewAlarmTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:text="@string/alarm_time"
+        android:textAllCaps="true"
         android:textColor="@android:color/black"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonTurnOn"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        app:layout_constraintBottom_toTopOf="@+id/buttonTurnOff"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewAlarm"
         tools:text="Alarm time"/>
 
     <Button
-        android:id="@+id/buttonTurnOn"
-        android:layout_width="wrap_content"
+        android:id="@+id/buttonTurnOff"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="@string/button_turn_on"
+        android:text="@string/button_turn_off"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/buttonTurnOff"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewAlarmTime"/>
-
-    <Button
-        android:id="@+id/buttonTurnOff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/button_cancel"
-        app:layout_constraintBaseline_toBaselineOf="@+id/buttonTurnOn"
-        app:layout_constraintLeft_toRightOf="@+id/buttonTurnOn"
-        app:layout_constraintRight_toRightOf="parent"/>
-
 </android.support.constraint.ConstraintLayout>

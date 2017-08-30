@@ -22,13 +22,14 @@ public class AlarmClockIntentService extends IntentService {
 
     public AlarmClockIntentService() {
         super("AlarmClockIntentService");
+        setIntentRedelivery(true);
     }
 
     /**
      * Starts this service to perform action TurnOnAlarmClock with the given parameters. If
      * the service is already performing a task this action will be queued.
      */
-    public static void startActionTurnOnAlarmClock(Context context, String hour, String minute) {
+    public static void startActionTurnOnAlarmClock(Context context, int hour, int minute) {
         Intent intent = new Intent(context, AlarmClockIntentService.class);
         intent.setAction(ACTION_TURN_ON_ALARM_CLOCK);
         intent.putExtra(EXTRA_HOUR, hour);
@@ -54,9 +55,12 @@ public class AlarmClockIntentService extends IntentService {
             Log.d(LOG_TAG, "onHandleIntent()");
             final String action = intent.getAction();
             if (ACTION_TURN_ON_ALARM_CLOCK.equals(action)) {
-                String hour = intent.getStringExtra(EXTRA_HOUR);
-                String minute = intent.getStringExtra(EXTRA_MINUTE);
+                int hour = intent.getIntExtra(EXTRA_HOUR, -1);
+                int minute = intent.getIntExtra(EXTRA_MINUTE, -1);
                 waitForRightTime(hour, minute);
+                Intent dialogIntent = new Intent(getApplicationContext(), ResultsActivity.class);
+                dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(dialogIntent);
             }
         }
     }
@@ -64,18 +68,16 @@ public class AlarmClockIntentService extends IntentService {
     /**
      *
      */
-    private void waitForRightTime(String alarmHour, String alarmMinute) {
-        Log.d(LOG_TAG, "onHandleIntent() " + alarmHour);
-        Log.d(LOG_TAG, "onHandleIntent() " + alarmMinute);
+    private void waitForRightTime(int alarmHour, int alarmMinute) {
         String alarmTime = alarmHour + ":" + alarmMinute;
-        Log.d(LOG_TAG, "onHandleIntent(): alarmTime = " + alarmTime);
+        Log.d(LOG_TAG, "waitForRightTime(): alarmTime = " + alarmTime);
         String currentTime;
         do {
             Calendar calendar = Calendar.getInstance();
             int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
             int currentMinute = calendar.get(Calendar.MINUTE);
             currentTime = currentHour + ":" + currentMinute;
-            Log.d(LOG_TAG, "onHandleIntent(): currentTime = " + currentTime);
+            Log.d(LOG_TAG, "waitForRightTime(): currentTime = " + currentTime);
         }
         while (!Objects.equals(currentTime, alarmTime));
     }

@@ -11,7 +11,7 @@ import android.widget.TimePicker;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String LOG_TAG = "simple_alarm_clock";
+    private static final String LOG_TAG = "main_activity";
 
     private TimePicker timePicker;
     private Button bTurnOn;
@@ -34,12 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViews();
-
-    }
-
-    private void turnOffAlarmClock() {
-        Log.d(LOG_TAG, "Alarm clock turn off");
-        tvAlarmTime.setText(R.string.turn_off);
     }
 
     private void turnOnAlarmClock() {
@@ -55,8 +49,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         tvAlarmTime.setText(getResources().getString(R.string.turn_on, String.valueOf(hour),
                 minute < 10 ? "0" + minute : minute));
-        AlarmClockIntentService.startActionTurnOnAlarmClock(getApplicationContext(), String.valueOf(hour),
-                String.valueOf(minute < 10 ? "0" + minute : minute));
+        AlarmClockIntentService.startActionTurnOnAlarmClock(getApplicationContext(), hour, minute);
+    }
+
+    private void turnOffAlarmClock() {
+        Log.d(LOG_TAG, "Alarm clock turn off");
+        tvAlarmTime.setText(R.string.turn_off);
     }
 
     private void initViews() {

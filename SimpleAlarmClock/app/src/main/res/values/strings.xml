@@ -2,6 +2,8 @@
     <string name="app_name">SimpleAlarmClock</string>
     <string name="button_turn_on">Turn on</string>
     <string name="button_turn_off">Turn off</string>
+    <string name="button_cancel">Cancel</string>
     <string name="turn_on">The alarm is on at %1$s:%2$s</string>
     <string name="turn_off">The alarm is off</string>
+    <string name="alarm_time">%1$s:%2$s</string>
 </resources>

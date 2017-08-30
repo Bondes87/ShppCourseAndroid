@@ -19,8 +19,12 @@
 
         <service
             android:name=".AlarmClockIntentService"
-            android:exported="false">
+            android:exported="false"
+            android:process=":newproc">
         </service>
+
+        <activity android:name=".ResultsActivity">
+        </activity>
     </application>
 
 </manifest>
