@@ -17,6 +17,7 @@ public class AlarmIntentService extends IntentService {
             "com.dbondarenko.shpp.simplealarmclock.action.TurnOnAlarmClock";
     public static final String EXTRA_HOUR = "com.dbondarenko.shpp.simplealarmclock.extra.Hour";
     public static final String EXTRA_MINUTE = "com.dbondarenko.shpp.simplealarmclock.extra.Minute";
+
     private static final String LOG_TAG = "alarm_service";
 
     private boolean isAlarmCanceled;

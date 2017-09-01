@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.dbondarenko.shpp.simplealarmclock">
+          package="com.dbondarenko.shpp.simplealarmclock"
+          android:installLocation="internalOnly">
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -9,22 +12,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".AlarmActivity"
+            android:noHistory="true"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait">
+        </activity>
+
         <service
             android:name=".AlarmIntentService"
-            android:exported="false"
+            android:exported="true"
             android:process=":service">
         </service>
 
-        <activity android:name=".AlarmActivity">
-        </activity>
+        <receiver
+            android:name=".RestoreAlarmBroaadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

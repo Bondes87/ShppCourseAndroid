@@ -33,6 +33,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         setUpScreen();
         playAlarmSound();
         showAlarmTime();
+        AlarmPreference.clearTimeSettings(getApplicationContext());
     }
 
     private void initViews() {
@@ -61,6 +62,5 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         int minute = AlarmPreference.getMitute(getApplicationContext());
         tvAlarmTime.setText(getResources().getString(R.string.alarm_time, String.valueOf(hour),
                 minute < 10 ? "0" + minute : minute));
-        AlarmPreference.clearTimeSettings(getApplicationContext());
     }
 }
