@@ -18,9 +18,9 @@
         </activity>
 
         <service
-            android:name=".AlarmClockIntentService"
+            android:name=".AlarmIntentService"
             android:exported="false"
-            android:process=":newproc">
+            android:process=":service">
         </service>
 
         <activity android:name=".AlarmActivity">
