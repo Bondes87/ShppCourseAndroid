@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ResultsActivity extends AppCompatActivity implements View.OnClickListener {
+public class AlarmActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String LOG_TAG = "result_activity";
 
@@ -17,8 +17,8 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.buttonTurnOff) {
-            Log.d(LOG_TAG, "stop()");
+        if (v.getId() == R.id.buttonCancel) {
+            Log.d(LOG_TAG, "stop Alarm");
             mediaPlayer.stop();
         }
     }
@@ -42,7 +42,7 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_results);
         ImageView ivAlarm = (ImageView) findViewById(R.id.imageViewAlarm);
         TextView tvAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
-        Button bTurnOff = (Button) findViewById(R.id.buttonTurnOff);
+        Button bTurnOff = (Button) findViewById(R.id.buttonCancel);
 
         bTurnOff.setOnClickListener(this);
     }

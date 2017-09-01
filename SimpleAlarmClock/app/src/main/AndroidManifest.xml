@@ -23,7 +23,7 @@
             android:process=":newproc">
         </service>
 
-        <activity android:name=".ResultsActivity">
+        <activity android:name=".AlarmActivity">
         </activity>
     </application>
 

@@ -1,5 +1,6 @@
 package com.dbondarenko.shpp.simplealarmclock;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,13 +10,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String LOG_TAG = "main_activity";
 
     private TimePicker timePicker;
     private Button bTurnOn;
-    private Button bTurnOff;
+    private Button bCancel;
     private TextView tvAlarmTime;
 
     @Override
@@ -24,8 +26,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.buttonTurnOn:
                 turnOnAlarmClock();
                 break;
-            case R.id.buttonTurnOff:
-                turnOffAlarmClock();
+            case R.id.buttonCancel:
+                cancelAlarmClock();
                 break;
         }
     }
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate()");
         initViews();
     }
 
@@ -49,22 +52,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         tvAlarmTime.setText(getResources().getString(R.string.turn_on, String.valueOf(hour),
                 minute < 10 ? "0" + minute : minute));
-        AlarmClockIntentService.startActionTurnOnAlarmClock(getApplicationContext(), hour, minute);
+        startService(AlarmClockIntentService.newIntent(getApplicationContext(), hour, minute));
     }
 
-    private void turnOffAlarmClock() {
-        Log.d(LOG_TAG, "Alarm clock turn off");
-        tvAlarmTime.setText(R.string.turn_off);
+
+    private void cancelAlarmClock() {
+        Log.d(LOG_TAG, "Alarm clock cancel");
+        tvAlarmTime.setText(R.string.cancel);
+        stopService(new Intent(getApplicationContext(), AlarmClockIntentService.class));
     }
+
 
     private void initViews() {
         setContentView(R.layout.activity_main);
         timePicker = (TimePicker) findViewById(R.id.timePicker);
         bTurnOn = (Button) findViewById(R.id.buttonTurnOn);
-        bTurnOff = (Button) findViewById(R.id.buttonTurnOff);
+        bCancel = (Button) findViewById(R.id.buttonCancel);
         tvAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
 
-        bTurnOff.setOnClickListener(this);
         bTurnOn.setOnClickListener(this);
+        bCancel.setOnClickListener(this);
     }
 }

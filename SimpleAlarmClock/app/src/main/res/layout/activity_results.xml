@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dbondarenko.shpp.simplealarmclock.ResultsActivity">
+    tools:context="com.dbondarenko.shpp.simplealarmclock.AlarmActivity">
 
     <ImageView
         android:id="@+id/imageViewAlarm"
@@ -26,18 +26,18 @@
         android:layout_margin="16dp"
         android:text="@string/alarm_time"
         android:textAllCaps="true"
-        android:textColor="@android:color/black"
-        android:textSize="30sp"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="36sp"
         android:textStyle="bold"
         android:typeface="serif"
-        app:layout_constraintBottom_toTopOf="@+id/buttonTurnOff"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCancel"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewAlarm"
         tools:text="Alarm time"/>
 
     <Button
-        android:id="@+id/buttonTurnOff"
+        android:id="@+id/buttonCancel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

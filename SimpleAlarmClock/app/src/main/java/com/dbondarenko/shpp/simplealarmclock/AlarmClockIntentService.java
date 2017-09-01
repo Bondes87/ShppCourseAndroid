@@ -14,11 +14,12 @@ import java.util.Objects;
  */
 public class AlarmClockIntentService extends IntentService {
 
-    private static final String LOG_TAG = "alarm_service";
-    private static final String ACTION_TURN_ON_ALARM_CLOCK =
+    public static final String ACTION_TURN_ON_ALARM_CLOCK =
             "com.dbondarenko.shpp.simplealarmclock.action.TurnOnAlarmClock";
-    private static final String EXTRA_HOUR = "com.dbondarenko.shpp.simplealarmclock.extra.Hour";
-    private static final String EXTRA_MINUTE = "com.dbondarenko.shpp.simplealarmclock.extra.Minute";
+    public static final String EXTRA_HOUR = "com.dbondarenko.shpp.simplealarmclock.extra.Hour";
+    public static final String EXTRA_MINUTE = "com.dbondarenko.shpp.simplealarmclock.extra.Minute";
+    private static final String LOG_TAG = "alarm_service";
+    private boolean isAlarmCancel;
 
     public AlarmClockIntentService() {
         super("AlarmClockIntentService");
@@ -29,12 +30,12 @@ public class AlarmClockIntentService extends IntentService {
      * Starts this service to perform action TurnOnAlarmClock with the given parameters. If
      * the service is already performing a task this action will be queued.
      */
-    public static void startActionTurnOnAlarmClock(Context context, int hour, int minute) {
+    public static Intent newIntent(Context context, int hour, int minute) {
         Intent intent = new Intent(context, AlarmClockIntentService.class);
         intent.setAction(ACTION_TURN_ON_ALARM_CLOCK);
         intent.putExtra(EXTRA_HOUR, hour);
         intent.putExtra(EXTRA_MINUTE, minute);
-        context.startService(intent);
+        return intent;
     }
 
     @Override
@@ -46,6 +47,7 @@ public class AlarmClockIntentService extends IntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isAlarmCancel = true;
         Log.d(LOG_TAG, "onDestroy()");
     }
 
@@ -58,16 +60,19 @@ public class AlarmClockIntentService extends IntentService {
                 int hour = intent.getIntExtra(EXTRA_HOUR, -1);
                 int minute = intent.getIntExtra(EXTRA_MINUTE, -1);
                 waitForRightTime(hour, minute);
-                Intent dialogIntent = new Intent(getApplicationContext(), ResultsActivity.class);
-                dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(dialogIntent);
+                if (!isAlarmCancel) {
+                    startAlarmActivity();
+                }
             }
         }
     }
 
-    /**
-     *
-     */
+    private void startAlarmActivity() {
+        Intent dialogIntent = new Intent(getApplicationContext(), AlarmActivity.class);
+        dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(dialogIntent);
+    }
+
     private void waitForRightTime(int alarmHour, int alarmMinute) {
         String alarmTime = alarmHour + ":" + alarmMinute;
         Log.d(LOG_TAG, "waitForRightTime(): alarmTime = " + alarmTime);
@@ -78,7 +83,12 @@ public class AlarmClockIntentService extends IntentService {
             int currentMinute = calendar.get(Calendar.MINUTE);
             currentTime = currentHour + ":" + currentMinute;
             Log.d(LOG_TAG, "waitForRightTime(): currentTime = " + currentTime);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        while (!Objects.equals(currentTime, alarmTime));
+        while (!Objects.equals(currentTime, alarmTime) && !isAlarmCancel);
     }
 }
