@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         showAlarmTime(hour, minute);
         AlarmPreference.setTimeSettings(getApplicationContext(), hour, minute);
+        stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
         startService(AlarmIntentService.newIntent(getApplicationContext(), hour, minute));
     }
 

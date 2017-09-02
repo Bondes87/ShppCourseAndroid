@@ -37,7 +37,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initViews() {
-        setContentView(R.layout.activity_results);
+        setContentView(R.layout.activity_alarm);
         findViewById(R.id.imageViewAlarm);
         tvAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
         Button bTurnOff = (Button) findViewById(R.id.buttonCancel);
