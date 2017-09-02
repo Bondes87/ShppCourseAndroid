@@ -12,6 +12,6 @@ public class RestoreAlarmBroaadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         context.startService(AlarmIntentService.newIntent(context,
-                AlarmPreference.getHour(context), AlarmPreference.getMitute(context)));
+                AlarmPreference.getDatetimeSettings(context)));
     }
 }

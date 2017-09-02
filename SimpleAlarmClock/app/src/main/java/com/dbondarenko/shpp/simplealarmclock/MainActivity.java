@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.util.Calendar;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -51,9 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             minute = timePicker.getCurrentMinute();
         }
         showAlarmTime(hour, minute);
-        AlarmPreference.setTimeSettings(getApplicationContext(), hour, minute);
+        long alarmDatetime = getDatetime(hour, minute);
+        AlarmPreference.setDatetimeSettings(getApplicationContext(), alarmDatetime);
         stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
-        startService(AlarmIntentService.newIntent(getApplicationContext(), hour, minute));
+        startService(AlarmIntentService.newIntent(getApplicationContext(), alarmDatetime));
     }
 
     private void showAlarmTime(int hour, int minute) {
@@ -61,12 +64,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 minute < 10 ? "0" + minute : minute));
     }
 
+    private long getDatetime(int alarmHour, int alarmMinute) {
+        Calendar calendar = Calendar.getInstance();
+        int alarmDay = calendar.get(Calendar.DAY_OF_YEAR);
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = calendar.get(Calendar.MINUTE);
+        Log.d(LOG_TAG, "current datetime: " + calendar.getTimeInMillis());
+        if (currentHour > alarmHour) {
+            alarmDay++;
+        } else if (currentHour == alarmHour) {
+            if (currentMinute > alarmMinute) {
+                alarmDay++;
+            }
+        }
+        calendar.set(Calendar.DAY_OF_YEAR, alarmDay);
+        calendar.set(Calendar.HOUR_OF_DAY, alarmHour);
+        calendar.set(Calendar.MINUTE, alarmMinute);
+        calendar.set(Calendar.SECOND, 0);
+        Log.d(LOG_TAG, "alarm datetime: " + calendar.getTimeInMillis());
+        return calendar.getTimeInMillis();
+    }
 
     private void cancelAlarmClock() {
         Log.d(LOG_TAG, "Alarm clock cancel");
         tvAlarmTime.setText(R.string.cancel);
         stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
-        AlarmPreference.clearTimeSettings(getApplicationContext());
+        AlarmPreference.clearDatetimeSettings(getApplicationContext());
     }
 
 
