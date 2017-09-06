@@ -25,10 +25,10 @@ class AlarmPreference {
         return settings.getLong(ALARM_CLOCK_PREFERENCES_DATETIME, -1);
     }
 
-    static void clearDatetimeSettings(Context context) {
+    static void removeDatetimeSettings(Context context) {
         context.getSharedPreferences(ALARM_CLOCK_PREFERENCES, Context.MODE_PRIVATE)
                 .edit()
-                .clear()
+                .remove(ALARM_CLOCK_PREFERENCES_DATETIME)
                 .apply();
     }
 }

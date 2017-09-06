@@ -35,7 +35,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         setUpScreen();
         playAlarmSound();
         showAlarmTime();
-        AlarmPreference.clearDatetimeSettings(getApplicationContext());
+        AlarmPreference.removeDatetimeSettings(getApplicationContext());
     }
 
     private void initViews() {

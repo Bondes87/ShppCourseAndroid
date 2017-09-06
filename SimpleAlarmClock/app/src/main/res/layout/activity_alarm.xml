@@ -26,7 +26,7 @@
         android:layout_margin="16dp"
         android:text="@string/alarm_time"
         android:textAllCaps="true"
-        android:textColor="@android:color/holo_red_dark"
+        android:textColor="@color/colorAccent"
         android:textSize="36sp"
         android:textStyle="bold"
         android:typeface="serif"

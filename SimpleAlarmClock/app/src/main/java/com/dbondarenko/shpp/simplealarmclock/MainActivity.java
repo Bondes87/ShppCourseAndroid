@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(LOG_TAG, "Alarm clock cancel");
         tvAlarmTime.setText(R.string.cancel);
         stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
-        AlarmPreference.clearDatetimeSettings(getApplicationContext());
+        AlarmPreference.removeDatetimeSettings(getApplicationContext());
     }
 
 
