@@ -9,8 +9,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Calendar;
-
 public class AlarmActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String LOG_TAG = "result_activity";
@@ -61,11 +59,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
 
     private void showAlarmTime() {
         long datetime = AlarmPreference.getDatetimeSettings(getApplicationContext());
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(datetime);
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        tvAlarmTime.setText(getResources().getString(R.string.alarm_time, String.valueOf(hour),
-                minute < 10 ? "0" + minute : minute));
+        tvAlarmTime.setText(getResources().getString(R.string.alarm_time,
+                Utility.getTime(datetime)));
     }
 }

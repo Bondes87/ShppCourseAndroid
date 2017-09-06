@@ -11,7 +11,9 @@ import android.content.Intent;
 public class RestoreAlarmBroaadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        context.startService(AlarmIntentService.newIntent(context,
-                AlarmPreference.getDatetimeSettings(context)));
+        long datetime = AlarmPreference.getDatetimeSettings(context);
+        if (datetime != -1) {
+            context.startService(AlarmIntentService.newIntent(context, datetime));
+        }
     }
 }

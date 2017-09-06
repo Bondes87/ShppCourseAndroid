@@ -39,6 +39,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         Log.d(LOG_TAG, "onCreate()");
         initViews();
+        long datetime = AlarmPreference.getDatetimeSettings(getApplicationContext());
+        if (datetime != -1) {
+            showAlarmTime(Utility.getTime(datetime));
+        }
+    }
+
+    private void initViews() {
+        setContentView(R.layout.activity_main);
+        timePicker = (TimePicker) findViewById(R.id.timePicker);
+        tvAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
+        Button bTurnOn = (Button) findViewById(R.id.buttonTurnOn);
+        Button bCancel = (Button) findViewById(R.id.buttonCancel);
+
+        bTurnOn.setOnClickListener(this);
+        bCancel.setOnClickListener(this);
     }
 
     private void turnOnAlarmClock() {
@@ -52,16 +67,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             hour = timePicker.getCurrentHour();
             minute = timePicker.getCurrentMinute();
         }
-        showAlarmTime(hour, minute);
+        showAlarmTime(hour + ":" + (minute < 10 ? "0" + minute : minute));
         long alarmDatetime = getDatetime(hour, minute);
         AlarmPreference.setDatetimeSettings(getApplicationContext(), alarmDatetime);
         stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
         startService(AlarmIntentService.newIntent(getApplicationContext(), alarmDatetime));
     }
 
-    private void showAlarmTime(int hour, int minute) {
-        tvAlarmTime.setText(getResources().getString(R.string.turn_on, String.valueOf(hour),
-                minute < 10 ? "0" + minute : minute));
+    private void showAlarmTime(String time) {
+        tvAlarmTime.setText(getResources().getString(R.string.turn_on, time));
     }
 
     private long getDatetime(int alarmHour, int alarmMinute) {
@@ -90,17 +104,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvAlarmTime.setText(R.string.cancel);
         stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
         AlarmPreference.removeDatetimeSettings(getApplicationContext());
-    }
-
-
-    private void initViews() {
-        setContentView(R.layout.activity_main);
-        timePicker = (TimePicker) findViewById(R.id.timePicker);
-        tvAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
-        Button bTurnOn = (Button) findViewById(R.id.buttonTurnOn);
-        Button bCancel = (Button) findViewById(R.id.buttonCancel);
-
-        bTurnOn.setOnClickListener(this);
-        bCancel.setOnClickListener(this);
     }
 }
