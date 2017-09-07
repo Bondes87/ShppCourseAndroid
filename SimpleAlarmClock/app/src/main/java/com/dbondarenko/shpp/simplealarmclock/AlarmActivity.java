@@ -2,8 +2,10 @@ package com.dbondarenko.shpp.simplealarmclock;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -15,6 +17,8 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
 
     private MediaPlayer mediaPlayer;
     private TextView tvAlarmTime;
+
+    private boolean isScreenOn;
 
     @Override
     public void onClick(View v) {
@@ -30,10 +34,34 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         Log.d(LOG_TAG, "onCreate()");
         initViews();
+        determineScreenStatus();
         setUpScreen();
         playAlarmSound();
         showAlarmTime();
         AlarmPreference.removeDatetimeSettings(getApplicationContext());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(LOG_TAG, "onStop()");
+        Log.d(LOG_TAG, "isScreenOn = " + isScreenOn);
+        if (isScreenOn) {
+            mediaPlayer.stop();
+            finish();
+        } else {
+            isScreenOn = true;
+        }
+    }
+
+    private void determineScreenStatus() {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT_WATCH) {
+            isScreenOn = powerManager.isInteractive();
+        } else {
+            isScreenOn = powerManager.isScreenOn();
+        }
+        Log.d(LOG_TAG, "isScreenOn = " + isScreenOn);
     }
 
     private void initViews() {
@@ -43,6 +71,8 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         Button bTurnOff = (Button) findViewById(R.id.buttonCancel);
 
         bTurnOff.setOnClickListener(this);
+        bTurnOff.setHapticFeedbackEnabled(true);
+        bTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
     }
 
     private void setUpScreen() {
