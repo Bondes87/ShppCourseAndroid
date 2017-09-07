@@ -13,7 +13,11 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
-
+/**
+ * File: MainActivity.java
+ * The activity which is launched when the program starts. Here can set up and start the alarm.
+ * Created by Dmitro Bondarenko on 29.08.2017.
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String LOG_TAG = "main_activity";
@@ -24,32 +28,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button bCancel;
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-            case R.id.buttonTurnOn:
-                bTurnOn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                turnOnAlarmClock();
-                break;
-
-            case R.id.buttonCancel:
-                bCancel.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                cancelAlarmClock();
-                break;
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(LOG_TAG, "onCreate()");
         initViews();
+        // Get and display the alarm time if it was activated earlier.
         long datetime = AlarmPreference.getDatetimeSettings(getApplicationContext());
         if (datetime != -1) {
             showAlarmTime(Utility.getTime(datetime));
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.buttonTurnOn:
+                // Provide tactile feedback for the button.
+                bTurnOn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                turnOnAlarmClock();
+                break;
+
+            case R.id.buttonCancel:
+                // Provide tactile feedback for the button.
+                bCancel.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                cancelAlarmClock();
+                break;
+        }
+    }
+
+    /**
+     * Initialize views and set listeners.
+     */
     private void initViews() {
         setContentView(R.layout.activity_main);
         timePicker = (TimePicker) findViewById(R.id.timePicker);
@@ -59,8 +69,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         bTurnOn.setOnClickListener(this);
         bCancel.setOnClickListener(this);
+        // Set that the button should have tactile feedback.
+        bTurnOn.setHapticFeedbackEnabled(true);
+        bCancel.setHapticFeedbackEnabled(true);
     }
 
+    /**
+     * Activate alarm. Get time with the TimePiker. Translate it into the number of milliseconds
+     * given the current date. Save the alarm time. Start the service,
+     * which operates the alarm clock logic.
+     */
     private void turnOnAlarmClock() {
         Log.d(LOG_TAG, "Alarm clock turn on");
         int hour;
@@ -73,26 +91,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             minute = timePicker.getCurrentMinute();
         }
         showAlarmTime(hour + ":" + (minute < 10 ? "0" + minute : minute));
+        // Get the number of milliseconds from the date the alarm was activated.
         long alarmDatetime = getDatetime(hour, minute);
-        AlarmPreference.setDatetimeSettings(getApplicationContext(), alarmDatetime);
+        // Save number of milliseconds (alarm activation date).
+        AlarmPreference.saveDatetimeSettings(getApplicationContext(), alarmDatetime);
         stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
         startService(AlarmIntentService.newIntent(getApplicationContext(), alarmDatetime));
     }
 
+    /**
+     * Show the time of the alarm on the screen.
+     *
+     * @param time The alarm time for on-screen display.
+     */
     private void showAlarmTime(String time) {
         tvAlarmTime.setText(getResources().getString(R.string.turn_on, time));
     }
 
+    /**
+     * Get time it into the number of milliseconds given the current date.
+     *
+     * @param alarmHour   The hour when the alarm should ring.
+     * @param alarmMinute Minutes when the alarm should ring.
+     * @return The time when the alarm should ring in milliseconds.
+     */
     private long getDatetime(int alarmHour, int alarmMinute) {
         Calendar calendar = Calendar.getInstance();
         int alarmDay = calendar.get(Calendar.DAY_OF_YEAR);
         int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
         int currentMinute = calendar.get(Calendar.MINUTE);
         Log.d(LOG_TAG, "current datetime: " + calendar.getTimeInMillis());
+        // If the current time is longer than the alarm time,
+        // then the alarm clock is set for tomorrow (increase the number of days by one).
         if (currentHour > alarmHour) {
             alarmDay++;
         } else if (currentHour == alarmHour) {
-            if (currentMinute > alarmMinute) {
+            if (currentMinute >= alarmMinute) {
                 alarmDay++;
             }
         }
@@ -104,6 +138,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return calendar.getTimeInMillis();
     }
 
+    /**
+     * Cancel alarm. Display a message to cancel the alarm.
+     * Stop the service that controls the alarm logic. Delete the alarm time settings.
+     */
     private void cancelAlarmClock() {
         Log.d(LOG_TAG, "Alarm clock cancel");
         tvAlarmTime.setText(R.string.cancel);
