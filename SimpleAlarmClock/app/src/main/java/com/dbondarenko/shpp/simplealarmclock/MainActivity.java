@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,16 +20,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TimePicker timePicker;
     private TextView tvAlarmTime;
+    private Button bTurnOn;
+    private Button bCancel;
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
 
             case R.id.buttonTurnOn:
+                bTurnOn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 turnOnAlarmClock();
                 break;
 
             case R.id.buttonCancel:
+                bCancel.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 cancelAlarmClock();
                 break;
         }
@@ -49,8 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         timePicker = (TimePicker) findViewById(R.id.timePicker);
         tvAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
-        Button bTurnOn = (Button) findViewById(R.id.buttonTurnOn);
-        Button bCancel = (Button) findViewById(R.id.buttonCancel);
+        bTurnOn = (Button) findViewById(R.id.buttonTurnOn);
+        bCancel = (Button) findViewById(R.id.buttonCancel);
 
         bTurnOn.setOnClickListener(this);
         bCancel.setOnClickListener(this);

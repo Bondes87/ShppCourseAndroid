@@ -17,6 +17,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
 
     private MediaPlayer mediaPlayer;
     private TextView tvAlarmTime;
+    private Button bTurnOff;
 
     private boolean isScreenOn;
 
@@ -24,6 +25,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         if (v.getId() == R.id.buttonCancel) {
             Log.d(LOG_TAG, "stop Alarm");
+            bTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             mediaPlayer.stop();
             finish();
         }
@@ -58,11 +60,10 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_alarm);
         findViewById(R.id.imageViewAlarm);
         tvAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
-        Button bTurnOff = (Button) findViewById(R.id.buttonCancel);
+        bTurnOff = (Button) findViewById(R.id.buttonCancel);
 
         bTurnOff.setOnClickListener(this);
         bTurnOff.setHapticFeedbackEnabled(true);
-        bTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
     }
 
     private void determineScreenStatus() {
