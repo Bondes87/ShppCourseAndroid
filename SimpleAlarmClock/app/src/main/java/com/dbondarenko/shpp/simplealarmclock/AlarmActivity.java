@@ -1,6 +1,7 @@
 package com.dbondarenko.shpp.simplealarmclock;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -11,6 +12,7 @@ import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class AlarmActivity extends AppCompatActivity implements View.OnClickListener {
@@ -20,7 +22,9 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     private MediaPlayer mediaPlayer;
     private Vibrator vibrator;
     private TextView tvAlarmTime;
+    private AnimationDrawable animationAlarm;
     private Button bTurnOff;
+    private ImageView ivAlarm;
 
     private boolean isScreenOn;
 
@@ -40,6 +44,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         initViews();
         determineScreenStatus();
         setUpScreen();
+        startAlarmAnimation();
         playAlarmSound();
         turnOnVibration();
         showAlarmTime();
@@ -58,9 +63,15 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    private void startAlarmAnimation() {
+        animationAlarm = (AnimationDrawable) ivAlarm.getBackground();
+        animationAlarm.start();
+    }
+
     private void turnOffAlarm() {
         mediaPlayer.stop();
         vibrator.cancel();
+        animationAlarm.stop();
         finish();
     }
 
@@ -74,7 +85,8 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
 
     private void initViews() {
         setContentView(R.layout.activity_alarm);
-        findViewById(R.id.imageViewAlarm);
+        ivAlarm = (ImageView) findViewById(R.id.imageViewAlarm);
+        ivAlarm.setBackgroundResource(R.drawable.alarm_animation);
         tvAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
         bTurnOff = (Button) findViewById(R.id.buttonCancel);
 

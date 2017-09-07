@@ -32,7 +32,6 @@
 
         <service
             android:name=".AlarmIntentService"
-            android:exported="true"
             android:process=":service">
         </service>
 
