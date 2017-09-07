@@ -1,8 +1,10 @@
 package com.dbondarenko.shpp.simplealarmclock;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
@@ -16,6 +18,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     private static final String LOG_TAG = "result_activity";
 
     private MediaPlayer mediaPlayer;
+    private Vibrator vibrator;
     private TextView tvAlarmTime;
     private Button bTurnOff;
 
@@ -26,8 +29,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         if (v.getId() == R.id.buttonCancel) {
             Log.d(LOG_TAG, "stop Alarm");
             bTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-            mediaPlayer.stop();
-            finish();
+            turnOffAlarm();
         }
     }
 
@@ -39,6 +41,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         determineScreenStatus();
         setUpScreen();
         playAlarmSound();
+        turnOnVibration();
         showAlarmTime();
         AlarmPreference.removeDatetimeSettings(getApplicationContext());
     }
@@ -49,10 +52,23 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         Log.d(LOG_TAG, "onStop()");
         Log.d(LOG_TAG, "isScreenOn = " + isScreenOn);
         if (isScreenOn) {
-            mediaPlayer.stop();
-            finish();
+            turnOffAlarm();
         } else {
             isScreenOn = true;
+        }
+    }
+
+    private void turnOffAlarm() {
+        mediaPlayer.stop();
+        vibrator.cancel();
+        finish();
+    }
+
+    private void turnOnVibration() {
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator.hasVibrator()) {
+            long[] pattern = {0, 400, 800};
+            vibrator.vibrate(pattern, 0);
         }
     }
 
