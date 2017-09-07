@@ -54,16 +54,6 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void determineScreenStatus() {
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT_WATCH) {
-            isScreenOn = powerManager.isInteractive();
-        } else {
-            isScreenOn = powerManager.isScreenOn();
-        }
-        Log.d(LOG_TAG, "isScreenOn = " + isScreenOn);
-    }
-
     private void initViews() {
         setContentView(R.layout.activity_alarm);
         findViewById(R.id.imageViewAlarm);
@@ -75,9 +65,20 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         bTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
     }
 
+    private void determineScreenStatus() {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT_WATCH) {
+            isScreenOn = powerManager.isInteractive();
+        } else {
+            isScreenOn = powerManager.isScreenOn();
+        }
+        Log.d(LOG_TAG, "isScreenOn = " + isScreenOn);
+    }
+
     private void setUpScreen() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     private void playAlarmSound() {
