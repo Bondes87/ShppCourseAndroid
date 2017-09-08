@@ -28,21 +28,33 @@
         android:textSize="@dimen/text_size_big"
         android:textStyle="bold"
         android:typeface="serif"
-        app:layout_constraintBottom_toTopOf="@+id/buttonCancel"
+        app:layout_constraintBottom_toTopOf="@+id/buttonTurnOff"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewAlarm"
         tools:text="Alarm time"/>
 
     <Button
-        android:id="@+id/buttonCancel"
-        android:layout_width="match_parent"
+        android:id="@+id/buttonTurnOff"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin_content"
         android:text="@string/button_turn_off"
         android:textSize="@dimen/text_size_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/buttonSnooze"
+        app:layout_constraintTop_toBottomOf="@id/textViewAlarmTime"        />
+
+    <Button
+        android:id="@+id/buttonSnooze"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin_content"
+        android:text="@string/button_snooze"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonTurnOff"
+        app:layout_constraintLeft_toRightOf="@+id/buttonTurnOff"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAlarmTime"/>
+        app:layout_constraintTop_toTopOf="@+id/buttonTurnOff"/>
 </android.support.constraint.ConstraintLayout>

@@ -9,7 +9,7 @@
 
     <TimePicker
         android:id="@+id/timePicker"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -30,7 +30,7 @@
 
     <Button
         android:id="@+id/buttonTurnOn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin_content"
         android:text="@string/button_turn_on"
@@ -42,13 +42,14 @@
 
     <Button
         android:id="@+id/buttonCancel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin_content"
         android:text="@string/button_cancel"
         android:textSize="@dimen/text_size_small"
-        app:layout_constraintBaseline_toBaselineOf="@+id/buttonTurnOn"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonTurnOn"
         app:layout_constraintLeft_toRightOf="@+id/buttonTurnOn"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/buttonTurnOn"/>
 
 </android.support.constraint.ConstraintLayout>

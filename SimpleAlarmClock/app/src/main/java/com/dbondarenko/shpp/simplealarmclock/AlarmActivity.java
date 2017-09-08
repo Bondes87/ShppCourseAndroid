@@ -1,12 +1,14 @@
 package com.dbondarenko.shpp.simplealarmclock;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
@@ -24,16 +26,44 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String LOG_TAG = "result_activity";
 
+    // Number of minutes of the period snooze of  alarm clock.
+    private static final int SNOOZE_PERIOD_IN_MINUTES = 1;
+
     private MediaPlayer mediaPlayer;
     private Vibrator vibrator;
     private TextView tvAlarmTime;
     private AnimationDrawable animationAlarm;
     private Button bTurnOff;
+    private Button bSnooze;
     private ImageView ivAlarm;
 
     // Variable for storing the value of the screen activity.
     // Used to select actions to stop the alarm.
     private boolean isScreenOn;
+    // A variable is used to select actions before deleting an activity.
+    // If its value is true, then the alarm time settings are not deleted,
+    // otherwise - there will be deletions.
+    private boolean isSnoozeAlarm;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.buttonTurnOff:
+                Log.d(LOG_TAG, "stop Alarm");
+                // Provide tactile feedback for the button.
+                bTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                turnOffAlarm();
+                break;
+
+            case R.id.buttonSnooze:
+                Log.d(LOG_TAG, "snooze Alarm");
+                // Provide tactile feedback for the button.
+                bSnooze.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                snoozeAlarm();
+                break;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +92,6 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.buttonCancel) {
-            Log.d(LOG_TAG, "stop Alarm");
-            // Provide tactile feedback for the button.
-            bTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-            turnOffAlarm();
-        }
-    }
-
     /**
      * Initialize views and set listeners.
      */
@@ -80,11 +100,14 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         ivAlarm = (ImageView) findViewById(R.id.imageViewAlarm);
         ivAlarm.setBackgroundResource(R.drawable.alarm_animation);
         tvAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
-        bTurnOff = (Button) findViewById(R.id.buttonCancel);
+        bTurnOff = (Button) findViewById(R.id.buttonTurnOff);
+        bSnooze = (Button) findViewById(R.id.buttonSnooze);
 
         bTurnOff.setOnClickListener(this);
+        bSnooze.setOnClickListener(this);
         // Set that the button should have tactile feedback.
         bTurnOff.setHapticFeedbackEnabled(true);
+        bSnooze.setHapticFeedbackEnabled(true);
     }
 
     /**
@@ -157,10 +180,34 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
      * Turn off the alarm clock.
      */
     private void turnOffAlarm() {
+        stopAction();
+        // Delete the settings if the Snooze button has not been pressed.
+        if (!isSnoozeAlarm) {
+            AlarmPreference.removeDatetimeSettings(getApplicationContext());
+        }
+        finish();
+    }
+
+    /**
+     * SStop the action of music playback, animation and turn off vibration.
+     */
+    private void stopAction() {
         mediaPlayer.stop();
         vibrator.cancel();
         animationAlarm.stop();
-        AlarmPreference.removeDatetimeSettings(getApplicationContext());
+    }
+
+    /**
+     * Snooze the alarm for another time.
+     */
+    private void snoozeAlarm() {
+        isSnoozeAlarm = true;
+        stopAction();
+        long newAlarmDatetime = AlarmPreference.getDatetimeSettings(getApplicationContext())
+                + DateUtils.MINUTE_IN_MILLIS * SNOOZE_PERIOD_IN_MINUTES;
+        AlarmPreference.saveDatetimeSettings(getApplicationContext(), newAlarmDatetime);
+        stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
+        startService(AlarmIntentService.newIntent(getApplicationContext(), newAlarmDatetime));
         finish();
     }
 }
