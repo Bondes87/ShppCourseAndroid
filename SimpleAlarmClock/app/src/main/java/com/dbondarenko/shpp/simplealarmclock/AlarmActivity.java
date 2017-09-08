@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * File: AlarmActivity.java
@@ -27,7 +28,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     private static final String LOG_TAG = "result_activity";
 
     // Number of minutes of the period snooze of  alarm clock.
-    private static final int SNOOZE_PERIOD_IN_MINUTES = 1;
+    private static final int SNOOZE_PERIOD_IN_MINUTES = 10;
 
     private MediaPlayer mediaPlayer;
     private Vibrator vibrator;
@@ -44,26 +45,6 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     // If its value is true, then the alarm time settings are not deleted,
     // otherwise - there will be deletions.
     private boolean isSnoozeAlarm;
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-            case R.id.buttonTurnOff:
-                Log.d(LOG_TAG, "stop Alarm");
-                // Provide tactile feedback for the button.
-                bTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                turnOffAlarm();
-                break;
-
-            case R.id.buttonSnooze:
-                Log.d(LOG_TAG, "snooze Alarm");
-                // Provide tactile feedback for the button.
-                bSnooze.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                snoozeAlarm();
-                break;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +70,26 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
             turnOffAlarm();
         } else {
             isScreenOn = true;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.buttonTurnOff:
+                Log.d(LOG_TAG, "stop Alarm");
+                // Provide tactile feedback for the button.
+                bTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                turnOffAlarm();
+                break;
+
+            case R.id.buttonSnooze:
+                Log.d(LOG_TAG, "snooze Alarm");
+                // Provide tactile feedback for the button.
+                bSnooze.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                snoozeAlarm();
+                break;
         }
     }
 
