@@ -7,4 +7,5 @@
     <string name="cancel">The alarm is cancel</string>
     <string name="alarm_time">%1$s</string>
     <string name="button_snooze">Snooze (10 mins)</string>
+    <string name="settings">Settings</string>
 </resources>

@@ -3,9 +3,12 @@ package com.dbondarenko.shpp.simplealarmclock;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,14 +31,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button bCancel;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "onCreate()");
-        initViews();
-        // Get and display the alarm time if it was activated earlier.
-        long datetime = AlarmPreference.getDatetimeSettings(getApplicationContext());
-        if (datetime != -1) {
-            showAlarmTime(Utility.getTime(datetime));
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -55,6 +63,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 cancelAlarmClock();
                 break;
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate()");
+        initViews();
+        // Get and display the alarm time if it was activated earlier.
+        long datetime = AlarmPreference.getDatetimeSettings(getApplicationContext());
+        if (datetime != -1) {
+            showAlarmTime(Utility.getTime(datetime));
+        }
+        PreferenceManager.setDefaultValues(this, R.xml.setting_alarm, false);
     }
 
     /**
@@ -134,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         calendar.set(Calendar.HOUR_OF_DAY, alarmHour);
         calendar.set(Calendar.MINUTE, alarmMinute);
         calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND,0);
+        calendar.set(Calendar.MILLISECOND, 0);
         Log.d(LOG_TAG, "alarm datetime: " + calendar.getTimeInMillis());
         return calendar.getTimeInMillis();
     }

@@ -2,12 +2,16 @@ package com.dbondarenko.shpp.simplealarmclock;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
@@ -16,7 +20,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.io.IOException;
 
 /**
  * File: AlarmActivity.java
@@ -47,6 +52,26 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     private boolean isSnoozeAlarm;
 
     @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.buttonTurnOff:
+                Log.d(LOG_TAG, "stop Alarm");
+                // Provide tactile feedback for the button.
+                bTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                turnOffAlarm();
+                break;
+
+            case R.id.buttonSnooze:
+                Log.d(LOG_TAG, "snooze Alarm");
+                // Provide tactile feedback for the button.
+                bSnooze.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                snoozeAlarm();
+                break;
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(LOG_TAG, "onCreate()");
@@ -70,26 +95,6 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
             turnOffAlarm();
         } else {
             isScreenOn = true;
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-            case R.id.buttonTurnOff:
-                Log.d(LOG_TAG, "stop Alarm");
-                // Provide tactile feedback for the button.
-                bTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                turnOffAlarm();
-                break;
-
-            case R.id.buttonSnooze:
-                Log.d(LOG_TAG, "snooze Alarm");
-                // Provide tactile feedback for the button.
-                bSnooze.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                snoozeAlarm();
-                break;
         }
     }
 
@@ -150,7 +155,24 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
      */
     private void playAlarmSound() {
         Log.d(LOG_TAG, "playAlarmSound()");
-        mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String filePath = sharedPreferences.getString("KeySettingRingtone", null);
+        // If the path to the file is empty, then play the default melody,
+        // otherwise play the selected melody
+        if (TextUtils.isEmpty(filePath)) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound);
+        } else {
+            Log.d(LOG_TAG, "playAlarmSound()" + filePath);
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            try {
+                mediaPlayer.setDataSource(filePath);
+                mediaPlayer.prepare();
+            } catch (IOException e) {
+                Log.d(LOG_TAG, "playAlarmSound()" + e);
+                e.printStackTrace();
+            }
+        }
         // Set  repeat the sound.
         mediaPlayer.setLooping(true);
         mediaPlayer.start();

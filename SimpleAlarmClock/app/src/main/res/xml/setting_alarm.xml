@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="KeyAlarmSettings"
+        android:title="Alarm settings">
+        <RingtonePreference
+            android:key="KeySettingRingtone"
+            android:ringtoneType="alarm"
+            android:showDefault="true"
+            android:showSilent="false"
+            android:summary="Select the melody for the alarm"
+            android:title="Select a melody"/>
+        <ListPreference
+            android:defaultValue="10"
+            android:dialogTitle="Select amount minutes for snooze"
+            android:entries="@array/snooze_time"
+            android:entryValues="@array/snooze_time"
+            android:key="KeySettingSnooze"
+            android:summary="Select amount minutes for snooze"
+            android:title="Snooze time"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="KeyAbove"
+        android:title="About">
+        <Preference
+            android:summary="1.1"
+            android:title="Version"/>
+        <Preference
+            android:summary="Dmytro Bondarenko"
+            android:title="Author"/>
+        <Preference
+            android:summary="bondes87@gmail.com"
+            android:title="Feedback">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="mailto:bondes87@gmail.com"/>
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>
