@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
  * Created by Dmitro Bondarenko on 12.09.2017.
  */
 public class SettingsFragment extends PreferenceFragment {
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

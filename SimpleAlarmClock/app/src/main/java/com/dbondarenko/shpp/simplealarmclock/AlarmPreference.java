@@ -10,8 +10,6 @@ import android.preference.PreferenceManager;
  */
 class AlarmPreference {
 
-    // The constant that specifies the name of the file in which the settings for the alarm are saved.
-    //private static final String ALARM_CLOCK_PREFERENCES = "AlarmPreference";
     // The constant that specifies the name of the setting to save.
     private static final String ALARM_CLOCK_PREFERENCES_DATETIME = "Datetime";
 
@@ -47,7 +45,7 @@ class AlarmPreference {
      */
     static String getRingtoneSettings(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString("KeyRingtoneSettings", null);
+                .getString(context.getString(R.string.key_ringtone_settings), null);
     }
 
     /**
@@ -58,7 +56,7 @@ class AlarmPreference {
      */
     static String getSnoozeSettings(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString("KeySnoozeSettings", null);
+                .getString(context.getString(R.string.key_snooze_settings), null);
     }
 
     /**
