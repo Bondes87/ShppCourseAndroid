@@ -31,6 +31,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button bCancel;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate()");
+        initViews();
+        // Get and display the alarm time if it was activated earlier.
+        long datetime = AlarmPreference.getDatetimeSettings(getApplicationContext());
+        if (datetime != -1) {
+            showAlarmTime(Utility.getTime(datetime));
+        }
+        // Save default preferences.
+        PreferenceManager.setDefaultValues(this, R.xml.setting_alarm, false);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -63,19 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 cancelAlarmClock();
                 break;
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "onCreate()");
-        initViews();
-        // Get and display the alarm time if it was activated earlier.
-        long datetime = AlarmPreference.getDatetimeSettings(getApplicationContext());
-        if (datetime != -1) {
-            showAlarmTime(Utility.getTime(datetime));
-        }
-        PreferenceManager.setDefaultValues(this, R.xml.setting_alarm, false);
     }
 
     /**

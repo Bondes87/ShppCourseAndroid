@@ -30,9 +30,6 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String LOG_TAG = "result_activity";
 
-    // Number of minutes of the period snooze of  alarm clock.
-    private static final int SNOOZE_PERIOD_IN_MINUTES = 10;
-
     private MediaPlayer mediaPlayer;
     private Vibrator vibrator;
     private TextView tvAlarmTime;
