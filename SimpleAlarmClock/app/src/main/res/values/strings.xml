@@ -1,17 +1,17 @@
 <resources>
-    <string name="app_name">SimpleAlarmClock</string>
+    <string name="app_name">Alarm Clock</string>
     <string name="button_turn_on">Turn on</string>
     <string name="button_turn_off">Turn off</string>
     <string name="button_cancel">Cancel</string>
     <string name="turn_on">The alarm is on at %1$s</string>
     <string name="cancel">The alarm is cancel</string>
-    <string name="alarm_time">%1$s</string>
-    <string name="button_snooze">Snooze (10 mins)</string>
+    <string name="alarm_time" translatable="false">%1$s</string>
+    <string name="button_snooze">Snooze</string>
     <string name="settings">Settings</string>
-    <string name="key_alarm_settings">KeyAlarmSettings</string>
-    <string name="key_ringtone_settings">KeyRingtoneSettings</string>
-    <string name="key_snooze_settings">KeySnoozeSettings</string>
-    <string name="key_above">KeyAbove</string>
+    <string name="key_alarm_settings" translatable="false">KeyAlarmSettings</string>
+    <string name="key_ringtone_settings" translatable="false">KeyRingtoneSettings</string>
+    <string name="key_snooze_settings" translatable="false">KeySnoozeSettings</string>
+    <string name="key_above" translatable="false">KeyAbove</string>
     <string name="category_alarm_settings">Alarm settings</string>
     <string name="category_about">About</string>
     <string name="summay_ringtone_settings">Select the melody for the alarm</string>
@@ -21,7 +21,7 @@
     <string name="title_version">Version</string>
     <string name="tittle_author">Author</string>
     <string name="title_feedbeck">Feedback</string>
-    <string name="summary_version">1.1</string>
+    <string name="summary_version" translatable="false">1.1</string>
     <string name="summary_author">Dmytro Bondarenko</string>
-    <string name="summary_feedbeck">bondes87@gmail.com</string>
+    <string name="summary_feedbeck" translatable="false">bondes87@gmail.com</string>
 </resources>

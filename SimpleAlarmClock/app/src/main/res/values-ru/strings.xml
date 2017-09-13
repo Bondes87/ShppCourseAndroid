@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Будильник</string>
+    <string name="button_cancel">Отмена</string>
+    <string name="button_snooze">Отложить</string>
+    <string name="button_turn_off">Выключить</string>
+    <string name="button_turn_on">Включить</string>
+    <string name="cancel">Будильник отменён</string>
+    <string name="category_about">О программе</string>
+    <string name="category_alarm_settings">Настройки будильника</string>
+    <string name="settings">Настройки</string>
+    <string name="summary_author">Дмитрий Бондаренко</string>
+    <string name="summay_ringtone_settings">Выберите мелодию для будильника</string>
+    <string name="summay_snooze_settings">Выберите количество минут для отсрочки будильника</string>
+    <string name="title_feedbeck">Обратная связь</string>
+    <string name="title_snooze_settings">Время отсрочки</string>
+    <string name="title_version">Версия</string>
+    <string name="tittle_author">Автор</string>
+    <string name="tittle_ringtone_settings">Выбор мелодии</string>
+    <string name="turn_on">Будильник установлен на %1$s</string>
+</resources>
