@@ -35,13 +35,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         Log.d(LOG_TAG, "onCreate()");
         initViews();
+        // Save default preferences.
+        PreferenceManager.setDefaultValues(this, R.xml.setting_alarm, false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "onResume()");
         // Get and display the alarm time if it was activated earlier.
         long datetime = AlarmPreference.getDatetimeSettings(getApplicationContext());
         if (datetime != -1) {
             showAlarmTime(Utility.getTime(datetime));
+        } else {
+            tvAlarmTime.setText("");
         }
-        // Save default preferences.
-        PreferenceManager.setDefaultValues(this, R.xml.setting_alarm, false);
     }
 
     @Override
