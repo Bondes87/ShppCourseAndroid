@@ -2,36 +2,36 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:key="KeyAlarmSettings"
-        android:title="Alarm settings">
+        android:key="@string/key_alarm_settings"
+        android:title="@string/category_alarm_settings">
         <RingtonePreference
-            android:key="KeySettingRingtone"
+            android:key="@string/key_ringtone_settings"
             android:ringtoneType="alarm"
             android:showDefault="true"
             android:showSilent="false"
-            android:summary="Select the melody for the alarm"
-            android:title="Select a melody"/>
+            android:summary="@string/summay_ringtone_settings"
+            android:title="@string/tittle_ringtone_settings"/>
         <ListPreference
             android:defaultValue="10"
-            android:dialogTitle="Select amount minutes for snooze"
+            android:dialogTitle="@string/summay_snooze_settings"
             android:entries="@array/snooze_time"
             android:entryValues="@array/snooze_time"
-            android:key="KeySettingSnooze"
-            android:summary="Select amount minutes for snooze"
-            android:title="Snooze time"/>
+            android:key="@string/key_snooze_settings"
+            android:summary="@string/summay_snooze_settings"
+            android:title="@string/title_snooze_settings"/>
     </PreferenceCategory>
     <PreferenceCategory
-        android:key="KeyAbove"
-        android:title="About">
+        android:key="@string/key_above"
+        android:title="@string/category_about">
         <Preference
-            android:summary="1.1"
-            android:title="Version"/>
+            android:summary="@string/summary_version"
+            android:title="@string/title_version"/>
         <Preference
-            android:summary="Dmytro Bondarenko"
-            android:title="Author"/>
+            android:summary="@string/summary_author"
+            android:title="@string/tittle_author"/>
         <Preference
-            android:summary="bondes87@gmail.com"
-            android:title="Feedback">
+            android:summary="@string/summary_feedbeck"
+            android:title="@string/title_feedbeck">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="mailto:bondes87@gmail.com"/>

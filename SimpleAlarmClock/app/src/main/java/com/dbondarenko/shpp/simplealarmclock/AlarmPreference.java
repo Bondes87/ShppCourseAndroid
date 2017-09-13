@@ -1,7 +1,7 @@
 package com.dbondarenko.shpp.simplealarmclock;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 /**
  * File: AlarmPreference.java
@@ -11,7 +11,7 @@ import android.content.SharedPreferences;
 class AlarmPreference {
 
     // The constant that specifies the name of the file in which the settings for the alarm are saved.
-    private static final String ALARM_CLOCK_PREFERENCES = "AlarmPreference";
+    //private static final String ALARM_CLOCK_PREFERENCES = "AlarmPreference";
     // The constant that specifies the name of the setting to save.
     private static final String ALARM_CLOCK_PREFERENCES_DATETIME = "Datetime";
 
@@ -22,22 +22,43 @@ class AlarmPreference {
      * @param datetime The number of milliseconds.
      */
     static void saveDatetimeSettings(Context context, long datetime) {
-        context.getSharedPreferences(ALARM_CLOCK_PREFERENCES, Context.MODE_PRIVATE)
+        PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putLong(ALARM_CLOCK_PREFERENCES_DATETIME, datetime)
                 .apply();
     }
 
     /**
-     * Save the alarm time.
+     * Get Datetime in milliseconds.
      *
      * @param context The Context of the application package implementing this class.
      * @return The number of milliseconds or -1 if the alarm was not activated.
      */
     static long getDatetimeSettings(Context context) {
-        SharedPreferences settings = context.getSharedPreferences(ALARM_CLOCK_PREFERENCES,
-                Context.MODE_PRIVATE);
-        return settings.getLong(ALARM_CLOCK_PREFERENCES_DATETIME, -1);
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getLong(ALARM_CLOCK_PREFERENCES_DATETIME, -1);
+    }
+
+    /**
+     * Get the path to the alarm ringtone.
+     *
+     * @param context The Context of the application package implementing this class.
+     * @return The path to the ringtone or the null.
+     */
+    static String getRingtoneSettings(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString("KeyRingtoneSettings", null);
+    }
+
+    /**
+     * Get the number of minutes for snooze.
+     *
+     * @param context The Context of the application package implementing this class.
+     * @return The path to the ringtone or the null.
+     */
+    static String getSnoozeSettings(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString("KeySnoozeSettings", null);
     }
 
     /**
@@ -46,7 +67,7 @@ class AlarmPreference {
      * @param context The Context of the application package implementing this class.
      */
     static void removeDatetimeSettings(Context context) {
-        context.getSharedPreferences(ALARM_CLOCK_PREFERENCES, Context.MODE_PRIVATE)
+        PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .remove(ALARM_CLOCK_PREFERENCES_DATETIME)
                 .apply();

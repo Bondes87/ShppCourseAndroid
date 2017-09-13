@@ -2,14 +2,12 @@ package com.dbondarenko.shpp.simplealarmclock;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -155,8 +153,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
      */
     private void playAlarmSound() {
         Log.d(LOG_TAG, "playAlarmSound()");
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String filePath = sharedPreferences.getString("KeySettingRingtone", null);
+        String filePath = AlarmPreference.getRingtoneSettings(getApplicationContext());
         // If the path to the file is empty, then play the default melody,
         // otherwise play the selected melody
         if (TextUtils.isEmpty(filePath)) {
@@ -226,8 +223,12 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     private void snoozeAlarm() {
         isSnoozeAlarm = true;
         stopAction();
+        // Get the number of minutes for sleep.
+        int snoozeTime = Integer.parseInt(AlarmPreference.getSnoozeSettings(getApplicationContext()));
+        // Create a new Datetime for the alarm.
         long newAlarmDatetime = AlarmPreference.getDatetimeSettings(getApplicationContext())
-                + DateUtils.MINUTE_IN_MILLIS * SNOOZE_PERIOD_IN_MINUTES;
+                + DateUtils.MINUTE_IN_MILLIS * snoozeTime;
+        Log.d(LOG_TAG, "snoozeAlarm()" + snoozeTime);
         AlarmPreference.saveDatetimeSettings(getApplicationContext(), newAlarmDatetime);
         stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
         startService(AlarmIntentService.newIntent(getApplicationContext(), newAlarmDatetime));
