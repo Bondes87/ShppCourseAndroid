@@ -89,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bTurnOn = (Button) findViewById(R.id.buttonTurnOn);
         bCancel = (Button) findViewById(R.id.buttonCancel);
 
+        // Set the 24-hour time format for the TimePicker.
+        timePicker.setIs24HourView(true);
         bTurnOn.setOnClickListener(this);
         bCancel.setOnClickListener(this);
         // Set that the button should have tactile feedback.
