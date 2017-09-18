@@ -45,7 +45,7 @@
             android:process=":service">
         </service>
 
-        <receiver android:name=".RestoreAlarmBroaadcastReceiver">
+        <receiver android:name=".RestoreAlarmBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON"/>

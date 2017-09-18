@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
@@ -137,7 +138,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param time The alarm time for on-screen display.
      */
     private void showAlarmTime(String time) {
-        textViewAlarmTime.setText(getResources().getString(R.string.turn_on, time));
+        if (TextUtils.isEmpty(time)) {
+            Log.d(LOG_TAG, "showAlarmTime(): the time of the alarm is not set");
+        } else {
+            textViewAlarmTime.setText(getResources().getString(R.string.turn_on, time));
+        }
     }
 
     /**
@@ -148,27 +153,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @return The time when the alarm should ring in milliseconds.
      */
     private long getDatetime(int alarmHour, int alarmMinute) {
-        Calendar calendar = Calendar.getInstance();
-        int alarmDay = calendar.get(Calendar.DAY_OF_YEAR);
-        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-        int currentMinute = calendar.get(Calendar.MINUTE);
-        Log.d(LOG_TAG, "current datetime: " + calendar.getTimeInMillis());
-        // If the current time is longer than the alarm time,
-        // then the alarm clock is set for tomorrow (increase the number of days by one).
-        if (currentHour > alarmHour) {
-            alarmDay++;
-        } else if (currentHour == alarmHour) {
-            if (currentMinute >= alarmMinute) {
+        if (alarmHour < 0) {
+            Log.d(LOG_TAG, "getDatetime(): the hour of the alarm was set incorrectly");
+        } else if (alarmHour < 0) {
+            Log.d(LOG_TAG, "getDatetime(): the minute of the alarm was set incorrectly");
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            int alarmDay = calendar.get(Calendar.DAY_OF_YEAR);
+            int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+            int currentMinute = calendar.get(Calendar.MINUTE);
+            Log.d(LOG_TAG, "current datetime: " + calendar.getTimeInMillis());
+            // If the current time is longer than the alarm time,
+            // then the alarm clock is set for tomorrow (increase the number of days by one).
+            if (currentHour > alarmHour) {
                 alarmDay++;
+            } else if (currentHour == alarmHour) {
+                if (currentMinute >= alarmMinute) {
+                    alarmDay++;
+                }
             }
+            calendar.set(Calendar.DAY_OF_YEAR, alarmDay);
+            calendar.set(Calendar.HOUR_OF_DAY, alarmHour);
+            calendar.set(Calendar.MINUTE, alarmMinute);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            Log.d(LOG_TAG, "alarm datetime: " + calendar.getTimeInMillis());
+            return calendar.getTimeInMillis();
         }
-        calendar.set(Calendar.DAY_OF_YEAR, alarmDay);
-        calendar.set(Calendar.HOUR_OF_DAY, alarmHour);
-        calendar.set(Calendar.MINUTE, alarmMinute);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Log.d(LOG_TAG, "alarm datetime: " + calendar.getTimeInMillis());
-        return calendar.getTimeInMillis();
+        return -1;
     }
 
     /**
