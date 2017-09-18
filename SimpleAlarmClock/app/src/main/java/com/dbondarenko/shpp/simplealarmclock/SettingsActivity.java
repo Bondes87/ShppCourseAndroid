@@ -16,9 +16,9 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         // Set the back button on the ActionBar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBarSettings = getSupportActionBar();
+        if (actionBarSettings != null) {
+            actionBarSettings.setDisplayHomeAsUpEnabled(true);
         }
         // Show a fragment with preferences.
         getFragmentManager().beginTransaction()

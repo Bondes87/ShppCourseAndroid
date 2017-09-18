@@ -25,10 +25,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String LOG_TAG = "main_activity";
 
-    private TimePicker timePicker;
-    private TextView tvAlarmTime;
-    private Button bTurnOn;
-    private Button bCancel;
+    private TimePicker timePickerAlarmTime;
+    private TextView textViewAlarmTime;
+    private Button buttonTurnOn;
+    private Button buttonCancel;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            Intent intentToStartSettingsActivity = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intentToStartSettingsActivity);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.buttonTurnOn:
+                // Provide tactile feedback for the button.
+                buttonTurnOn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                turnOnAlarmClock();
+                break;
+
+            case R.id.buttonCancel:
+                // Provide tactile feedback for the button.
+                buttonCancel.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                cancelAlarmClock();
+                break;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,42 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (datetime != -1) {
             showAlarmTime(Utility.getTime(datetime));
         } else {
-            tvAlarmTime.setText("");
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-            startActivity(intent);
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-            case R.id.buttonTurnOn:
-                // Provide tactile feedback for the button.
-                bTurnOn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                turnOnAlarmClock();
-                break;
-
-            case R.id.buttonCancel:
-                // Provide tactile feedback for the button.
-                bCancel.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                cancelAlarmClock();
-                break;
+            textViewAlarmTime.setText("");
         }
     }
 
@@ -92,18 +92,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void initViews() {
         setContentView(R.layout.activity_main);
-        timePicker = (TimePicker) findViewById(R.id.timePicker);
-        tvAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
-        bTurnOn = (Button) findViewById(R.id.buttonTurnOn);
-        bCancel = (Button) findViewById(R.id.buttonCancel);
+        timePickerAlarmTime = (TimePicker) findViewById(R.id.timePicker);
+        textViewAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
+        buttonTurnOn = (Button) findViewById(R.id.buttonTurnOn);
+        buttonCancel = (Button) findViewById(R.id.buttonCancel);
 
         // Set the 24-hour time format for the TimePicker.
-        timePicker.setIs24HourView(true);
-        bTurnOn.setOnClickListener(this);
-        bCancel.setOnClickListener(this);
+        timePickerAlarmTime.setIs24HourView(true);
+        buttonTurnOn.setOnClickListener(this);
+        buttonCancel.setOnClickListener(this);
         // Set that the button should have tactile feedback.
-        bTurnOn.setHapticFeedbackEnabled(true);
-        bCancel.setHapticFeedbackEnabled(true);
+        buttonTurnOn.setHapticFeedbackEnabled(true);
+        buttonCancel.setHapticFeedbackEnabled(true);
     }
 
     /**
@@ -116,11 +116,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int hour;
         int minute;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            hour = timePicker.getHour();
-            minute = timePicker.getMinute();
+            hour = timePickerAlarmTime.getHour();
+            minute = timePickerAlarmTime.getMinute();
         } else {
-            hour = timePicker.getCurrentHour();
-            minute = timePicker.getCurrentMinute();
+            hour = timePickerAlarmTime.getCurrentHour();
+            minute = timePickerAlarmTime.getCurrentMinute();
         }
         showAlarmTime(hour + ":" + (minute < 10 ? "0" + minute : minute));
         // Get the number of milliseconds from the date the alarm was activated.
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param time The alarm time for on-screen display.
      */
     private void showAlarmTime(String time) {
-        tvAlarmTime.setText(getResources().getString(R.string.turn_on, time));
+        textViewAlarmTime.setText(getResources().getString(R.string.turn_on, time));
     }
 
     /**
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void cancelAlarmClock() {
         Log.d(LOG_TAG, "Alarm clock cancel");
-        tvAlarmTime.setText(R.string.cancel);
+        textViewAlarmTime.setText(R.string.cancel);
         stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
         AlarmPreference.removeDatetimeSettings(getApplicationContext());
     }

@@ -39,10 +39,10 @@ public class AlarmIntentService extends IntentService {
      * @return The Intent supplied to startService(Intent), as given.
      */
     public static Intent newIntent(Context context, long datetime) {
-        Intent intent = new Intent(context, AlarmIntentService.class);
-        intent.setAction(ACTION_TURN_ON_ALARM_CLOCK);
-        intent.putExtra(EXTRA_DATETIME, datetime);
-        return intent;
+        Intent intentToStartAlarmService = new Intent(context, AlarmIntentService.class);
+        intentToStartAlarmService.setAction(ACTION_TURN_ON_ALARM_CLOCK);
+        intentToStartAlarmService.putExtra(EXTRA_DATETIME, datetime);
+        return intentToStartAlarmService;
     }
 
     @Override
@@ -105,9 +105,9 @@ public class AlarmIntentService extends IntentService {
      * Launch alarm window.
      */
     private void startAlarmActivity() {
-        Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
+        Intent intentToStartAlarmActivity = new Intent(getApplicationContext(), AlarmActivity.class);
         // Set this action as the beginning of a new task in this history stack.
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        intentToStartAlarmActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intentToStartAlarmActivity);
     }
 }

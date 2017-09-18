@@ -30,13 +30,13 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String LOG_TAG = "result_activity";
 
-    private MediaPlayer mediaPlayer;
-    private Vibrator vibrator;
-    private TextView tvAlarmTime;
-    private AnimationDrawable animationAlarm;
-    private Button bTurnOff;
-    private Button bSnooze;
-    private ImageView ivAlarm;
+    private MediaPlayer mediaPlayerAlarm;
+    private Vibrator vibratorAlarm;
+    private TextView textViewAlarmTime;
+    private AnimationDrawable animationDrawableAlarm;
+    private Button buttonTurnOff;
+    private Button buttonSnooze;
+    private ImageView imageViewAlarm;
 
     // Variable for storing the value of the screen activity.
     // Used to select actions to stop the alarm.
@@ -53,14 +53,14 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
             case R.id.buttonTurnOff:
                 Log.d(LOG_TAG, "stop Alarm");
                 // Provide tactile feedback for the button.
-                bTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                buttonTurnOff.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 turnOffAlarm();
                 break;
 
             case R.id.buttonSnooze:
                 Log.d(LOG_TAG, "snooze Alarm");
                 // Provide tactile feedback for the button.
-                bSnooze.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                buttonSnooze.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 snoozeAlarm();
                 break;
         }
@@ -98,17 +98,17 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
      */
     private void initViews() {
         setContentView(R.layout.activity_alarm);
-        ivAlarm = (ImageView) findViewById(R.id.imageViewAlarm);
-        ivAlarm.setBackgroundResource(R.drawable.alarm_animation);
-        tvAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
-        bTurnOff = (Button) findViewById(R.id.buttonTurnOff);
-        bSnooze = (Button) findViewById(R.id.buttonSnooze);
+        imageViewAlarm = (ImageView) findViewById(R.id.imageViewAlarm);
+        imageViewAlarm.setBackgroundResource(R.drawable.alarm_animation);
+        textViewAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
+        buttonTurnOff = (Button) findViewById(R.id.buttonTurnOff);
+        buttonSnooze = (Button) findViewById(R.id.buttonSnooze);
 
-        bTurnOff.setOnClickListener(this);
-        bSnooze.setOnClickListener(this);
+        buttonTurnOff.setOnClickListener(this);
+        buttonSnooze.setOnClickListener(this);
         // Set that the button should have tactile feedback.
-        bTurnOff.setHapticFeedbackEnabled(true);
-        bSnooze.setHapticFeedbackEnabled(true);
+        buttonTurnOff.setHapticFeedbackEnabled(true);
+        buttonSnooze.setHapticFeedbackEnabled(true);
     }
 
     /**
@@ -129,8 +129,8 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
      * Start the alarm animation.
      */
     private void startAlarmAnimation() {
-        animationAlarm = (AnimationDrawable) ivAlarm.getBackground();
-        animationAlarm.start();
+        animationDrawableAlarm = (AnimationDrawable) imageViewAlarm.getBackground();
+        animationDrawableAlarm.start();
     }
 
     /**
@@ -154,33 +154,33 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         // If the path to the file is empty, then play the default melody,
         // otherwise play the selected melody
         if (TextUtils.isEmpty(filePath)) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound);
+            mediaPlayerAlarm = MediaPlayer.create(this, R.raw.alarm_sound);
         } else {
             Log.d(LOG_TAG, "playAlarmSound()" + filePath);
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            mediaPlayerAlarm = new MediaPlayer();
+            mediaPlayerAlarm.setAudioStreamType(AudioManager.STREAM_ALARM);
             try {
-                mediaPlayer.setDataSource(filePath);
-                mediaPlayer.prepare();
+                mediaPlayerAlarm.setDataSource(filePath);
+                mediaPlayerAlarm.prepare();
             } catch (IOException e) {
                 Log.d(LOG_TAG, "playAlarmSound()" + e);
                 e.printStackTrace();
             }
         }
         // Set  repeat the sound.
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        mediaPlayerAlarm.setLooping(true);
+        mediaPlayerAlarm.start();
     }
 
     /**
      * Turn on vibration.
      */
     private void turnOnVibration() {
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibratorAlarm = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // If there is vibration on this device, then run it.
-        if (vibrator.hasVibrator()) {
+        if (vibratorAlarm.hasVibrator()) {
             long[] pattern = {0, 400, 800};
-            vibrator.vibrate(pattern, 0);
+            vibratorAlarm.vibrate(pattern, 0);
         }
     }
 
@@ -189,7 +189,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
      */
     private void showAlarmTime() {
         long datetime = AlarmPreference.getDatetimeSettings(getApplicationContext());
-        tvAlarmTime.setText(getResources().getString(R.string.alarm_time,
+        textViewAlarmTime.setText(getResources().getString(R.string.alarm_time,
                 Utility.getTime(datetime)));
     }
 
@@ -209,9 +209,9 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
      * SStop the action of music playback, animation and turn off vibration.
      */
     private void stopAction() {
-        mediaPlayer.stop();
-        vibrator.cancel();
-        animationAlarm.stop();
+        mediaPlayerAlarm.stop();
+        vibratorAlarm.cancel();
+        animationDrawableAlarm.stop();
     }
 
     /**
