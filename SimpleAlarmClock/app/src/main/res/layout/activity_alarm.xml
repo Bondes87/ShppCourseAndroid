@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/middle_margin_content"
         android:text="@string/alarm_time"
+        android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/text_size_big"

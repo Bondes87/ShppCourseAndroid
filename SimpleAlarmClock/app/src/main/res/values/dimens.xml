@@ -2,7 +2,7 @@
 <resources>
     <dimen name="middle_margin_content">16dp</dimen>
     <dimen name="text_size_big">36sp</dimen>
-    <dimen name="text_size_middle">24sp</dimen>
+    <dimen name="text_size_middle">22sp</dimen>
     <dimen name="text_size_small">15sp</dimen>
     <dimen name="small_margin_content">8dp</dimen>
 </resources>
