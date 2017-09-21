@@ -61,7 +61,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.buttonCancel:
                 // Provide tactile feedback for the button.
                 buttonCancel.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                cancelAlarmClock();
+                if (AlarmPreference.getDatetimeSettings(getApplicationContext()) > -1) {
+                    cancelAlarmClock();
+                }
                 break;
         }
     }
@@ -161,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private long getDatetime(int alarmHour, int alarmMinute) {
         if (alarmHour < 0) {
             Log.d(LOG_TAG, "getDatetime(): the hour of the alarm was set incorrectly");
-        } else if (alarmHour < 0) {
+        } else if (alarmMinute < 0) {
             Log.d(LOG_TAG, "getDatetime(): the minute of the alarm was set incorrectly");
         } else {
             Calendar calendar = Calendar.getInstance();

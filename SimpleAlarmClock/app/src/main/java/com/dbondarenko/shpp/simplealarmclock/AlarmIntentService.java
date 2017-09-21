@@ -15,9 +15,9 @@ import java.util.Calendar;
  */
 public class AlarmIntentService extends IntentService {
 
-    public static final String ACTION_TURN_ON_ALARM_CLOCK =
+    private static final String ACTION_TURN_ON_ALARM_CLOCK =
             "com.dbondarenko.shpp.simplealarmclock.action.TurnOnAlarmClock";
-    public static final String EXTRA_DATETIME =
+    private static final String EXTRA_DATETIME =
             "com.dbondarenko.shpp.simplealarmclock.extra.Datetime";
 
     private static final String LOG_TAG = "alarm_service";
