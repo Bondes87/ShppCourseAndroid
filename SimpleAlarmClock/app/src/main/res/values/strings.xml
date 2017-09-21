@@ -5,6 +5,7 @@
     <string name="button_cancel">Cancel</string>
     <string name="turn_on">The alarm is on at %1$s</string>
     <string name="cancel">The alarm is cancel</string>
+    <string name="alarm_not_installed">The alarm is not set</string>
     <string name="alarm_time" translatable="false">%1$s</string>
     <string name="button_snooze">Snooze</string>
     <string name="settings">Settings</string>

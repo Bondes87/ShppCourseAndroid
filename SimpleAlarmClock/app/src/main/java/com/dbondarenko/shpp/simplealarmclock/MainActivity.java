@@ -69,7 +69,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         Log.d(LOG_TAG, "onCreate()");
+        findViews();
         initViews();
         // Save default preferences.
         PreferenceManager.setDefaultValues(this, R.xml.setting_alarm, false);
@@ -84,20 +86,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (datetime != -1) {
             showAlarmTime(Utility.getTime(datetime));
         } else {
-            textViewAlarmTime.setText("");
+            textViewAlarmTime.setText(getResources().getString(R.string.alarm_not_installed));
         }
+    }
+
+    /**
+     * Find views.
+     */
+    private void findViews() {
+        timePickerAlarmTime = (TimePicker) findViewById(R.id.timePicker);
+        textViewAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
+        buttonTurnOn = (Button) findViewById(R.id.buttonTurnOn);
+        buttonCancel = (Button) findViewById(R.id.buttonCancel);
     }
 
     /**
      * Initialize views and set listeners.
      */
     private void initViews() {
-        setContentView(R.layout.activity_main);
-        timePickerAlarmTime = (TimePicker) findViewById(R.id.timePicker);
-        textViewAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
-        buttonTurnOn = (Button) findViewById(R.id.buttonTurnOn);
-        buttonCancel = (Button) findViewById(R.id.buttonCancel);
-
         // Set the 24-hour time format for the TimePicker.
         timePickerAlarmTime.setIs24HourView(true);
         buttonTurnOn.setOnClickListener(this);

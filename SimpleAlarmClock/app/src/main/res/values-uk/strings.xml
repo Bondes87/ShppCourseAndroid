@@ -6,6 +6,7 @@
     <string name="button_turn_off">Вимкнути</string>
     <string name="button_turn_on">Увімкнути</string>
     <string name="cancel">Будильник відмінено</string>
+    <string name="alarm_not_installed">Будильник не встановлено</string>
     <string name="category_about">Про програму</string>
     <string name="category_alarm_settings">Налаштування будильника</string>
     <string name="settings">Налаштування</string>
