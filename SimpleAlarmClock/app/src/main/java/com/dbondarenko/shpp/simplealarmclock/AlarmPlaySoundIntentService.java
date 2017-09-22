@@ -14,27 +14,44 @@ import android.util.Log;
 import java.io.IOException;
 
 /**
- *
+ * File: AlarmPlaySoundIntentService.java
+ * Service in which the alarm sounds. The service is working in the foreground.
+ * With this service you can start AlarmActivity to turn off the alarm.
+ * Created by Dmitro Bondarenko on 22.09.2017.
  */
 public class AlarmPlaySoundIntentService extends IntentService {
+
     private static final String LOG_TAG = "sound_service";
-    private static final String ACTION_ALARM_SOUND_PLAYBACK =
-            "com.dbondarenko.shpp.simplealarmclock.action.AlarmSoundPlayback";
-    private static final int NOTIFICATION_ID = 1;
-    private boolean isAlarmTurnOff;
+
+    private static final String ACTION_ALARM_PLAY_SOUND =
+            "com.dbondarenko.shpp.simplealarmclock.action.AlarmPlaySound";
+    // Service identifier AlarmPlaceSoundInternetService to work in the foreground.
+    private static final int ALARM_NOTIFICATION_ID = 1;
+
     private MediaPlayer mediaPlayerAlarm;
     private Vibrator vibratorAlarm;
+
+    // Variable is used to stop the work of the service. If the value of the variable is true,
+    // then the service should be stopped, if it is false, then the service continues to work.
+    private boolean isAlarmTurnOff;
 
     public AlarmPlaySoundIntentService() {
         super("AlarmPlaySoundIntentService");
     }
 
+    /**
+     * Returns the intent to run this service to perform the AlarmPlaySound action with
+     * the specified parameters.
+     *
+     * @param context The Context of the application package implementing this class.
+     * @return The Intent supplied to startService(Intent), as given.
+     */
     public static Intent newIntent(Context context) {
         if (context == null) {
             Log.d(LOG_TAG, "newIntent(): the context is equal to null");
         } else {
             Intent intentToStartAlarmService = new Intent(context, AlarmPlaySoundIntentService.class);
-            intentToStartAlarmService.setAction(ACTION_ALARM_SOUND_PLAYBACK);
+            intentToStartAlarmService.setAction(ACTION_ALARM_PLAY_SOUND);
             return intentToStartAlarmService;
         }
         return null;
@@ -43,7 +60,8 @@ public class AlarmPlaySoundIntentService extends IntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // Set the value of the dlodlo variable to true to cancel the alarm (stop the service).
+        // Set the value of the isAlarmTurnOff variable to true to cancel the alarm
+        // (stop the service).
         isAlarmTurnOff = true;
         Log.d(LOG_TAG, "onDestroy()");
     }
@@ -52,14 +70,12 @@ public class AlarmPlaySoundIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
-            if (ACTION_ALARM_SOUND_PLAYBACK.equals(action)) {
-                startForegroundService();
-                playAlarmSound();
-                turnOnVibration();
+            if (ACTION_ALARM_PLAY_SOUND.equals(action)) {
+                startForeground(ALARM_NOTIFICATION_ID, getAlarmNotification());
+                startAlarmActions();
                 while (true) {
                     if (isAlarmTurnOff) {
-                        mediaPlayerAlarm.stop();
-                        vibratorAlarm.cancel();
+                        stopAlarmActions();
                         stopForeground(true);
                         break;
                     }
@@ -69,24 +85,59 @@ public class AlarmPlaySoundIntentService extends IntentService {
     }
 
     /**
+     * Start the action of music playback and turn off vibration.
+     */
+    private void startAlarmActions() {
+        Log.d(LOG_TAG, "startAlarmActions()");
+        playAlarmSound();
+        turnOnVibration();
+    }
+
+    /**
+     * Get notification about alarm clock.
+     *
+     * @return Notification about alarm clock.
+     */
+    private Notification getAlarmNotification() {
+        return new Notification.Builder(getApplicationContext())
+                .setContentTitle("Alarm clock")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setWhen(System.currentTimeMillis())
+                .setContentIntent(getPendingIntentToStartAlarmActivity())
+                .build();
+    }
+
+    /**
+     * Get PendingIntent to run AlarmActivity.
+     *
+     * @return PendingIntent to run AlarmActivity.
+     */
+    private PendingIntent getPendingIntentToStartAlarmActivity() {
+        Intent intentToStartAlarmActivity = new Intent(getApplicationContext(), AlarmActivity.class);
+        // Set this action as the beginning of a new task in this history stack.
+        intentToStartAlarmActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return PendingIntent.getActivity(this, 0, intentToStartAlarmActivity, 0);
+    }
+
+    /**
      * Play alarm sound.
      */
     private void playAlarmSound() {
-        // Log.d(LOG_TAG, "playAlarmSound()");
+        Log.d(LOG_TAG, "playAlarmSound()");
         String filePath = AlarmPreference.getRingtoneSettings(getApplicationContext());
         // If the path to the file is empty, then play the default melody,
         // otherwise play the selected melody
         if (TextUtils.isEmpty(filePath)) {
             mediaPlayerAlarm = MediaPlayer.create(this, R.raw.alarm_sound);
         } else {
-            //  Log.d(LOG_TAG, "playAlarmSound()" + filePath);
+            Log.d(LOG_TAG, "playAlarmSound()" + filePath);
             mediaPlayerAlarm = new MediaPlayer();
             mediaPlayerAlarm.setAudioStreamType(AudioManager.STREAM_ALARM);
             try {
                 mediaPlayerAlarm.setDataSource(filePath);
                 mediaPlayerAlarm.prepare();
             } catch (IOException e) {
-                //    Log.d(LOG_TAG, "playAlarmSound()" + e);
+                Log.d(LOG_TAG, "playAlarmSound()" + e);
                 e.printStackTrace();
             }
         }
@@ -99,6 +150,7 @@ public class AlarmPlaySoundIntentService extends IntentService {
      * Turn on vibration.
      */
     private void turnOnVibration() {
+        Log.d(LOG_TAG, "turnOnVibration()");
         vibratorAlarm = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // If there is vibration on this device, then run it.
         if (vibratorAlarm.hasVibrator()) {
@@ -107,26 +159,12 @@ public class AlarmPlaySoundIntentService extends IntentService {
         }
     }
 
-    private void startForegroundService() {
-        Log.d(LOG_TAG, "startForegroundService()");
-        PendingIntent pendingIntent = getPendingIntent();
-        //Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        Notification notification = new Notification.Builder(getApplicationContext())
-                .setContentTitle("Alarm clock")
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setWhen(System.currentTimeMillis())
-                //.setAutoCancel(false)
-                .setContentIntent(pendingIntent)
-                //.setLargeIcon(Bitmap.createScaledBitmap(icon, 128, 128, false))
-                //.setOngoing(true)
-                .build();
-        startForeground(NOTIFICATION_ID, notification);
-    }
-
-    private PendingIntent getPendingIntent() {
-        Intent notificationIntent = new Intent(getApplicationContext(), AlarmActivity.class);
-        // Set this action as the beginning of a new task in this history stack.
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        return PendingIntent.getActivity(this, 0, notificationIntent, 0);
+    /**
+     * Stop the action of music playback and turn off vibration.
+     */
+    private void stopAlarmActions() {
+        Log.d(LOG_TAG, "stopAlarmActions()");
+        mediaPlayerAlarm.stop();
+        vibratorAlarm.cancel();
     }
 }

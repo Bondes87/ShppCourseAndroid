@@ -189,7 +189,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * SStop the action of music playback, animation and turn off vibration.
+     * Stop the animation.
      */
     private void stopAnimation() {
         animationDrawableAlarm.stop();

@@ -15,12 +15,13 @@ import java.util.Calendar;
  */
 public class AlarmIntentService extends IntentService {
 
+    private static final String LOG_TAG = "alarm_service";
+
     private static final String ACTION_TURN_ON_ALARM_CLOCK =
             "com.dbondarenko.shpp.simplealarmclock.action.TurnOnAlarmClock";
     private static final String EXTRA_DATETIME =
             "com.dbondarenko.shpp.simplealarmclock.extra.Datetime";
 
-    private static final String LOG_TAG = "alarm_service";
     // The variable that is used to stop the service if the alarm is canceled.
     private boolean isAlarmCanceled;
 
@@ -31,8 +32,8 @@ public class AlarmIntentService extends IntentService {
     }
 
     /**
-     * Starts this service to perform action TurnOnAlarmClock with the given parameters. If
-     * the service is already performing a task this action will be queued.
+     * Returns the intent to run this service to perform the TurnOnAlarmClock action with
+     * the specified parameters.
      *
      * @param context  The Context of the application package implementing this class.
      * @param datetime The time in milliseconds when want to start the alarm clock.
@@ -53,15 +54,10 @@ public class AlarmIntentService extends IntentService {
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        Log.d(LOG_TAG, "onCreate()");
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
-        // Set the value of the dlodlo variable to true to cancel the alarm (stop the service).
+        // Set the value of the isAlarmCanceled variable to true to cancel the alarm
+        // (stop the service).
         isAlarmCanceled = true;
         Log.d(LOG_TAG, "onDestroy()");
     }
