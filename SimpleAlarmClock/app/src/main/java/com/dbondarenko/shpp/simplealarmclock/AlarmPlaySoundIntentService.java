@@ -37,6 +37,8 @@ public class AlarmPlaySoundIntentService extends IntentService {
 
     public AlarmPlaySoundIntentService() {
         super("AlarmPlaySoundIntentService");
+        // Set the ability to restart the service if it was stopped and its work is not completed.
+        setIntentRedelivery(true);
     }
 
     /**
@@ -100,7 +102,7 @@ public class AlarmPlaySoundIntentService extends IntentService {
      */
     private Notification getAlarmNotification() {
         return new Notification.Builder(getApplicationContext())
-                .setContentTitle("Alarm clock")
+                .setContentTitle(getString(R.string.app_name))
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setWhen(System.currentTimeMillis())
                 .setContentIntent(getPendingIntentToStartAlarmActivity())

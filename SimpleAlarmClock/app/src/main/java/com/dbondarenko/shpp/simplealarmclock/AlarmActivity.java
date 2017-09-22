@@ -3,7 +3,6 @@ package com.dbondarenko.shpp.simplealarmclock;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -24,16 +23,12 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String LOG_TAG = "result_activity";
 
-
     private TextView textViewAlarmTime;
     private AnimationDrawable animationDrawableAlarm;
     private Button buttonTurnOff;
     private Button buttonSnooze;
     private ImageView imageViewAlarm;
 
-    // Variable for storing the value of the screen activity.
-    // Used to select actions to stop the alarm.
-    private boolean isScreenOn;
     // A variable is used to select actions before deleting an activity.
     // If its value is true, then the alarm time settings are not deleted,
     // otherwise - there will be deletions.
@@ -68,8 +63,6 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         Log.d(LOG_TAG, "onCreate()");
         findViews();
         initViews();
-        Log.d(LOG_TAG, "onCreate() >-1  " + AlarmPreference.getDatetimeSettings(getApplicationContext()));
-        determineScreenStatus();
         setUpScreen();
         startAlarmAnimation();
         startPlaySoundAndVibration();
@@ -77,27 +70,34 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(LOG_TAG, "onPause()");
-        Log.d(LOG_TAG, "isScreenOn = " + isScreenOn);
-        // If the screen was unlocked the first time the activity was activated,
-        // then stop the alarm, otherwise - change the value of isScreenOn to true.
-        /*if (isScreenOn) {
-            turnOffAlarm();
-        } else {
-            isScreenOn = true;
-        }*/
-    }
-
-    @Override
     protected void onDestroy() {
         Log.d(LOG_TAG, "onDestroy()");
         super.onDestroy();
         stopAnimation();
+    }
+
+    /**
+     * Stop the animation.
+     */
+    private void stopAnimation() {
+        animationDrawableAlarm.stop();
+    }
+
+    /**
+     * Turn off the alarm clock.
+     */
+    private void turnOffAlarm() {
+        stopAnimation();
+        // Delete the settings if the Snooze button has not been pressed.
+        if (!isSnoozeAlarm) {
+            AlarmPreference.removeDatetimeSettings(getApplicationContext());
+        }
         finish();
     }
 
+    /**
+     * Stop the service in which play sound and the included vibration.
+     */
     private void stopPlaySoundAndVibration() {
         stopService(AlarmPlaySoundIntentService.newIntent(getApplicationContext()));
     }
@@ -122,20 +122,6 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * Determine the status of the screen when activates for the first time.
-     * The result is assigned to the variable isScreenOn.
-     */
-    private void determineScreenStatus() {
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT_WATCH) {
-            isScreenOn = powerManager.isInteractive();
-        } else {
-            isScreenOn = powerManager.isScreenOn();
-        }
-        Log.d(LOG_TAG, "isScreenOn = " + isScreenOn);
-    }
-
-    /**
      * Start the alarm animation.
      */
     private void startAlarmAnimation() {
@@ -156,7 +142,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * Play alarm sound.
+     * Play alarm sound and turn on vibration.
      */
     private void startPlaySoundAndVibration() {
         startService(AlarmPlaySoundIntentService.newIntent(getApplicationContext()));
@@ -174,25 +160,6 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
             textViewAlarmTime.setText(getResources().getString(R.string.alarm_time,
                     Utility.getTime(datetime)));
         }
-    }
-
-    /**
-     * Turn off the alarm clock.
-     */
-    private void turnOffAlarm() {
-        stopAnimation();
-        // Delete the settings if the Snooze button has not been pressed.
-        if (!isSnoozeAlarm) {
-            AlarmPreference.removeDatetimeSettings(getApplicationContext());
-        }
-        finish();
-    }
-
-    /**
-     * Stop the animation.
-     */
-    private void stopAnimation() {
-        animationDrawableAlarm.stop();
     }
 
     /**
