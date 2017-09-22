@@ -32,4 +32,24 @@ class Utility {
         }
         return null;
     }
+
+    static boolean checkForNull(Object o) {
+        if (o == null) {
+            throw new NullPointerException("The object is equal null.");
+        }
+        return false;
+    }
+
+    static boolean isNotEmptyString(String string) {
+        if (string == null || string.length() == 0)
+            throw new NullPointerException("The string is equal null or empty.");
+        return false;
+    }
+
+    static boolean isNotNegativeNumber(long number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("The number is negative.");
+        }
+        return false;
+    }
 }
