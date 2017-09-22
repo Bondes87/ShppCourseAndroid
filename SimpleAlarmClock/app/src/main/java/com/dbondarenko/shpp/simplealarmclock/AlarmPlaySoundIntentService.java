@@ -126,7 +126,8 @@ public class AlarmPlaySoundIntentService extends IntentService {
      */
     private void playAlarmSound() {
         Log.d(LOG_TAG, "playAlarmSound()");
-        String filePath = AlarmPreference.getRingtoneSettings(getApplicationContext());
+        String filePath = AlarmPreference.getAlarmPreference()
+                .getRingtoneSettings(getApplicationContext());
         // If the path to the file is empty, then play the default melody,
         // otherwise play the selected melody
         if (TextUtils.isEmpty(filePath)) {

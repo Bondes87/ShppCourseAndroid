@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.buttonCancel:
                 // Provide tactile feedback for the button.
                 buttonCancel.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                if (AlarmPreference.getDatetimeSettings(getApplicationContext()) > -1) {
+                if (AlarmPreference.getAlarmPreference().
+                        getDatetimeSettings(getApplicationContext()) > -1) {
                     cancelAlarmClock();
                 }
                 break;
@@ -84,7 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         Log.d(LOG_TAG, "onResume()");
         // Get and display the alarm time if it was activated earlier.
-        long datetime = AlarmPreference.getDatetimeSettings(getApplicationContext());
+        long datetime = AlarmPreference.getAlarmPreference()
+                .getDatetimeSettings(getApplicationContext());
         if (datetime != -1) {
             showAlarmTime(Utility.getTime(datetime));
         } else {
@@ -135,7 +137,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Get the number of milliseconds from the date the alarm was activated.
         long alarmDatetime = getDatetime(hour, minute);
         // Save number of milliseconds (alarm activation date).
-        AlarmPreference.saveDatetimeSettings(getApplicationContext(), alarmDatetime);
+        AlarmPreference.getAlarmPreference()
+                .saveDatetimeSettings(getApplicationContext(), alarmDatetime);
         stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
         startService(AlarmIntentService.newIntent(getApplicationContext(), alarmDatetime));
     }
@@ -199,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d(LOG_TAG, "Alarm clock cancel");
         textViewAlarmTime.setText(R.string.cancel);
         stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
-        AlarmPreference.removeDatetimeSettings(getApplicationContext());
+        AlarmPreference.getAlarmPreference()
+                .removeDatetimeSettings(getApplicationContext());
     }
 }

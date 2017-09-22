@@ -90,7 +90,8 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         stopAnimation();
         // Delete the settings if the Snooze button has not been pressed.
         if (!isSnoozeAlarm) {
-            AlarmPreference.removeDatetimeSettings(getApplicationContext());
+            AlarmPreference.getAlarmPreference()
+                    .removeDatetimeSettings(getApplicationContext());
         }
         finish();
     }
@@ -153,7 +154,8 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
      * Show the time of the alarm on the screen.
      */
     private void showAlarmTime() {
-        long datetime = AlarmPreference.getDatetimeSettings(getApplicationContext());
+        long datetime = AlarmPreference.getAlarmPreference()
+                .getDatetimeSettings(getApplicationContext());
         if (datetime < 0) {
             Log.d(LOG_TAG, "showAlarmTime(): the time of the alarm was set incorrectly");
         } else {
@@ -168,17 +170,20 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     private void snoozeAlarm() {
         isSnoozeAlarm = true;
         stopAnimation();
-        String snoozeSettings = AlarmPreference.getSnoozeSettings(getApplicationContext());
+        String snoozeSettings = AlarmPreference.getAlarmPreference()
+                .getSnoozeSettings(getApplicationContext());
         if (TextUtils.isEmpty(snoozeSettings)) {
             Log.d(LOG_TAG, "showAlarmTime(): the snooze time of the alarm is not set");
         } else {
             // Get the number of minutes for sleep.
             int snoozeTime = Integer.parseInt(snoozeSettings);
             // Create a new Datetime for the alarm.
-            long newAlarmDatetime = AlarmPreference.getDatetimeSettings(getApplicationContext())
+            long newAlarmDatetime = AlarmPreference.getAlarmPreference()
+                    .getDatetimeSettings(getApplicationContext())
                     + DateUtils.MINUTE_IN_MILLIS * snoozeTime;
             Log.d(LOG_TAG, "snoozeAlarm()" + snoozeTime);
-            AlarmPreference.saveDatetimeSettings(getApplicationContext(), newAlarmDatetime);
+            AlarmPreference.getAlarmPreference()
+                    .saveDatetimeSettings(getApplicationContext(), newAlarmDatetime);
             stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
             startService(AlarmIntentService.newIntent(getApplicationContext(), newAlarmDatetime));
         }

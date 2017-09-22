@@ -6,7 +6,9 @@ import android.util.Log;
 
 /**
  * File: AlarmPreference.java
- * The class that contains methods for saving, retrieving and clearing the alarm time settings.
+ * The class that contains methods for saving, retrieving and clearing the alarm time settings,
+ * methods for getting the path to the alarm sound and the snooze time for the alarm.
+ * The class is built using the Singleton pattern
  * Created by Dmitro Bondarenko on 01.09.2017.
  */
 class AlarmPreference {
@@ -16,13 +18,31 @@ class AlarmPreference {
     // The constant that specifies the name of the setting to save.
     private static final String ALARM_CLOCK_PREFERENCES_DATETIME = "Datetime";
 
+    private static AlarmPreference alarmPreference;
+
+    private AlarmPreference() {
+    }
+
+    /**
+     * Get the object AlarmPreference. If the object AlarmPreference is null,
+     * then create the object, otherwise return the existing object.
+     *
+     * @return object AlarmPreference.
+     */
+    static AlarmPreference getAlarmPreference() {
+        if (alarmPreference == null) {
+            alarmPreference = new AlarmPreference();
+        }
+        return alarmPreference;
+    }
+
     /**
      * Save the alarm time.
      *
      * @param context  The Context of the application package implementing this class.
      * @param datetime The number of milliseconds.
      */
-    static void saveDatetimeSettings(Context context, long datetime) {
+    void saveDatetimeSettings(Context context, long datetime) {
         if (context == null) {
             Log.d(LOG_TAG, "saveDatetimeSettings(): the context is equal to null");
         } else if (datetime < 0) {
@@ -41,7 +61,7 @@ class AlarmPreference {
      * @param context The Context of the application package implementing this class.
      * @return The number of milliseconds or -1 if the alarm was not activated.
      */
-    static long getDatetimeSettings(Context context) {
+    long getDatetimeSettings(Context context) {
         if (context == null) {
             Log.d(LOG_TAG, "getDatetimeSettings(): the context is equal to null");
         } else {
@@ -57,7 +77,7 @@ class AlarmPreference {
      * @param context The Context of the application package implementing this class.
      * @return The path to the ringtone or the null.
      */
-    static String getRingtoneSettings(Context context) {
+    String getRingtoneSettings(Context context) {
         if (context == null) {
             Log.d(LOG_TAG, "getRingtoneSettings(): the context is equal to null");
         } else {
@@ -73,7 +93,7 @@ class AlarmPreference {
      * @param context The Context of the application package implementing this class.
      * @return The path to the ringtone or the null.
      */
-    static String getSnoozeSettings(Context context) {
+    String getSnoozeSettings(Context context) {
         if (context == null) {
             Log.d(LOG_TAG, "getSnoozeSettings(): the context is equal to null");
         } else {
@@ -88,7 +108,7 @@ class AlarmPreference {
      *
      * @param context The Context of the application package implementing this class.
      */
-    static void removeDatetimeSettings(Context context) {
+    void removeDatetimeSettings(Context context) {
         if (context == null) {
             Log.d(LOG_TAG, "removeDatetimeSettings(): the context is equal to null");
         } else {
