@@ -15,7 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -23,13 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".AlarmActivity"
             android:excludeFromRecents="true"
             android:noHistory="true">
         </activity>
-
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings"
@@ -38,7 +35,7 @@
 
         <service
             android:name=".AlarmIntentService"
-            android:process=":service">
+            android:process=":AlarmIntentService">
         </service>
 
         <receiver android:name=".RestoreAlarmBroadcastReceiver">
@@ -49,6 +46,10 @@
             </intent-filter>
         </receiver>
 
+        <service
+            android:name=".AlarmPlaySoundIntentService"
+            android:process=":AlarmSoundPlaybackIntentService">
+        </service>
     </application>
 
 </manifest>
