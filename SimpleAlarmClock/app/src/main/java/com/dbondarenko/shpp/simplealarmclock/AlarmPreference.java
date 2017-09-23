@@ -8,7 +8,7 @@ import android.util.Log;
  * File: AlarmPreference.java
  * The class that contains methods for saving, retrieving and clearing the alarm time settings,
  * methods for getting the path to the alarm sound and the snooze time for the alarm.
- * The class is built using the Singleton pattern
+ * The class is built using the Singleton pattern.
  * Created by Dmitro Bondarenko on 01.09.2017.
  */
 class AlarmPreference {
@@ -90,6 +90,20 @@ class AlarmPreference {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(context.getString(R.string.key_snooze_settings), null);
     }
+
+    /**
+     * Returns true if AlarmManager is used for the alarm, otherwise return the false.
+     *
+     * @param context The Context of the application package implementing this class.
+     * @return The true if AlarmManager is used for the alarm, otherwise return the false.
+     */
+    boolean isUseAlarmManager(Context context) {
+        Log.d(LOG_TAG, "isUseAlarmManager()");
+        Utility.checkForNull(context);
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(context.getString(R.string.key_alarm_manager), false);
+    }
+
 
     /**
      * Remove the alarm time.

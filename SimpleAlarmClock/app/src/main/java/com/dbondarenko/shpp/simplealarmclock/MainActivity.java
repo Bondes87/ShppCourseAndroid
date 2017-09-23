@@ -132,8 +132,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Save number of milliseconds (alarm activation date).
         AlarmPreference.getAlarmPreference()
                 .saveDatetimeSettings(getApplicationContext(), alarmDatetime);
-        stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
-        startService(AlarmIntentService.newIntent(getApplicationContext(), alarmDatetime));
+        if (AlarmPreference.getAlarmPreference().isUseAlarmManager(getApplicationContext())) {
+            AlarmClockManager.getAlarmClockManager()
+                    .cancelAlarmUsingAlarmManager(getApplicationContext(), alarmDatetime);
+            AlarmClockManager.getAlarmClockManager()
+                    .startAlarmUsingAlarmManager(getApplicationContext(), alarmDatetime);
+        } else {
+            stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
+            startService(AlarmIntentService.newIntent(getApplicationContext(), alarmDatetime));
+        }
     }
 
     /**
@@ -182,7 +189,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void cancelAlarmClock() {
         Log.d(LOG_TAG, "Alarm clock cancel");
         textViewAlarmTime.setText(R.string.cancel);
-        stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
+        if (AlarmPreference.getAlarmPreference().isUseAlarmManager(getApplicationContext())) {
+            long datetime = AlarmPreference.getAlarmPreference()
+                    .getDatetimeSettings(getApplicationContext());
+            Utility.checkForNegativeNumber(datetime);
+            AlarmClockManager.getAlarmClockManager()
+                    .cancelAlarmUsingAlarmManager(getApplicationContext(), datetime);
+        } else {
+            stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
+        }
         AlarmPreference.getAlarmPreference()
                 .removeDatetimeSettings(getApplicationContext());
     }

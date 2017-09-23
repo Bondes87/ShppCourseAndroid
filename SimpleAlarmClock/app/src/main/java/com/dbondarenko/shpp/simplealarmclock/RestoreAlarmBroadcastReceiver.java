@@ -21,6 +21,11 @@ public class RestoreAlarmBroadcastReceiver extends BroadcastReceiver {
         Utility.checkForNull(context);
         long datetime = AlarmPreference.getAlarmPreference().getDatetimeSettings(context);
         Utility.checkForNegativeNumber(datetime);
-        context.startService(AlarmIntentService.newIntent(context, datetime));
+        if (AlarmPreference.getAlarmPreference().isUseAlarmManager(context)) {
+            AlarmClockManager.getAlarmClockManager()
+                    .startAlarmUsingAlarmManager(context, datetime);
+        } else {
+            context.startService(AlarmIntentService.newIntent(context, datetime));
+        }
     }
 }
