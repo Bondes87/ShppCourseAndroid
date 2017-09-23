@@ -20,7 +20,7 @@ import android.widget.TextView;
  */
 public class AlarmActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String LOG_TAG = "result_activity";
+    private static final String LOG_TAG = "alarm_activity";
 
     private TextView textViewAlarmTime;
     private AnimationDrawable animationDrawableAlarm;
