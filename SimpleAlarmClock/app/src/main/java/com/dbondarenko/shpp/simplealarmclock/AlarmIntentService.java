@@ -89,6 +89,7 @@ public class AlarmIntentService extends IntentService {
             try {
                 Thread.sleep(ONE_SECOND);
             } catch (InterruptedException e) {
+                Log.e(LOG_TAG, "playAlarmSound()" + e);
                 e.printStackTrace();
             }
         }

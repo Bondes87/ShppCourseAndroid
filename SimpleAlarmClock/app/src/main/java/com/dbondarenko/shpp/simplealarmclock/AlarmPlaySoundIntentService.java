@@ -135,7 +135,7 @@ public class AlarmPlaySoundIntentService extends IntentService {
                 mediaPlayerAlarm.setDataSource(filePath);
                 mediaPlayerAlarm.prepare();
             } catch (IOException e) {
-                Log.d(LOG_TAG, "playAlarmSound()" + e);
+                Log.e(LOG_TAG, "playAlarmSound()" + e);
                 e.printStackTrace();
             }
         }
