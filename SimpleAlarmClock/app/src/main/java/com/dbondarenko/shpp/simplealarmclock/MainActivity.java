@@ -18,6 +18,9 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 
 /**
  * File: MainActivity.java
@@ -27,6 +30,9 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String LOG_TAG = "main_activity";
+
+    private static final String SHOWCASE_ID =
+            "com.dbondarenko.shpp.simplealarmclock.action.MainActivity";
 
     @BindView(R.id.timePicker)
     TimePicker timePickerAlarmTime;
@@ -46,7 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-            Intent intentToStartSettingsActivity = new Intent(getApplicationContext(), SettingsActivity.class);
+            Intent intentToStartSettingsActivity = new Intent(getApplicationContext(),
+                    SettingsActivity.class);
             startActivity(intentToStartSettingsActivity);
             return true;
         } else {
@@ -84,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initViews();
         // Save default preferences.
         PreferenceManager.setDefaultValues(this, R.xml.setting_alarm, false);
+        presentShowcaseView();
     }
 
     @Override
@@ -98,6 +106,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             textViewAlarmTime.setText(getResources().getString(R.string.alarm_not_installed));
         }
+    }
+
+    private void presentShowcaseView() {
+        ShowcaseConfig config = new ShowcaseConfig();
+        // Half second between each showcase view
+        config.setDelay(500);
+        config.setShapePadding(0);
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID);
+        sequence.setConfig(config);
+        sequence.addSequenceItem(buttonTurnOn,
+                "This is button to turn on the alarm", "GOT IT");
+        sequence.addSequenceItem(buttonCancel,
+                "This is button to cancel the alarm", "GOT IT");
+        sequence.addSequenceItem(timePickerAlarmTime,
+                "Here you select the time of alarm clock", "GOT IT");
+        sequence.start();
     }
 
     /**
