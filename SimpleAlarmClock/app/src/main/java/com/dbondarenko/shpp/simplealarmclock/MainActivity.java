@@ -117,18 +117,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void turnOnAlarmClock() {
         Log.d(LOG_TAG, "Alarm clock turn on");
-        int hour;
-        int minute;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            hour = timePickerAlarmTime.getHour();
-            minute = timePickerAlarmTime.getMinute();
-        } else {
-            hour = timePickerAlarmTime.getCurrentHour();
-            minute = timePickerAlarmTime.getCurrentMinute();
-        }
-        showAlarmTime(hour + ":" + (minute < 10 ? "0" + minute : minute));
         // Get the number of milliseconds from the date the alarm was activated.
-        long alarmDatetime = getDatetime(hour, minute);
+        long alarmDatetime = getDatetime(getTime());
+        showAlarmTime(Utility.getTime(alarmDatetime));
         // Save number of milliseconds (alarm activation date).
         AlarmPreference.getAlarmPreference()
                 .saveDatetimeSettings(getApplicationContext(), alarmDatetime);
@@ -145,6 +136,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
+     * Return an array with two elements, the first is a hour, and the second is a minutes.
+     *
+     * @return An array with two elements.
+     */
+    private int[] getTime() {
+        int hour;
+        int minute;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            hour = timePickerAlarmTime.getHour();
+            minute = timePickerAlarmTime.getMinute();
+        } else {
+            hour = timePickerAlarmTime.getCurrentHour();
+            minute = timePickerAlarmTime.getCurrentMinute();
+        }
+        return new int[]{hour, minute};
+    }
+
+    /**
      * Show the time of the alarm on the screen.
      *
      * @param time The alarm time for on-screen display.
@@ -157,12 +166,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Get time it into the number of milliseconds given the current date.
      *
-     * @param alarmHour   The hour when the alarm should ring.
-     * @param alarmMinute Minutes when the alarm should ring.
+     * @param alarmTime The array with two elements, the first is a hour,
+     *                  and the second is a minutes.
      * @return The time when the alarm should ring in milliseconds.
      */
-    private long getDatetime(int alarmHour, int alarmMinute) {
-        Utility.checkForNegativeNumber(alarmHour, alarmMinute);
+    private long getDatetime(int[] alarmTime) {
+        Utility.checkForNegativeNumber(alarmTime[0], alarmTime[1]);
+        int alarmHour = alarmTime[0];
+        int alarmMinute = alarmTime[1];
         Calendar calendar = Calendar.getInstance();
         int alarmDay = calendar.get(Calendar.DAY_OF_YEAR);
         int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
