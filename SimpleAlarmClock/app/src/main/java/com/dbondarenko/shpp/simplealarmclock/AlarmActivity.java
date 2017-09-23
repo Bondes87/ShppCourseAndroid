@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * File: AlarmActivity.java
  * The activity in which  is stop the alarm.
@@ -22,11 +25,16 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String LOG_TAG = "alarm_activity";
 
-    private TextView textViewAlarmTime;
+    @BindView(R.id.imageViewAlarm)
+    ImageView imageViewAlarm;
+    @BindView(R.id.textViewAlarmTime)
+    TextView textViewAlarmTime;
+    @BindView(R.id.buttonTurnOff)
+    Button buttonTurnOff;
+    @BindView(R.id.buttonSnooze)
+    Button buttonSnooze;
+
     private AnimationDrawable animationDrawableAlarm;
-    private Button buttonTurnOff;
-    private Button buttonSnooze;
-    private ImageView imageViewAlarm;
 
     // A variable is used to select actions before deleting an activity.
     // If its value is true, then the alarm time settings are not deleted,
@@ -59,8 +67,8 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
+        ButterKnife.bind(this);
         Log.d(LOG_TAG, "onCreate()");
-        findViews();
         initViews();
         setUpScreen();
         startAlarmAnimation();
@@ -102,23 +110,13 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         stopService(AlarmPlaySoundIntentService.newIntent(getApplicationContext()));
     }
 
-    private void findViews() {
-        imageViewAlarm = (ImageView) findViewById(R.id.imageViewAlarm);
-        imageViewAlarm.setBackgroundResource(R.drawable.alarm_animation);
-        textViewAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
-        buttonTurnOff = (Button) findViewById(R.id.buttonTurnOff);
-        buttonSnooze = (Button) findViewById(R.id.buttonSnooze);
-    }
-
     /**
      * Initialize views and set listeners.
      */
     private void initViews() {
+        imageViewAlarm.setBackgroundResource(R.drawable.alarm_animation);
         buttonTurnOff.setOnClickListener(this);
         buttonSnooze.setOnClickListener(this);
-        // Set that the button should have tactile feedback.
-        buttonTurnOff.setHapticFeedbackEnabled(true);
-        buttonSnooze.setHapticFeedbackEnabled(true);
     }
 
     /**

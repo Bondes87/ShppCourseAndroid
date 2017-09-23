@@ -16,6 +16,9 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * File: MainActivity.java
  * The activity which is launched when the program starts. Here can set up and start the alarm.
@@ -25,10 +28,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String LOG_TAG = "main_activity";
 
-    private TimePicker timePickerAlarmTime;
-    private TextView textViewAlarmTime;
-    private Button buttonTurnOn;
-    private Button buttonCancel;
+    @BindView(R.id.timePicker)
+    TimePicker timePickerAlarmTime;
+    @BindView(R.id.textViewAlarmTime)
+    TextView textViewAlarmTime;
+    @BindView(R.id.buttonTurnOn)
+    Button buttonTurnOn;
+    @BindView(R.id.buttonCancel)
+    Button buttonCancel;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,8 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         Log.d(LOG_TAG, "onCreate()");
-        findViews();
         initViews();
         // Save default preferences.
         PreferenceManager.setDefaultValues(this, R.xml.setting_alarm, false);
@@ -94,16 +101,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Find views.
-     */
-    private void findViews() {
-        timePickerAlarmTime = (TimePicker) findViewById(R.id.timePicker);
-        textViewAlarmTime = (TextView) findViewById(R.id.textViewAlarmTime);
-        buttonTurnOn = (Button) findViewById(R.id.buttonTurnOn);
-        buttonCancel = (Button) findViewById(R.id.buttonCancel);
-    }
-
-    /**
      * Initialize views and set listeners.
      */
     private void initViews() {
@@ -111,9 +108,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         timePickerAlarmTime.setIs24HourView(true);
         buttonTurnOn.setOnClickListener(this);
         buttonCancel.setOnClickListener(this);
-        // Set that the button should have tactile feedback.
-        buttonTurnOn.setHapticFeedbackEnabled(true);
-        buttonCancel.setHapticFeedbackEnabled(true);
     }
 
     /**
