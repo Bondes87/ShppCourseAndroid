@@ -176,13 +176,14 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         Log.d(LOG_TAG, "snoozeAlarm()" + snoozeTime);
         AlarmPreference.getAlarmPreference()
                 .saveDatetimeSettings(getApplicationContext(), newAlarmDatetime);
+        // Cancel alarm clock, which was launched  AlarmManager or AlarmIntentService.
+        AlarmClockManager.getAlarmClockManager()
+                .cancelAlarmUsingAlarmManager(getApplicationContext(), newAlarmDatetime);
+        stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
         if (AlarmPreference.getAlarmPreference().isUseAlarmManager(getApplicationContext())) {
-            AlarmClockManager.getAlarmClockManager()
-                    .cancelAlarmUsingAlarmManager(getApplicationContext(), newAlarmDatetime);
             AlarmClockManager.getAlarmClockManager()
                     .startAlarmUsingAlarmManager(getApplicationContext(), newAlarmDatetime);
         } else {
-            stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
             startService(AlarmIntentService.newIntent(getApplicationContext(), newAlarmDatetime));
         }
         finish();
