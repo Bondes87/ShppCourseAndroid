@@ -15,13 +15,12 @@ import java.util.Calendar;
  */
 public class AlarmIntentService extends IntentService {
 
+    public static final int ONE_SECOND = 1000;
     private static final String LOG_TAG = "alarm_service";
-
     private static final String ACTION_TURN_ON_ALARM_CLOCK =
             "com.dbondarenko.shpp.simplealarmclock.action.TurnOnAlarmClock";
     private static final String EXTRA_DATETIME =
             "com.dbondarenko.shpp.simplealarmclock.extra.Datetime";
-
     // The variable that is used to stop the service if the alarm is canceled.
     private boolean isAlarmCanceled;
 
@@ -40,17 +39,12 @@ public class AlarmIntentService extends IntentService {
      * @return The Intent supplied to startService(Intent), as given.
      */
     public static Intent newIntent(Context context, long datetime) {
-        if (context == null) {
-            Log.d(LOG_TAG, "newIntent(): the context is equal to null");
-        } else if (datetime < 0) {
-            Log.d(LOG_TAG, "onHandleIntent(): the time of the alarm was set incorrectly");
-        } else {
-            Intent intentToStartAlarmService = new Intent(context, AlarmIntentService.class);
-            intentToStartAlarmService.setAction(ACTION_TURN_ON_ALARM_CLOCK);
-            intentToStartAlarmService.putExtra(EXTRA_DATETIME, datetime);
-            return intentToStartAlarmService;
-        }
-        return null;
+        Utility.checkForNull(context);
+        Utility.checkForNegativeNumber(datetime);
+        Intent intentToStartAlarmService = new Intent(context, AlarmIntentService.class);
+        intentToStartAlarmService.setAction(ACTION_TURN_ON_ALARM_CLOCK);
+        intentToStartAlarmService.putExtra(EXTRA_DATETIME, datetime);
+        return intentToStartAlarmService;
     }
 
     @Override
@@ -64,23 +58,17 @@ public class AlarmIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            Log.d(LOG_TAG, "onHandleIntent()");
-            final String action = intent.getAction();
-            if (ACTION_TURN_ON_ALARM_CLOCK.equals(action)) {
-                long datetime = intent.getLongExtra(EXTRA_DATETIME, -1);
-                if (datetime < 0) {
-                    Log.d(LOG_TAG, "onHandleIntent(): the time of the alarm was set incorrectly");
-                } else {
-                    waitForRightTime(datetime);
-                    // If the alarm is canceled, do not start the alarm stop window.
-                    if (!isAlarmCanceled) {
-                        startAlarmActivity();
-                    }
-                }
+        Utility.checkForNull(intent);
+        Log.d(LOG_TAG, "onHandleIntent()");
+        final String action = intent.getAction();
+        if (ACTION_TURN_ON_ALARM_CLOCK.equals(action)) {
+            long datetime = intent.getLongExtra(EXTRA_DATETIME, -1);
+            Utility.checkForNegativeNumber(datetime);
+            waitForRightTime(datetime);
+            // If the alarm is canceled, do not start the alarm stop window.
+            if (!isAlarmCanceled) {
+                startAlarmActivity();
             }
-        } else {
-            Log.d(LOG_TAG, "onHandleIntent(): intent is equal to null");
         }
     }
 
@@ -91,23 +79,20 @@ public class AlarmIntentService extends IntentService {
      */
     private void waitForRightTime(long alarmDatetime) {
         Log.d(LOG_TAG, "waitForRightTime(): alarmTime = " + alarmDatetime);
-        if (alarmDatetime != -1) {
-            long currentDatetime;
-            // Check the current time as long as it is less than the alarm
-            // time or until the alarm was canceled.
-            do {
-                currentDatetime = Calendar.getInstance().getTimeInMillis();
-                Log.d(LOG_TAG, "waitForRightTime(): currentTime = " + currentDatetime);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        Utility.checkForNegativeNumber(alarmDatetime);
+        long currentDatetime;
+        // Check the current time as long as it is less than the alarm
+        // time or until the alarm was canceled.
+        do {
+            currentDatetime = Calendar.getInstance().getTimeInMillis();
+            Log.d(LOG_TAG, "waitForRightTime(): currentTime = " + currentDatetime);
+            try {
+                Thread.sleep(ONE_SECOND);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            while (alarmDatetime > currentDatetime && !isAlarmCanceled);
-        } else {
-            Log.e(LOG_TAG, "waitForRightTime(): the alarm time is not set.");
         }
+        while (alarmDatetime > currentDatetime && !isAlarmCanceled);
     }
 
     /**

@@ -49,14 +49,10 @@ public class AlarmPlaySoundIntentService extends IntentService {
      * @return The Intent supplied to startService(Intent), as given.
      */
     public static Intent newIntent(Context context) {
-        if (context == null) {
-            Log.d(LOG_TAG, "newIntent(): the context is equal to null");
-        } else {
-            Intent intentToStartAlarmService = new Intent(context, AlarmPlaySoundIntentService.class);
-            intentToStartAlarmService.setAction(ACTION_ALARM_PLAY_SOUND);
-            return intentToStartAlarmService;
-        }
-        return null;
+        Utility.checkForNull(context);
+        Intent intentToStartAlarmService = new Intent(context, AlarmPlaySoundIntentService.class);
+        intentToStartAlarmService.setAction(ACTION_ALARM_PLAY_SOUND);
+        return intentToStartAlarmService;
     }
 
     @Override
@@ -70,17 +66,16 @@ public class AlarmPlaySoundIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_ALARM_PLAY_SOUND.equals(action)) {
-                startForeground(ALARM_NOTIFICATION_ID, getAlarmNotification());
-                startAlarmActions();
-                while (true) {
-                    if (isAlarmTurnOff) {
-                        stopAlarmActions();
-                        stopForeground(true);
-                        break;
-                    }
+        Utility.checkForNull(intent);
+        final String action = intent.getAction();
+        if (ACTION_ALARM_PLAY_SOUND.equals(action)) {
+            startForeground(ALARM_NOTIFICATION_ID, getAlarmNotification());
+            startAlarmActions();
+            while (true) {
+                if (isAlarmTurnOff) {
+                    stopAlarmActions();
+                    stopForeground(true);
+                    break;
                 }
             }
         }

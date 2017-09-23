@@ -43,16 +43,13 @@ class AlarmPreference {
      * @param datetime The number of milliseconds.
      */
     void saveDatetimeSettings(Context context, long datetime) {
-        if (context == null) {
-            Log.d(LOG_TAG, "saveDatetimeSettings(): the context is equal to null");
-        } else if (datetime < 0) {
-            Log.d(LOG_TAG, "saveDatetimeSettings(): the time of the alarm was set incorrectly");
-        } else {
-            PreferenceManager.getDefaultSharedPreferences(context)
-                    .edit()
-                    .putLong(ALARM_CLOCK_PREFERENCES_DATETIME, datetime)
-                    .apply();
-        }
+        Log.d(LOG_TAG, "saveDatetimeSettings()");
+        Utility.checkForNull(context);
+        Utility.checkForNegativeNumber(datetime);
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putLong(ALARM_CLOCK_PREFERENCES_DATETIME, datetime)
+                .apply();
     }
 
     /**
@@ -62,13 +59,10 @@ class AlarmPreference {
      * @return The number of milliseconds or -1 if the alarm was not activated.
      */
     long getDatetimeSettings(Context context) {
-        if (context == null) {
-            Log.d(LOG_TAG, "getDatetimeSettings(): the context is equal to null");
-        } else {
-            return PreferenceManager.getDefaultSharedPreferences(context)
-                    .getLong(ALARM_CLOCK_PREFERENCES_DATETIME, -1);
-        }
-        return -1;
+        Log.d(LOG_TAG, "getDatetimeSettings()");
+        Utility.checkForNull(context);
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getLong(ALARM_CLOCK_PREFERENCES_DATETIME, -1);
     }
 
     /**
@@ -78,13 +72,10 @@ class AlarmPreference {
      * @return The path to the ringtone or the null.
      */
     String getRingtoneSettings(Context context) {
-        if (context == null) {
-            Log.d(LOG_TAG, "getRingtoneSettings(): the context is equal to null");
-        } else {
-            return PreferenceManager.getDefaultSharedPreferences(context)
-                    .getString(context.getString(R.string.key_ringtone_settings), null);
-        }
-        return null;
+        Log.d(LOG_TAG, "getRingtoneSettings()");
+        Utility.checkForNull(context);
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(context.getString(R.string.key_ringtone_settings), null);
     }
 
     /**
@@ -94,13 +85,10 @@ class AlarmPreference {
      * @return The path to the ringtone or the null.
      */
     String getSnoozeSettings(Context context) {
-        if (context == null) {
-            Log.d(LOG_TAG, "getSnoozeSettings(): the context is equal to null");
-        } else {
-            return PreferenceManager.getDefaultSharedPreferences(context)
-                    .getString(context.getString(R.string.key_snooze_settings), null);
-        }
-        return null;
+        Log.d(LOG_TAG, "getSnoozeSettings()");
+        Utility.checkForNull(context);
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(context.getString(R.string.key_snooze_settings), null);
     }
 
     /**
@@ -109,13 +97,11 @@ class AlarmPreference {
      * @param context The Context of the application package implementing this class.
      */
     void removeDatetimeSettings(Context context) {
-        if (context == null) {
-            Log.d(LOG_TAG, "removeDatetimeSettings(): the context is equal to null");
-        } else {
-            PreferenceManager.getDefaultSharedPreferences(context)
-                    .edit()
-                    .remove(ALARM_CLOCK_PREFERENCES_DATETIME)
-                    .apply();
-        }
+        Log.d(LOG_TAG, "removeDatetimeSettings()");
+        Utility.checkForNull(context);
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove(ALARM_CLOCK_PREFERENCES_DATETIME)
+                .apply();
     }
 }

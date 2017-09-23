@@ -17,17 +17,10 @@ public class RestoreAlarmBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (context == null) {
-            Log.d(LOG_TAG, "onReceive(): the context is equal to null");
-        } else {
-            long datetime = AlarmPreference.getAlarmPreference()
-                    .getDatetimeSettings(context);
-            // Start the service if there is an alarm time value.
-            if (datetime != -1) {
-                context.startService(AlarmIntentService.newIntent(context, datetime));
-            } else {
-                Log.d(LOG_TAG, "onReceive(): the time of the alarm was set incorrectly");
-            }
-        }
+        Log.d(LOG_TAG, "onReceive()");
+        Utility.checkForNull(context);
+        long datetime = AlarmPreference.getAlarmPreference().getDatetimeSettings(context);
+        Utility.checkForNegativeNumber(datetime);
+        context.startService(AlarmIntentService.newIntent(context, datetime));
     }
 }

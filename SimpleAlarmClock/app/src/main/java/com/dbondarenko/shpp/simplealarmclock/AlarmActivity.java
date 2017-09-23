@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
@@ -156,12 +155,9 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     private void showAlarmTime() {
         long datetime = AlarmPreference.getAlarmPreference()
                 .getDatetimeSettings(getApplicationContext());
-        if (datetime < 0) {
-            Log.d(LOG_TAG, "showAlarmTime(): the time of the alarm was set incorrectly");
-        } else {
-            textViewAlarmTime.setText(getResources().getString(R.string.alarm_time,
-                    Utility.getTime(datetime)));
-        }
+        Utility.checkForNegativeNumber(datetime);
+        textViewAlarmTime.setText(getResources().getString(R.string.alarm_time,
+                Utility.getTime(datetime)));
     }
 
     /**
@@ -172,21 +168,18 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         stopAnimation();
         String snoozeSettings = AlarmPreference.getAlarmPreference()
                 .getSnoozeSettings(getApplicationContext());
-        if (TextUtils.isEmpty(snoozeSettings)) {
-            Log.d(LOG_TAG, "showAlarmTime(): the snooze time of the alarm is not set");
-        } else {
-            // Get the number of minutes for sleep.
-            int snoozeTime = Integer.parseInt(snoozeSettings);
-            // Create a new Datetime for the alarm.
-            long newAlarmDatetime = AlarmPreference.getAlarmPreference()
-                    .getDatetimeSettings(getApplicationContext())
-                    + DateUtils.MINUTE_IN_MILLIS * snoozeTime;
-            Log.d(LOG_TAG, "snoozeAlarm()" + snoozeTime);
-            AlarmPreference.getAlarmPreference()
-                    .saveDatetimeSettings(getApplicationContext(), newAlarmDatetime);
-            stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
-            startService(AlarmIntentService.newIntent(getApplicationContext(), newAlarmDatetime));
-        }
+        Utility.checkForEmptyString(snoozeSettings);
+        // Get the number of minutes for sleep.
+        int snoozeTime = Integer.parseInt(snoozeSettings);
+        // Create a new Datetime for the alarm.
+        long newAlarmDatetime = AlarmPreference.getAlarmPreference()
+                .getDatetimeSettings(getApplicationContext())
+                + DateUtils.MINUTE_IN_MILLIS * snoozeTime;
+        Log.d(LOG_TAG, "snoozeAlarm()" + snoozeTime);
+        AlarmPreference.getAlarmPreference()
+                .saveDatetimeSettings(getApplicationContext(), newAlarmDatetime);
+        stopService(new Intent(getApplicationContext(), AlarmIntentService.class));
+        startService(AlarmIntentService.newIntent(getApplicationContext(), newAlarmDatetime));
         finish();
     }
 }
