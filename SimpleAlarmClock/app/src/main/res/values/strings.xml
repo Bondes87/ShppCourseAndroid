@@ -25,4 +25,7 @@
     <string name="summary_version" translatable="false">1.1</string>
     <string name="summary_author">Dmytro Bondarenko</string>
     <string name="summary_feedbeck" translatable="false">bondes87@gmail.com</string>
+    <string name="key_alarm_manager">KeyAlarmManager</string>
+    <string name="title_alarm_manager">Alarm Manager</string>
+    <string name="summary_alarm_manager">Check the box to use Alarm Manager for alarm clock operation</string>
 </resources>

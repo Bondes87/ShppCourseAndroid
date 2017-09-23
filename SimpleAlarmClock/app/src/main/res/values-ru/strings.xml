@@ -19,4 +19,5 @@
     <string name="tittle_author">Автор</string>
     <string name="tittle_ringtone_settings">Выбор мелодии</string>
     <string name="turn_on">Будильник установлен на %1$s</string>
+    <string name="summary_alarm_manager">Установите флажок, чтобы использовать Alarm Manager для работы будильника</string>
 </resources>

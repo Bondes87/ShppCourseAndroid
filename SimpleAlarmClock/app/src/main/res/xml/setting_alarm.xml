@@ -4,6 +4,11 @@
     <PreferenceCategory
         android:key="@string/key_alarm_settings"
         android:title="@string/category_alarm_settings">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/key_alarm_manager"
+            android:summary="@string/summary_alarm_manager"
+            android:title="@string/title_alarm_manager"/>
         <RingtonePreference
             android:key="@string/key_ringtone_settings"
             android:ringtoneType="alarm"
