@@ -108,20 +108,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * Create and start the presentation of ShowcaseView.
+     */
     private void presentShowcaseView() {
         ShowcaseConfig config = new ShowcaseConfig();
-        // Half second between each showcase view
+        // Half second between each showcase view.
         config.setDelay(500);
-        config.setShapePadding(0);
-        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID);
-        sequence.setConfig(config);
-        sequence.addSequenceItem(buttonTurnOn,
-                "This is button to turn on the alarm", "GOT IT");
-        sequence.addSequenceItem(buttonCancel,
-                "This is button to cancel the alarm", "GOT IT");
-        sequence.addSequenceItem(timePickerAlarmTime,
-                "Here you select the time of alarm clock", "GOT IT");
-        sequence.start();
+        // Decrease the radius of the shape by the specified value.
+        config.setShapePadding(-50);
+        MaterialShowcaseSequence materialShowcaseSequencence =
+                new MaterialShowcaseSequence(this, SHOWCASE_ID);
+        materialShowcaseSequencence.setConfig(config);
+        materialShowcaseSequencence.addSequenceItem(buttonTurnOn,
+                getString(R.string.showcase_view_button_turn_on),
+                getString(R.string.showcase_view_got_it));
+        materialShowcaseSequencence.addSequenceItem(buttonCancel,
+                getString(R.string.showcase_view_button_cancel),
+                getString(R.string.showcase_view_got_it));
+        materialShowcaseSequencence.start();
     }
 
     /**

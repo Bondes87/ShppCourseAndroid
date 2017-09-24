@@ -20,4 +20,6 @@
     <string name="tittle_ringtone_settings">Вибір мелодії</string>
     <string name="turn_on">Будильник встановлено на %1$s</string>
     <string name="summary_alarm_manager">Встановіть прапорець, щоб використовувати Alarm Manager для роботи будильника</string>
+    <string name="showcase_view_button_cancel">Це кнопка, щоб відмінити будильник</string>
+    <string name="showcase_view_button_turn_on">Це кнопка, щоб увімкнути будильник</string>
 </resources>

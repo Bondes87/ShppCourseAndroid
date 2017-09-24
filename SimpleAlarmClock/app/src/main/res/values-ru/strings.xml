@@ -20,4 +20,6 @@
     <string name="tittle_ringtone_settings">Выбор мелодии</string>
     <string name="turn_on">Будильник установлен на %1$s</string>
     <string name="summary_alarm_manager">Установите флажок, чтобы использовать Alarm Manager для работы будильника</string>
+    <string name="showcase_view_button_cancel">Это кнопка для отмены будильника</string>
+    <string name="showcase_view_button_turn_on">Это кнопка включения будильника</string>
 </resources>
