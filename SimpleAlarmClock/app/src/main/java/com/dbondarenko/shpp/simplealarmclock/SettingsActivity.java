@@ -20,9 +20,11 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBarSettings != null) {
             actionBarSettings.setDisplayHomeAsUpEnabled(true);
         }
-        // Show a fragment with preferences.
-        getFragmentManager().beginTransaction()
-                .add(android.R.id.content, new SettingsFragment())
-                .commit();
+        if (savedInstanceState == null) {
+            // Show a fragment with preferences.
+            getFragmentManager().beginTransaction()
+                    .add(android.R.id.content, new SettingsFragment())
+                    .commit();
+        }
     }
 }
