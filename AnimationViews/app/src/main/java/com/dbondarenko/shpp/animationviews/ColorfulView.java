@@ -1,5 +1,6 @@
 package com.dbondarenko.shpp.animationviews;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -7,7 +8,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -42,7 +42,7 @@ public class ColorfulView extends View {
         init();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public ColorfulView(Context context, @Nullable AttributeSet attrs,
                         int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);

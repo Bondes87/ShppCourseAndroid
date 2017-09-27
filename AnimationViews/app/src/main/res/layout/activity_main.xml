@@ -5,15 +5,113 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBeige"
+    android:padding="@dimen/default_padding"
     tools:context="com.dbondarenko.shpp.animationviews.MainActivity">
 
+
+    <TextView
+        android:id="@+id/textViewStickerA"
+        android:layout_width="@dimen/sticker_size"
+        android:layout_height="@dimen/sticker_size"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:background="@color/colorRed"
+        android:gravity="center"
+        android:text="@string/sticker_a"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/default_text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewStickerB"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/textViewStickerB"
+        app:layout_constraintTop_toTopOf="@+id/textViewStickerB"/>
+
+    <TextView
+        android:id="@+id/textViewStickerB"
+        android:layout_width="@dimen/sticker_size"
+        android:layout_height="@dimen/sticker_size"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:gravity="center"
+        android:text="@string/sticker_b"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/default_text_size"
+        android:background="@color/colorDodgerBlue"
+        app:layout_constraintBottom_toTopOf="@+id/textViewStickerE"
+        app:layout_constraintLeft_toRightOf="@+id/textViewStickerA"
+        app:layout_constraintRight_toLeftOf="@+id/textViewStickerC"
+        />
+
+    <TextView
+        android:id="@+id/textViewStickerC"
+        android:layout_width="@dimen/sticker_size"
+        android:layout_height="@dimen/sticker_size"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:gravity="center"
+        android:text="@string/sticker_c"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/default_text_size"
+        android:background="@color/colorMediumOrchid"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewStickerB"
+        app:layout_constraintLeft_toRightOf="@+id/textViewStickerB"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewStickerB"
+        />
+
+    <TextView
+        android:id="@+id/textViewStickerD"
+        android:layout_width="@dimen/sticker_size"
+        android:layout_height="@dimen/sticker_size"
+        android:layout_margin="@dimen/default_margin"
+        android:gravity="center"
+        android:text="@string/sticker_d"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/default_text_size"
+        android:background="@color/colorYellow"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewStickerE"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/textViewStickerE"
+        app:layout_constraintTop_toTopOf="@+id/textViewStickerE"/>
+
+    <TextView
+        android:id="@+id/textViewStickerE"
+        android:layout_width="@dimen/sticker_size"
+        android:layout_height="@dimen/sticker_size"
+        android:layout_margin="@dimen/default_margin"
+        android:gravity="center"
+        android:text="@string/sticker_e"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/default_text_size"
+        android:background="@color/colorLimeGreen"
+        app:layout_constraintBottom_toTopOf="@+id/colorfulViewSticker"
+        app:layout_constraintLeft_toRightOf="@+id/textViewStickerD"
+        app:layout_constraintRight_toLeftOf="@+id/textViewStickerF"
+        app:layout_constraintTop_toBottomOf="@+id/textViewStickerB"/>
+
+    <TextView
+        android:id="@+id/textViewStickerF"
+        android:layout_width="@dimen/sticker_size"
+        android:layout_height="@dimen/sticker_size"
+        android:layout_margin="@dimen/default_margin"
+        android:gravity="center"
+        android:text="@string/sticker_f"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/default_text_size"
+        android:background="@color/colorDarkOrange"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewStickerE"
+        app:layout_constraintLeft_toRightOf="@+id/textViewStickerE"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewStickerE"/>
+
     <com.dbondarenko.shpp.animationviews.ColorfulView
-        android:id="@+id/colorful_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/colorfulViewSticker"
+        android:layout_width="@dimen/sticker_size"
+        android:layout_height="@dimen/sticker_size"
+        android:layout_margin="@dimen/default_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
+        app:layout_constraintTop_toBottomOf="@+id/textViewStickerE"/>
 </android.support.constraint.ConstraintLayout>
