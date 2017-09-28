@@ -55,15 +55,13 @@ public class MainActivity extends AppCompatActivity {
                 - textViewStickerA.getHeight();
         if (!isStickersReturn ) {
             isStickersReturn = true;
-            ObjectAnimator moveX = ObjectAnimator.ofFloat(textViewStickerA, "x", xValue / 2);
-            ObjectAnimator moveY = ObjectAnimator.ofFloat(textViewStickerA, "y", yValue);
-            ObjectAnimator rotationX = ObjectAnimator.ofFloat(textViewStickerA, "rotationX", 275);
-            ObjectAnimator rotationY = ObjectAnimator.ofFloat(textViewStickerA, "rotationY", 360);
-            AnimatorSet fallAnimation = new AnimatorSet();
-            fallAnimation.setInterpolator(new LinearInterpolator());
-            fallAnimation.setDuration(2000);
-            fallAnimation.playTogether(moveX, moveY, rotationX, rotationY);
-            fallAnimation.start();
+            textViewStickerA.animate()
+                    .setDuration(2000)
+                    .setInterpolator(new LinearInterpolator())
+                    .x(xValue / 2)
+                    .y(yValue)
+                    .rotationX(275).
+                    rotationY(360);
         }
     }
 
@@ -72,15 +70,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "onViewLongClicked()");
         if (isStickersReturn) {
             isStickersReturn = false;
-            ObjectAnimator translationX = ObjectAnimator.ofFloat(textViewStickerA, "translationX", 0);
-            ObjectAnimator translationY = ObjectAnimator.ofFloat(textViewStickerA, "translationY", 0);
-            ObjectAnimator rotationX = ObjectAnimator.ofFloat(textViewStickerA, "rotationX", 0);
-            ObjectAnimator rotationY = ObjectAnimator.ofFloat(textViewStickerA, "rotationY", -360);
-            AnimatorSet returnAnimation = new AnimatorSet();
-            returnAnimation.playTogether(translationX, translationY, rotationX, rotationY);
-            returnAnimation.setInterpolator(new LinearInterpolator());
-            returnAnimation.setDuration(1000);
-            returnAnimation.start();
+            textViewStickerA.animate()
+                    .setDuration(1000)
+                    .setInterpolator(new LinearInterpolator())
+                    .translationX(0)
+                    .translationY(0)
+                    .rotationX(0).
+                    rotationY(-360);
         }
         return true;
     }
