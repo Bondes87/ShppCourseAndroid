@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">AnimationViews</string>
+    <string name="app_name">Falling stickers</string>
     <string name="sticker_a">A</string>
     <string name="sticker_b">B</string>
     <string name="sticker_c">C</string>
     <string name="sticker_d">D</string>
     <string name="sticker_e">E</string>
     <string name="sticker_f">F</string>
+    <string name="showcase_view_content_text">A quick tap on the screen launches the falling stickers animation. Long press on the screen launches the animation of returning stickers to their places. Running animation is forbidden if another animation is played.</string>
 </resources>

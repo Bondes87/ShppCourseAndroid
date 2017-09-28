@@ -3,6 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorShowcaseViewBackground">#b3000000</color>
+    <color name="colorShowcaseView">#25467A</color>
+    <color name="colorShowcaseViewContentTitle">#ff8800</color>
+    <color name="colorShowcaseViewContentText">#ffffff</color>
     <color name="colorBeige">#F5F5DC</color>
     <color name="colorRed">#FF0000</color>
     <color name="colorDodgerBlue">#1E90FF</color>
@@ -10,5 +14,4 @@
     <color name="colorYellow">#FFFF00</color>
     <color name="colorLimeGreen">#32CD32</color>
     <color name="colorDarkOrange">#FF8C00</color>
-
 </resources>

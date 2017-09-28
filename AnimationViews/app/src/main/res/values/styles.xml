@@ -8,4 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ShowcaseViewTheme" parent="ShowcaseView">
+        <item name="sv_backgroundColor">@color/colorShowcaseViewBackground</item>
+        <item name="sv_showcaseColor">@color/colorShowcaseView</item>
+        <item name="sv_titleTextAppearance">@style/ContentTitle</item>
+        <item name="sv_detailTextAppearance">@style/ContentText</item>
+    </style>
+
+    <style name="ContentTitle" parent="TextAppearance.ShowcaseView.Title.Light">
+        <item name="android:textColor">@color/colorShowcaseViewContentTitle</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ContentText" parent="TextAppearance.ShowcaseView.Detail.Light">
+        <item name="android:textColor">@color/colorShowcaseViewContentText</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+    </style>
+
 </resources>

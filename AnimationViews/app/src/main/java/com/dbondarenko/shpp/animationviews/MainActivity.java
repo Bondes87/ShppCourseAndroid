@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         slowestAnimation = new AnimatorSet();
+        presentShowcaseView();
     }
 
     @OnClick(R.id.constraintLayoutBoard)
@@ -158,5 +162,17 @@ public class MainActivity extends AppCompatActivity {
      */
     private long getValueOfDuration() {
         return ONE_SECOND + Utility.getRandomNumber(4 * ONE_SECOND);
+    }
+
+    /**
+     * Create and start the presentation of ShowcaseView.
+     */
+    private void presentShowcaseView() {
+        new ShowcaseView.Builder(this)
+                .setStyle(R.style.ShowcaseViewTheme)
+                .setTarget(ActionViewTarget.NONE)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.showcase_view_content_text))
+                .build();
     }
 }
