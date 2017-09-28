@@ -1,7 +1,5 @@
 package com.dbondarenko.shpp.animationviews;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +14,14 @@ import butterknife.OnLongClick;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int ROTATION_X_FOR_FALL = 275;
+    public static final int ROTATION_Y_FOR_FALL = 360;
+    public static final int ROTATION_X_FOR_RETURN = 0;
+    public static final int ROTATION_Y_FOR_RETURN = -360;
+    public static final int TRANSLATION_X_FOR_RETURN = 0;
+    public static final int TRANSLATION_Y_FOR_RETURN = 0;
+    private static final int ONE_SECOND = 1000;
+    public static final int DURATION_OF_RETURN_ANIMATION = ONE_SECOND;
     private static final String LOG_TAG = "main_activity";
 
     @BindView(R.id.constraintLayoutBoard)
@@ -37,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isStickersReturn;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreate()");
@@ -49,19 +54,9 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.constraintLayoutBoard)
     public void onViewClicked() {
         Log.d(LOG_TAG, "onViewClicked()");
-        int xValue = constraintLayoutBoard.getWidth() - constraintLayoutBoard.getPaddingEnd()
-                - textViewStickerA.getWidth();
-        int yValue = constraintLayoutBoard.getHeight() - constraintLayoutBoard.getPaddingBottom()
-                - textViewStickerA.getHeight();
-        if (!isStickersReturn ) {
+        if (!isStickersReturn) {
             isStickersReturn = true;
-            textViewStickerA.animate()
-                    .setDuration(2000)
-                    .setInterpolator(new LinearInterpolator())
-                    .x(xValue / 2)
-                    .y(yValue)
-                    .rotationX(275).
-                    rotationY(360);
+            runOfFallAnimation();
         }
     }
 
@@ -70,14 +65,49 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "onViewLongClicked()");
         if (isStickersReturn) {
             isStickersReturn = false;
-            textViewStickerA.animate()
-                    .setDuration(1000)
-                    .setInterpolator(new LinearInterpolator())
-                    .translationX(0)
-                    .translationY(0)
-                    .rotationX(0).
-                    rotationY(-360);
+            runOfReturnAnimation();
         }
         return true;
+    }
+
+    private float getValueOfX() {
+        int maxValueOfX = constraintLayoutBoard.getWidth() - constraintLayoutBoard.getPaddingEnd()
+                - textViewStickerA.getWidth();
+        int minValueOfX = constraintLayoutBoard.getPaddingStart();
+        return minValueOfX + Utility.getRandomNumber(maxValueOfX);
+    }
+
+    private float getValueOfY() {
+        return constraintLayoutBoard.getHeight()
+                - constraintLayoutBoard.getPaddingBottom()
+                - textViewStickerA.getHeight();
+    }
+
+    private long getValueOfDuration() {
+        return ONE_SECOND + Utility.getRandomNumber(4 * ONE_SECOND);
+    }
+
+    private void runOfFallAnimation() {
+        for (int i = 0; i < constraintLayoutBoard.getChildCount(); i++) {
+            constraintLayoutBoard.getChildAt(i).animate()
+                    .setDuration(getValueOfDuration())
+                    .setInterpolator(new LinearInterpolator())
+                    .x(getValueOfX())
+                    .y(getValueOfY())
+                    .rotationX(ROTATION_X_FOR_FALL).
+                    rotationY(ROTATION_Y_FOR_FALL);
+        }
+    }
+
+    private void runOfReturnAnimation() {
+        for (int i = 0; i < constraintLayoutBoard.getChildCount(); i++) {
+            constraintLayoutBoard.getChildAt(i).animate()
+                    .setDuration(DURATION_OF_RETURN_ANIMATION)
+                    .setInterpolator(new LinearInterpolator())
+                    .translationX(TRANSLATION_X_FOR_RETURN)
+                    .translationY(TRANSLATION_Y_FOR_RETURN)
+                    .rotationX(ROTATION_X_FOR_RETURN).
+                    rotationY(ROTATION_Y_FOR_RETURN);
+        }
     }
 }
