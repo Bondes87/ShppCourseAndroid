@@ -29,11 +29,11 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static final int ONE_SECOND = 1000;
+    public static final int SHOWCASE_VIEW_SHAPE_PADDING = -50;
     private static final String LOG_TAG = "main_activity";
-
     private static final String SHOWCASE_ID =
             "com.dbondarenko.shpp.simplealarmclock.action.MainActivity";
-
     @BindView(R.id.timePicker)
     TimePicker timePickerAlarmTime;
     @BindView(R.id.textViewAlarmTime)
@@ -114,9 +114,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void presentShowcaseView() {
         ShowcaseConfig config = new ShowcaseConfig();
         // Half second between each showcase view.
-        config.setDelay(500);
+        config.setDelay(ONE_SECOND);
         // Decrease the radius of the shape by the specified value.
-        config.setShapePadding(-50);
+        config.setShapePadding(SHOWCASE_VIEW_SHAPE_PADDING);
         MaterialShowcaseSequence materialShowcaseSequencence =
                 new MaterialShowcaseSequence(this, SHOWCASE_ID);
         materialShowcaseSequencence.setConfig(config);
