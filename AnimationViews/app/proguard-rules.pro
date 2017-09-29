@@ -23,3 +23,15 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# For Butterknife:
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+
+# Version 8
+-keep class **_ViewBinding { *; }
+-keepclasseswithmembernames class * { @butterknife.* <fields>; }
+-keepclasseswithmembernames class * { @butterknife.* <methods>; }
+
+# For ShowcaseView:
+-keep class github.amlcurran.** { *; }
