@@ -3,6 +3,7 @@ package com.dbondarenko.shpp.animationviews;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -39,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String PROPERTY_TRANSLATION_X = "translationX";
     private static final String PROPERTY_TRANSLATION_Y = "translationY";
     private static final int DURATION_OF_RETURN_ANIMATION = ONE_SECOND;
+    // The parameter name that is used to save in SharedPreferences and
+    // get the result from SharedPreferences about using ShowcaseView.
+    private static final String PREFERENCES_SHOWCASE_VIEW = "ShowcaseView";
 
     @BindView(R.id.constraintLayoutBoard)
     ConstraintLayout constraintLayoutBoard;
@@ -168,11 +172,36 @@ public class MainActivity extends AppCompatActivity {
      * Create and start the presentation of ShowcaseView.
      */
     private void presentShowcaseView() {
-        new ShowcaseView.Builder(this)
-                .setStyle(R.style.ShowcaseViewTheme)
-                .setTarget(ActionViewTarget.NONE)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(getString(R.string.showcase_view_content_text))
-                .build();
+        if (!isWasUsedShowcaseView()) {
+            saveShowcaseViewSettings();
+            new ShowcaseView.Builder(this)
+                    .setStyle(R.style.ShowcaseViewTheme)
+                    .setTarget(ActionViewTarget.NONE)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText(getString(R.string.showcase_view_content_text))
+                    .build();
+        }
+    }
+
+    /**
+     * Returns true if ShowcaseView has already been was used, otherwise it returns false.
+     *
+     * @return The true if ShowcaseView has already been was used, otherwise it returns false.
+     */
+    private boolean isWasUsedShowcaseView() {
+        Log.d(LOG_TAG, "isWasUsedShowcaseView()");
+        return PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .getBoolean(PREFERENCES_SHOWCASE_VIEW, false);
+    }
+
+    /**
+     * Save the value to true in SharedPreferences if ShowcaseView is used.
+     */
+    private void saveShowcaseViewSettings() {
+        Log.d(LOG_TAG, "saveShowcaseViewSettings()");
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .edit()
+                .putBoolean(PREFERENCES_SHOWCASE_VIEW, true)
+                .apply();
     }
 }
