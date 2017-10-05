@@ -33,16 +33,16 @@ public class MainActivity extends AppCompatActivity {
     private static final int TRANSLATION_X_FOR_RETURN = 0;
     private static final int TRANSLATION_Y_FOR_RETURN = 0;
     // Parameter names in the settings for creating fall animation and return animation.
-    private static final String PROPERTY_X = "x";
-    private static final String PROPERTY_Y = "y";
-    private static final String PROPERTY_ROTATION_X = "rotationX";
-    private static final String PROPERTY_ROTATION_Y = "rotationY";
-    private static final String PROPERTY_TRANSLATION_X = "translationX";
-    private static final String PROPERTY_TRANSLATION_Y = "translationY";
+    private static final String PROPERTY_NAME_MOVE_BY_X = "x";
+    private static final String PROPERTY_NAME_MOVE_BY_Y = "y";
+    private static final String PROPERTY_NAME_ROTATION_BY_X = "rotationX";
+    private static final String PROPERTY_NAME_ROTATION_BY_Y = "rotationY";
+    private static final String PROPERTY_NAME_TRANSLATION_BY_X = "translationX";
+    private static final String PROPERTY_NAME_TRANSLATION_BY_Y = "translationY";
     private static final int DURATION_OF_RETURN_ANIMATION = ONE_SECOND;
     // The parameter name that is used to save in SharedPreferences and
     // get the result from SharedPreferences about using ShowcaseView.
-    private static final String PREFERENCES_SHOWCASE_VIEW = "ShowcaseView";
+    private static final String KEY_PREFERENCES_SHOWCASE_VIEW = "ShowcaseView";
 
     @BindView(R.id.constraintLayoutBoard)
     ConstraintLayout constraintLayoutBoard;
@@ -98,10 +98,10 @@ public class MainActivity extends AppCompatActivity {
             AnimatorSet fallAnimation = new AnimatorSet();
             fallAnimation.setInterpolator(new LinearInterpolator());
             fallAnimation.setDuration(currentValueOfDuration);
-            fallAnimation.playTogether(ObjectAnimator.ofFloat(sticker, PROPERTY_X, getValueOfX()),
-                    ObjectAnimator.ofFloat(sticker, PROPERTY_Y, getValueOfY()),
-                    ObjectAnimator.ofFloat(sticker, PROPERTY_ROTATION_X, ROTATION_X_FOR_FALL),
-                    ObjectAnimator.ofFloat(sticker, PROPERTY_ROTATION_Y, ROTATION_Y_FOR_FALL));
+            fallAnimation.playTogether(ObjectAnimator.ofFloat(sticker, PROPERTY_NAME_MOVE_BY_X, getValueOfX()),
+                    ObjectAnimator.ofFloat(sticker, PROPERTY_NAME_MOVE_BY_Y, getValueOfY()),
+                    ObjectAnimator.ofFloat(sticker, PROPERTY_NAME_ROTATION_BY_X, ROTATION_X_FOR_FALL),
+                    ObjectAnimator.ofFloat(sticker, PROPERTY_NAME_ROTATION_BY_Y, ROTATION_Y_FOR_FALL));
             fallAnimation.start();
             // The slowest animation is an animation that has the longest duration.
             if (currentValueOfDuration > maxValueOfDuration) {
@@ -122,10 +122,10 @@ public class MainActivity extends AppCompatActivity {
             returnAnimation.setInterpolator(new LinearInterpolator());
             returnAnimation.setDuration(DURATION_OF_RETURN_ANIMATION);
             returnAnimation.playTogether(
-                    ObjectAnimator.ofFloat(sticker, PROPERTY_TRANSLATION_X, TRANSLATION_X_FOR_RETURN),
-                    ObjectAnimator.ofFloat(sticker, PROPERTY_TRANSLATION_Y, TRANSLATION_Y_FOR_RETURN),
-                    ObjectAnimator.ofFloat(sticker, PROPERTY_ROTATION_X, ROTATION_X_FOR_RETURN),
-                    ObjectAnimator.ofFloat(sticker, PROPERTY_ROTATION_Y, ROTATION_Y_FOR_RETURN));
+                    ObjectAnimator.ofFloat(sticker, PROPERTY_NAME_TRANSLATION_BY_X, TRANSLATION_X_FOR_RETURN),
+                    ObjectAnimator.ofFloat(sticker, PROPERTY_NAME_TRANSLATION_BY_Y, TRANSLATION_Y_FOR_RETURN),
+                    ObjectAnimator.ofFloat(sticker, PROPERTY_NAME_ROTATION_BY_X, ROTATION_X_FOR_RETURN),
+                    ObjectAnimator.ofFloat(sticker, PROPERTY_NAME_ROTATION_BY_Y, ROTATION_Y_FOR_RETURN));
             returnAnimation.start();
             // The slowest animation is the last one.
             if (i == constraintLayoutBoard.getChildCount() - 1) {
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isWasUsedShowcaseView() {
         Log.d(LOG_TAG, "isWasUsedShowcaseView()");
         return PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .getBoolean(PREFERENCES_SHOWCASE_VIEW, false);
+                .getBoolean(KEY_PREFERENCES_SHOWCASE_VIEW, false);
     }
 
     /**
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "saveShowcaseViewSettings()");
         PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                 .edit()
-                .putBoolean(PREFERENCES_SHOWCASE_VIEW, true)
+                .putBoolean(KEY_PREFERENCES_SHOWCASE_VIEW, true)
                 .apply();
     }
 }

@@ -21,14 +21,15 @@ import java.util.TimerTask;
  */
 public class ColorfulView extends View {
 
+    private static final String LOG_TAG = "colorful_view";
     // The time period between color changes in the view.
-    public static final int PERIOD_OF_TIME_BETWEEN_CHANGE_OF_COLOR = 500;
+    private static final int PERIOD_OF_TIME_BETWEEN_CHANGE_OF_COLOR = 500;
     // The time delay before begins of color change.
-    public static final int DELAY_OF_TIME_BEFORE_BEGINNING_CHANGE_OF_COLOR = 0;
+    private static final int DELAY_OF_TIME_BEFORE_BEGINNING_CHANGE_OF_COLOR = 0;
     // The amount of intensity values that can be used in one of the four
     // components to compose color.
-    public static final int AMOUNT_OF_COLOR_INTENSIVES = 256;
-    private static final String LOG_TAG = "colorful_view";
+    private static final int AMOUNT_OF_COLOR_INTENSIVES = 256;
+
     private Paint paint;
     private Timer timer;
     private Handler handler;
@@ -93,12 +94,7 @@ public class ColorfulView extends View {
         return new TimerTask() {
             @Override
             public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        invalidate();
-                    }
-                });
+                handler.post(() -> invalidate());
             }
         };
     }
