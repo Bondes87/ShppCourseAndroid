@@ -2,12 +2,17 @@ package com.dbondarenko.shpp.simplealarmclock;
 
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Vibrator;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -22,9 +27,11 @@ import java.io.IOException;
 public class AlarmPlaySoundIntentService extends IntentService {
 
     private static final String LOG_TAG = "sound_service";
-
     private static final String ACTION_ALARM_PLAY_SOUND =
             "com.dbondarenko.shpp.simplealarmclock.action.AlarmPlaySound";
+    private static final String ALARM_CLOCK_CHANNEL_ID =
+            "com.dbondarenko.shpp.simplealarmclock.action.AlarmClock";
+    private static final String ALARM_CLOCK_CHANNEL_NAME = "AlarmClockChannel";
     // Service identifier AlarmPlaceSoundInternetService to work in the foreground.
     private static final int ALARM_NOTIFICATION_ID = 1;
 
@@ -96,12 +103,42 @@ public class AlarmPlaySoundIntentService extends IntentService {
      * @return Notification about alarm clock.
      */
     private Notification getAlarmNotification() {
-        return new Notification.Builder(getApplicationContext())
-                .setContentTitle(getString(R.string.app_name))
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setWhen(System.currentTimeMillis())
-                .setContentIntent(getPendingIntentToStartAlarmActivity())
-                .build();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createAlarmNotificationChannel();
+            return new Notification.Builder(getApplicationContext(), ALARM_CLOCK_CHANNEL_ID)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setWhen(System.currentTimeMillis())
+                    .setContentIntent(getPendingIntentToStartAlarmActivity())
+                    .build();
+        } else {
+            return new Notification.Builder(getApplicationContext())
+                    .setContentTitle(getString(R.string.app_name))
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setWhen(System.currentTimeMillis())
+                    .setContentIntent(getPendingIntentToStartAlarmActivity())
+                    .build();
+        }
+    }
+
+    /**
+     * Create a notification channel for the alarm.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createAlarmNotificationChannel() {
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel alarmClockChannel = new NotificationChannel(ALARM_CLOCK_CHANNEL_ID,
+                ALARM_CLOCK_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+        // Sets whether notifications posted to this channel should display notification lights
+        alarmClockChannel.enableLights(true);
+        // Sets whether notification posted to this channel should vibrate.
+        alarmClockChannel.enableVibration(true);
+        // Sets the notification light color for notifications posted to this channel
+        alarmClockChannel.setLightColor(Color.GREEN);
+        // Sets whether notifications posted to this channel appear on the lockscreen or not
+        alarmClockChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        notificationManager.createNotificationChannel(alarmClockChannel);
     }
 
     /**
