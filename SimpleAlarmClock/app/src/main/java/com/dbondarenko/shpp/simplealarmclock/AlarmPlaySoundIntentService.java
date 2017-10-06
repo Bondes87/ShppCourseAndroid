@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -167,7 +168,7 @@ public class AlarmPlaySoundIntentService extends IntentService {
         } else {
             Log.d(LOG_TAG, "playAlarmSound()" + filePath);
             mediaPlayerAlarm = new MediaPlayer();
-            mediaPlayerAlarm.setAudioStreamType(AudioManager.STREAM_ALARM);
+            setAudioStream();
             try {
                 mediaPlayerAlarm.setDataSource(filePath);
                 mediaPlayerAlarm.prepare();
@@ -179,6 +180,19 @@ public class AlarmPlaySoundIntentService extends IntentService {
         // Set  repeat the sound.
         mediaPlayerAlarm.setLooping(true);
         mediaPlayerAlarm.start();
+    }
+
+    /**
+     * Set an audio stream for the MediaPlayer that plays the alarm sound.
+     */
+    private void setAudioStream() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mediaPlayerAlarm.setAudioAttributes(new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .build());
+        } else {
+            mediaPlayerAlarm.setAudioStreamType(AudioManager.STREAM_ALARM);
+        }
     }
 
     /**
