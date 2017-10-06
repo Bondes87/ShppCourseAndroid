@@ -12,6 +12,7 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
@@ -204,7 +205,11 @@ public class AlarmPlaySoundIntentService extends IntentService {
         // If there is vibration on this device, then run it.
         if (vibratorAlarm.hasVibrator()) {
             long[] pattern = {0, 400, 800};
-            vibratorAlarm.vibrate(pattern, 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibratorAlarm.vibrate(VibrationEffect.createWaveform(pattern, 0));
+            } else {
+                vibratorAlarm.vibrate(pattern, 0);
+            }
         }
     }
 
