@@ -13,8 +13,7 @@
         android:name="com.dbondarenko.shpp.colorcombinations.TopLeftColorRectangleFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_margin="@dimen/default_margin"
         app:layout_constraintBottom_toTopOf="@+id/fragmentBottom"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/fragmentTopRight"
@@ -25,19 +24,19 @@
         android:name="com.dbondarenko.shpp.colorcombinations.TopRightColorRectangleFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/default_margin"
         android:layout_marginStart="@dimen/default_margin"
         app:layout_constraintBottom_toBottomOf="@+id/fragmentTopLeft"
         app:layout_constraintLeft_toRightOf="@+id/fragmentTopLeft"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/fragmentTopLeft"/>
 
-
     <fragment
         android:id="@+id/fragmentBottom"
         android:name="com.dbondarenko.shpp.colorcombinations.BottomColorRectangleFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/default_margin"
+        android:layout_margin="@dimen/default_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

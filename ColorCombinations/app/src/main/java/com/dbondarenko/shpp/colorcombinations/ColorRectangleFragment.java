@@ -2,6 +2,7 @@ package com.dbondarenko.shpp.colorcombinations;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,7 @@ public abstract class ColorRectangleFragment extends Fragment {
 
     private int rectangleColor;
 
-    private View rectangleView;
+    private CardView rectangleView;
 
     public abstract int getInitRectangleColor();
 
@@ -30,7 +31,7 @@ public abstract class ColorRectangleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()");
-        rectangleView = new View(getActivity());
+        rectangleView = new CardView(getActivity());
         rectangleView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         if (rectangleColor == 0) {
