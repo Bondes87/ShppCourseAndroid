@@ -17,30 +17,26 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(LOG_TAG, "onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(LOG_TAG, "onOptionsItemSelected()");
         switch (item.getItemId()) {
             case R.id.oneFragment:
                 item.setChecked(true);
-                topLeftColorRectangleFragment.setRectangleVisibility(View.GONE);
-                topRightColorRectangleFragment.setRectangleVisibility(View.GONE);
-                bottomColorRectangleFragment.setRectangleVisibility(View.VISIBLE);
+                setFragmentsVisibility(View.GONE, View.GONE, View.VISIBLE);
                 return true;
             case R.id.twoFragments:
                 item.setChecked(true);
-                topLeftColorRectangleFragment.setRectangleVisibility(View.VISIBLE);
-                topRightColorRectangleFragment.setRectangleVisibility(View.VISIBLE);
-                bottomColorRectangleFragment.setRectangleVisibility(View.GONE);
+                setFragmentsVisibility(View.VISIBLE, View.VISIBLE, View.GONE);
                 return true;
             case R.id.threeFragments:
                 item.setChecked(true);
-                topLeftColorRectangleFragment.setRectangleVisibility(View.VISIBLE);
-                topRightColorRectangleFragment.setRectangleVisibility(View.VISIBLE);
-                bottomColorRectangleFragment.setRectangleVisibility(View.VISIBLE);
+                setFragmentsVisibility(View.VISIBLE, View.VISIBLE, View.VISIBLE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -53,6 +49,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "onCreate()");
         setContentView(R.layout.activity_main);
         findFragments();
+    }
+
+    private void setFragmentsVisibility(int firstFragmentVisibility, int secondFragmentVisibility,
+                                        int thirdFragmentVisibility) {
+        topLeftColorRectangleFragment.setRectangleVisibility(firstFragmentVisibility);
+        topRightColorRectangleFragment.setRectangleVisibility(secondFragmentVisibility);
+        bottomColorRectangleFragment.setRectangleVisibility(thirdFragmentVisibility);
     }
 
     private void findFragments() {
