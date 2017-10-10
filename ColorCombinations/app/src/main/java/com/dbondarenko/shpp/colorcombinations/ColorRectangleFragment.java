@@ -51,4 +51,8 @@ public abstract class ColorRectangleFragment extends Fragment {
         this.rectangleColor = rectangleColor;
         this.rectangleView.setBackgroundColor(rectangleColor);
     }
+
+    public void setRectangleVisibility(int visibility) {
+        rectangleView.setVisibility(visibility);
+    }
 }
