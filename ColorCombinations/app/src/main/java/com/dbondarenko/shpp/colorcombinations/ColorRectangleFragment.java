@@ -29,6 +29,8 @@ public abstract class ColorRectangleFragment extends Fragment {
 
     public abstract int getInitRectangleColor();
 
+    public abstract void saveRectangleColor(int color);
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +45,12 @@ public abstract class ColorRectangleFragment extends Fragment {
         rectangleCardView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         if (rectangleColor == 0) {
-            rectangleCardView.setBackgroundColor(getInitRectangleColor());
-        } else {
-            rectangleCardView.setBackgroundColor(rectangleColor);
+            rectangleColor = getInitRectangleColor();
+            saveRectangleColor(rectangleColor);
         }
+        rectangleCardView.setBackgroundColor(rectangleColor);
         registerForContextMenu(rectangleCardView);
-        Log.d(LOG_TAG, "onCreateView() = " + getClass().getSimpleName() + "| rectangleCardView = " + rectangleCardView.hashCode());
+        Log.d(LOG_TAG, "onCreateView() = " + getClass().getSimpleName());
         return rectangleCardView;
     }
 
@@ -77,11 +79,6 @@ public abstract class ColorRectangleFragment extends Fragment {
         } else {
             return super.onContextItemSelected(item);
         }
-    }
-
-    public int getRectangleColor() {
-        Log.d(LOG_TAG, "getRectangleColor()");
-        return rectangleColor;
     }
 
     public void setRectangleColor(int rectangleColor) {

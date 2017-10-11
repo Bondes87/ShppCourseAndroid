@@ -1,7 +1,8 @@
 package com.dbondarenko.shpp.colorcombinations;
 
-import android.graphics.Color;
 import android.util.Log;
+
+import java.util.Random;
 
 /**
  * File: TopRightColorRectangleFragment.java
@@ -14,6 +15,18 @@ public class TopRightColorRectangleFragment extends ColorRectangleFragment {
     @Override
     public int getInitRectangleColor() {
         Log.d(LOG_TAG, "getInitRectangleColor()");
-        return Color.rgb(255, 0, 0);
+        int color = FragmentsPreferences.getFragmentsPreferences().getTopRightFragmentColor(getContext());
+        if (color == -1) {
+            Random random = new Random();
+            return ColorsForFragments.getColorsForFragments()
+                    .getFragmentColor(random.nextInt(2) + 2).getValueColor();
+        } else {
+            return color;
+        }
+    }
+
+    @Override
+    public void saveRectangleColor(int color) {
+        FragmentsPreferences.getFragmentsPreferences().saveTopRightFragmentColor(getContext(), color);
     }
 }
