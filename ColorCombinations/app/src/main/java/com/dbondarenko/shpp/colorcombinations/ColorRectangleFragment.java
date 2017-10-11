@@ -48,22 +48,35 @@ public abstract class ColorRectangleFragment extends Fragment {
             rectangleCardView.setBackgroundColor(rectangleColor);
         }
         registerForContextMenu(rectangleCardView);
+        Log.d(LOG_TAG, "onCreateView() = " + getClass().getSimpleName() + "| rectangleCardView = " + rectangleCardView.hashCode());
         return rectangleCardView;
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        Log.d(LOG_TAG, "onCreateContextMenu()");
+        Log.d(LOG_TAG, "onCreateContextMenu()|" + getClass().getSimpleName());
         for (int i = 0; i < ColorsForFragments.getColorsForFragments().getSize(); i++) {
-            menu.add(Menu.NONE, 1, Menu.NONE, getMenuItemName(i));
+            menu.add(Menu.NONE, i, Menu.NONE, getMenuItemName(i))
+                    .setOnMenuItemClickListener(item -> {
+                        onContextItemSelected(item);
+                        return true;
+                    });
         }
+        menu.setHeaderTitle("Select the color");
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        Log.d(LOG_TAG, "onContextItemSelected()");
-        return super.onContextItemSelected(item);
+        Log.d(LOG_TAG, "onContextItemSelected() = " + getClass().getSimpleName());
+        int itemId = item.getItemId();
+        if (itemId >= 0 && itemId < 7) {
+            setRectangleColor((ColorsForFragments.getColorsForFragments()
+                    .getFragmentColor(itemId).getValueColor()));
+            return true;
+        } else {
+            return super.onContextItemSelected(item);
+        }
     }
 
     public int getRectangleColor() {
@@ -72,9 +85,9 @@ public abstract class ColorRectangleFragment extends Fragment {
     }
 
     public void setRectangleColor(int rectangleColor) {
-        Log.d(LOG_TAG, "setRectangleColor()");
         this.rectangleColor = rectangleColor;
         this.rectangleCardView.setBackgroundColor(rectangleColor);
+        Log.d(LOG_TAG, "setRectangleColor() = " + getClass().getSimpleName() + "| rectangleCardView = " + rectangleCardView.hashCode());
     }
 
     public void setRectangleVisibility(int visibility) {
