@@ -29,14 +29,17 @@ public class MainActivity extends AppCompatActivity {
             case R.id.oneFragment:
                 item.setChecked(true);
                 setFragmentsVisibility(View.INVISIBLE, View.INVISIBLE, View.VISIBLE);
+                saveFragmentVisibility(View.INVISIBLE, View.INVISIBLE, View.VISIBLE);
                 return true;
             case R.id.twoFragments:
                 item.setChecked(true);
                 setFragmentsVisibility(View.VISIBLE, View.VISIBLE, View.INVISIBLE);
+                saveFragmentVisibility(View.VISIBLE, View.VISIBLE, View.INVISIBLE);
                 return true;
             case R.id.threeFragments:
                 item.setChecked(true);
                 setFragmentsVisibility(View.VISIBLE, View.VISIBLE, View.VISIBLE);
+                saveFragmentVisibility(View.VISIBLE, View.VISIBLE, View.VISIBLE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -49,6 +52,17 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "onCreate()");
         setContentView(R.layout.activity_main);
         findFragments();
+        initFragmentVisibility();
+    }
+
+    private void initFragmentVisibility() {
+        int[] fragmentsVisibility = FragmentsPreferences.getFragmentsPreferences()
+                .getFragmentsVisibilitySettings(getApplicationContext());
+        Log.d(LOG_TAG, "initFragmentVisibility()" + fragmentsVisibility[0]);
+        Log.d(LOG_TAG, "initFragmentVisibility()" + fragmentsVisibility[1]);
+        Log.d(LOG_TAG, "initFragmentVisibility()" + fragmentsVisibility[2]);
+        setFragmentsVisibility(fragmentsVisibility[0], fragmentsVisibility[1],
+                fragmentsVisibility[2]);
     }
 
     private void setFragmentsVisibility(int firstFragmentVisibility, int secondFragmentVisibility,
@@ -56,6 +70,16 @@ public class MainActivity extends AppCompatActivity {
         topLeftColorRectangleFragment.setRectangleVisibility(firstFragmentVisibility);
         topRightColorRectangleFragment.setRectangleVisibility(secondFragmentVisibility);
         bottomColorRectangleFragment.setRectangleVisibility(thirdFragmentVisibility);
+    }
+
+    private void saveFragmentVisibility(int firstFragmentVisibility, int secondFragmentVisibility,
+                                        int thirdFragmentVisibility) {
+        Log.d(LOG_TAG, "saveFragmentVisibility()" + firstFragmentVisibility);
+        Log.d(LOG_TAG, "saveFragmentVisibility()" + secondFragmentVisibility);
+        Log.d(LOG_TAG, "saveFragmentVisibility()" + thirdFragmentVisibility);
+        FragmentsPreferences.getFragmentsPreferences().
+                saveFragmentsVisibilitySettings(getApplicationContext(), firstFragmentVisibility,
+                        secondFragmentVisibility, thirdFragmentVisibility);
     }
 
     private void findFragments() {

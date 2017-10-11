@@ -3,6 +3,7 @@ package com.dbondarenko.shpp.colorcombinations;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 
 /**
  * File: FragmentsPreferences.java
@@ -52,11 +53,11 @@ public class FragmentsPreferences {
     int[] getFragmentsVisibilitySettings(Context context) {
         Log.d(LOG_TAG, "getFragmentsVisibilitySettings()");
         int firstFragmentVisibility = PreferenceManager.getDefaultSharedPreferences(context)
-                .getInt(TOP_LEFT_FRAGMENT_VISIBILITY, -1);
+                .getInt(TOP_LEFT_FRAGMENT_VISIBILITY, View.VISIBLE);
         int secondFragmentVisibility = PreferenceManager.getDefaultSharedPreferences(context)
-                .getInt(TOP_LEFT_FRAGMENT_VISIBILITY, -1);
+                .getInt(TOP_RIGHT_FRAGMENT_VISIBILITY, View.VISIBLE);
         int thirdFragmentVisibility = PreferenceManager.getDefaultSharedPreferences(context)
-                .getInt(TOP_LEFT_FRAGMENT_VISIBILITY, -1);
+                .getInt(BOTTOM_FRAGMENT_VISIBILITY, View.VISIBLE);
         return new int[]{firstFragmentVisibility, secondFragmentVisibility, thirdFragmentVisibility};
     }
 
