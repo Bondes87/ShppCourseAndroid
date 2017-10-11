@@ -92,4 +92,15 @@ public class FragmentsPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getInt(BOTTOM_FRAGMENT_COLOR, -1);
     }
+
+    int[] getFragmentsColorsSettings(Context context) {
+        Log.d(LOG_TAG, "getFragmentsColorsSettings()");
+        int firstFragmentColor = PreferenceManager.getDefaultSharedPreferences(context)
+                .getInt(TOP_LEFT_FRAGMENT_COLOR, -1);
+        int secondFragmentColor = PreferenceManager.getDefaultSharedPreferences(context)
+                .getInt(TOP_RIGHT_FRAGMENT_COLOR, -1);
+        int thirdFragmentColor = PreferenceManager.getDefaultSharedPreferences(context)
+                .getInt(BOTTOM_FRAGMENT_COLOR, -1);
+        return new int[]{firstFragmentColor, secondFragmentColor, thirdFragmentColor};
+    }
 }

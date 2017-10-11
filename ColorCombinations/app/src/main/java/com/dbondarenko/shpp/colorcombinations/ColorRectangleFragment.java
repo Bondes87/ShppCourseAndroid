@@ -59,11 +59,18 @@ public abstract class ColorRectangleFragment extends Fragment {
         super.onCreateContextMenu(menu, v, menuInfo);
         Log.d(LOG_TAG, "onCreateContextMenu()|" + getClass().getSimpleName());
         for (int i = 0; i < ColorsForFragments.getColorsForFragments().getSize(); i++) {
-            menu.add(Menu.NONE, i, Menu.NONE, getMenuItemName(i))
-                    .setOnMenuItemClickListener(item -> {
-                        onContextItemSelected(item);
-                        return true;
-                    });
+            int menuItemColor = ColorsForFragments.getColorsForFragments()
+                    .getFragmentColor(i).getValueColor();
+            if (isUsedColor(menuItemColor)) {
+                menu.add(Menu.NONE, i, Menu.NONE, getMenuItemName(i, menuItemColor))
+                        .setVisible(false);
+            } else {
+                menu.add(Menu.NONE, i, Menu.NONE, getMenuItemName(i, menuItemColor))
+                        .setOnMenuItemClickListener(item -> {
+                            onContextItemSelected(item);
+                            return true;
+                        });
+            }
         }
         menu.setHeaderTitle("Select the color");
     }
@@ -73,8 +80,10 @@ public abstract class ColorRectangleFragment extends Fragment {
         Log.d(LOG_TAG, "onContextItemSelected() = " + getClass().getSimpleName());
         int itemId = item.getItemId();
         if (itemId >= 0 && itemId < 7) {
-            setRectangleColor((ColorsForFragments.getColorsForFragments()
-                    .getFragmentColor(itemId).getValueColor()));
+            int color = (ColorsForFragments.getColorsForFragments()
+                    .getFragmentColor(itemId).getValueColor());
+            setRectangleColor(color);
+            saveRectangleColor(color);
             return true;
         } else {
             return super.onContextItemSelected(item);
@@ -84,19 +93,30 @@ public abstract class ColorRectangleFragment extends Fragment {
     public void setRectangleColor(int rectangleColor) {
         this.rectangleColor = rectangleColor;
         this.rectangleCardView.setBackgroundColor(rectangleColor);
-        Log.d(LOG_TAG, "setRectangleColor() = " + getClass().getSimpleName() + "| rectangleCardView = " + rectangleCardView.hashCode());
+        Log.d(LOG_TAG, "setRectangleColor() = " + getClass().getSimpleName() +
+                "| rectangleCardView = " + rectangleCardView.hashCode());
     }
 
     public void setRectangleVisibility(int visibility) {
         rectangleCardView.setVisibility(visibility);
     }
 
-    private Spannable getMenuItemName(int index) {
+    private boolean isUsedColor(int menuItemColor) {
+        int[] usedFragmentsColors = FragmentsPreferences.getFragmentsPreferences()
+                .getFragmentsColorsSettings(getContext());
+        for (int fragmentColor : usedFragmentsColors) {
+            if (fragmentColor == menuItemColor) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Spannable getMenuItemName(int index, int color) {
         String nameColor = ColorsForFragments.getColorsForFragments().getFragmentColor(index).getNameColor();
         Spannable spannable = new SpannableString("  - " + nameColor);
         ShapeDrawable circle = new ShapeDrawable(new OvalShape());
-        circle.getPaint().setColor(ColorsForFragments.getColorsForFragments()
-                .getFragmentColor(index).getValueColor());
+        circle.getPaint().setColor(color);
         circle.setIntrinsicHeight(120);
         circle.setIntrinsicWidth(120);
         circle.setBounds(0, 0, 120, 120);
