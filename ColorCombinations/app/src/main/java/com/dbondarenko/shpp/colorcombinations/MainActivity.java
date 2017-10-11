@@ -28,11 +28,11 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.oneFragment:
                 item.setChecked(true);
-                setFragmentsVisibility(View.GONE, View.GONE, View.VISIBLE);
+                setFragmentsVisibility(View.INVISIBLE, View.INVISIBLE, View.VISIBLE);
                 return true;
             case R.id.twoFragments:
                 item.setChecked(true);
-                setFragmentsVisibility(View.VISIBLE, View.VISIBLE, View.GONE);
+                setFragmentsVisibility(View.VISIBLE, View.VISIBLE, View.INVISIBLE);
                 return true;
             case R.id.threeFragments:
                 item.setChecked(true);
