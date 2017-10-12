@@ -1,6 +1,8 @@
 package com.dbondarenko.shpp.colorcombinations;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -9,6 +11,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "main_activity";
+
     private static final String TOP_LEFT_FRAGMENT =
             "com.dbondarenko.shpp.colorcombinations.TopLeftFragment";
     private static final String TOP_RIGHT_FRAGMENT =
@@ -26,24 +29,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(LOG_TAG, "onOptionsItemSelected()");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        ;
         switch (item.getItemId()) {
             case R.id.topLeftFragment:
-                item.setChecked(!item.isChecked());
-                /*item.setChecked(true);
-                setFragmentsVisibility(View.INVISIBLE, View.INVISIBLE, View.VISIBLE);
-                saveFragmentVisibility(View.INVISIBLE, View.INVISIBLE, View.VISIBLE);*/
+                setFragmentVisibility(item, fragmentManager, TOP_LEFT_FRAGMENT);
                 return true;
             case R.id.topRightFragment:
-                item.setChecked(!item.isChecked());
-                /*item.setChecked(true);
-                setFragmentsVisibility(View.VISIBLE, View.VISIBLE, View.INVISIBLE);
-                saveFragmentVisibility(View.VISIBLE, View.VISIBLE, View.INVISIBLE);*/
+                setFragmentVisibility(item, fragmentManager, TOP_RIGHT_FRAGMENT);
                 return true;
             case R.id.bottomFragment:
-                item.setChecked(!item.isChecked());
-               /* item.setChecked(true);
-                setFragmentsVisibility(View.VISIBLE, View.VISIBLE, View.VISIBLE);
-                saveFragmentVisibility(View.VISIBLE, View.VISIBLE, View.VISIBLE);*/
+                setFragmentVisibility(item, fragmentManager, BOTTOM_FRAGMENT);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -54,11 +50,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(LOG_TAG, "onCreate()");
+        Log.d(LOG_TAG, "onCreate() " + savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             initFragments();
         }
-        //initFragmentVisibility();
+    }
+
+    private void setFragmentVisibility(MenuItem item, FragmentManager fragmentManager,
+                                       String fragmentTag) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (item.isChecked()) {
+            fragmentTransaction.hide(fragmentManager.findFragmentByTag(fragmentTag));
+        } else {
+            fragmentTransaction.show(fragmentManager.findFragmentByTag(fragmentTag));
+        }
+        fragmentTransaction.commit();
+        item.setChecked(!item.isChecked());
     }
 
    /* private void initFragmentVisibility() {
