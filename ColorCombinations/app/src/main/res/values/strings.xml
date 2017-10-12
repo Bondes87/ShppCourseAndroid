@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Color combinations</string>
-    <string name="one_fragment">1 rectangle</string>
-    <string name="two_fragments">2 rectangles</string>
-    <string name="three_fragments">3 rectangles</string>
+    <string name="top_left_fragment">Left</string>
+    <string name="top_right_fragment">Right</string>
+    <string name="bottom_fragment">Bottom</string>
 </resources>

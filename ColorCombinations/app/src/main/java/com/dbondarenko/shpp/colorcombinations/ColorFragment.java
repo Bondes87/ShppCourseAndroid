@@ -1,52 +1,39 @@
 package com.dbondarenko.shpp.colorcombinations;
 
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.Random;
 
 /**
  *
  */
-public class ColorRectangleFragment extends Fragment {
+public class ColorFragment extends Fragment {
 
     private static final String LOG_TAG = "abstract_fragment";
+
     private static final String INIT_RECTANGLE_COLOR =
             "com.dbondarenko.shpp.colorcombinations.InitRectangleColor";
 
-    private int intRectangleColor;
+    private int colorValue;
 
-    private CardView cardViewRectangle;
+    private CardView cardView;
 
-    public static ColorRectangleFragment newInstance(int colorFragment) {
-        ColorRectangleFragment colorRectangleFragment = new ColorRectangleFragment();
+    public static ColorFragment newInstance(int colorValue) {
+        ColorFragment colorFragment = new ColorFragment();
         Bundle args = new Bundle();
-        args.putInt(INIT_RECTANGLE_COLOR, colorFragment);
-        colorRectangleFragment.setArguments(args);
-        return colorRectangleFragment;
+        args.putInt(INIT_RECTANGLE_COLOR, colorValue);
+        colorFragment.setArguments(args);
+        return colorFragment;
     }
-
-    /*private void saveRectangleColor(int color){
-
-    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        intRectangleColor = getArguments().getInt(INIT_RECTANGLE_COLOR);
+        colorValue = getArguments().getInt(INIT_RECTANGLE_COLOR);
         Log.d(LOG_TAG, "onCreate()");
     }
 
@@ -54,20 +41,16 @@ public class ColorRectangleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()");
-        cardViewRectangle = new CardView(getActivity());
-        cardViewRectangle.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        cardView = new CardView(getActivity());
+        cardView.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-        if (intRectangleColor == 0) {
-            intRectangleColor = getInitRectangleColor();
-            //saveRectangleColor(intRectangleColor);
-        }
-        cardViewRectangle.setBackgroundColor(intRectangleColor);
-        registerForContextMenu(cardViewRectangle);
-        Log.d(LOG_TAG, "onCreateView() = " + getClass().getSimpleName());
-        return cardViewRectangle;
+        cardView.setBackgroundColor(colorValue);
+        registerForContextMenu(cardView);
+        return cardView;
     }
 
-    @Override
+    /*@Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         Log.d(LOG_TAG, "onCreateContextMenu()|" + getClass().getSimpleName());
@@ -95,23 +78,23 @@ public class ColorRectangleFragment extends Fragment {
         if (itemId >= 0 && itemId < 7) {
             int color = (ColorsManager.getColorsManager()
                     .getFragmentColor(itemId).getValueColor());
-            setIntRectangleColor(color);
+            setColorValue(color);
             //saveRectangleColor(color);
             return true;
         } else {
             return super.onContextItemSelected(item);
         }
-    }
+    }*/
 
-    public void setIntRectangleColor(int intRectangleColor) {
-        this.intRectangleColor = intRectangleColor;
-        this.cardViewRectangle.setBackgroundColor(intRectangleColor);
-        Log.d(LOG_TAG, "setIntRectangleColor() = " + getClass().getSimpleName() +
-                "| cardViewRectangle = " + cardViewRectangle.hashCode());
+  /*  public void setColorValue(int colorValue) {
+        this.colorValue = colorValue;
+        this.cardView.setBackgroundColor(colorValue);
+        Log.d(LOG_TAG, "setColorValue() = " + getClass().getSimpleName() +
+                "| cardView = " + cardView.hashCode());
     }
-
-    public void setRectangleVisibility(int visibility) {
-        cardViewRectangle.setVisibility(visibility);
+*/
+   /* public void setRectangleVisibility(int visibility) {
+        cardView.setVisibility(visibility);
     }
 
     private int getInitRectangleColor() {
@@ -135,8 +118,8 @@ public class ColorRectangleFragment extends Fragment {
         }
         return false;
     }
-
-    private Spannable getMenuItemName(int index, int color) {
+*/
+    /*private Spannable getMenuItemName(int index, int color) {
         String nameColor = ColorsManager.getColorsManager().getFragmentColor(index).getNameColor();
         Spannable spannable = new SpannableString("  - " + nameColor);
         ShapeDrawable circle = new ShapeDrawable(new OvalShape());
@@ -146,5 +129,5 @@ public class ColorRectangleFragment extends Fragment {
         circle.setBounds(0, 0, 120, 120);
         spannable.setSpan(new ImageSpan(circle), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannable;
-    }
+    }*/
 }

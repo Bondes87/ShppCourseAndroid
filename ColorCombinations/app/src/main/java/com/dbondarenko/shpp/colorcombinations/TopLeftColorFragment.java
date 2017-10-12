@@ -1,16 +1,12 @@
 package com.dbondarenko.shpp.colorcombinations;
 
-import android.util.Log;
-
-import java.util.Random;
-
 /**
- * File: TopLeftColorRectangleFragment.java
+ * File: TopLeftColorFragment.java
  * Created by Dmitro Bondarenko on 09.10.2017.
  */
-public class TopLeftColorRectangleFragment extends ColorRectangleFragment {
+public class TopLeftColorFragment extends ColorFragment {
 
-    private static final String LOG_TAG = "left_fragment";
+    /*private static final String LOG_TAG = "left_fragment";
 
 
     public int getInitRectangleColor() {
@@ -28,5 +24,5 @@ public class TopLeftColorRectangleFragment extends ColorRectangleFragment {
 
     public void saveRectangleColor(int color) {
         FragmentsPreferences.getFragmentsPreferences().saveTopLeftFragmentColor(getContext(), color);
-    }
+    }*/
 }
