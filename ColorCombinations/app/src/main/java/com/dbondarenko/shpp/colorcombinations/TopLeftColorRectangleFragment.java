@@ -12,7 +12,7 @@ public class TopLeftColorRectangleFragment extends ColorRectangleFragment {
 
     private static final String LOG_TAG = "left_fragment";
 
-    @Override
+
     public int getInitRectangleColor() {
         Log.d(LOG_TAG, "getInitRectangleColor()");
         int color = FragmentsPreferences.getFragmentsPreferences().getTopLeftFragmentColor(getContext());
@@ -25,7 +25,7 @@ public class TopLeftColorRectangleFragment extends ColorRectangleFragment {
         }
     }
 
-    @Override
+
     public void saveRectangleColor(int color) {
         FragmentsPreferences.getFragmentsPreferences().saveTopLeftFragmentColor(getContext(), color);
     }

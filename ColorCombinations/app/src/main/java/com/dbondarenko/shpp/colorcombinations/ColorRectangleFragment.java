@@ -16,24 +16,37 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Random;
+
 /**
  *
  */
-public abstract class ColorRectangleFragment extends Fragment {
+public class ColorRectangleFragment extends Fragment {
 
     private static final String LOG_TAG = "abstract_fragment";
+    private static final String INIT_RECTANGLE_COLOR =
+            "com.dbondarenko.shpp.colorcombinations.InitRectangleColor";
 
-    private int rectangleColor;
+    private int intRectangleColor;
 
-    private CardView rectangleCardView;
+    private CardView cardViewRectangle;
 
-    public abstract int getInitRectangleColor();
+    public static ColorRectangleFragment newInstance(int colorFragment) {
+        ColorRectangleFragment colorRectangleFragment = new ColorRectangleFragment();
+        Bundle args = new Bundle();
+        args.putInt(INIT_RECTANGLE_COLOR, colorFragment);
+        colorRectangleFragment.setArguments(args);
+        return colorRectangleFragment;
+    }
 
-    public abstract void saveRectangleColor(int color);
+    /*private void saveRectangleColor(int color){
+
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        intRectangleColor = getArguments().getInt(INIT_RECTANGLE_COLOR);
         Log.d(LOG_TAG, "onCreate()");
     }
 
@@ -41,17 +54,17 @@ public abstract class ColorRectangleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()");
-        rectangleCardView = new CardView(getActivity());
-        rectangleCardView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        cardViewRectangle = new CardView(getActivity());
+        cardViewRectangle.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-        if (rectangleColor == 0) {
-            rectangleColor = getInitRectangleColor();
-            saveRectangleColor(rectangleColor);
+        if (intRectangleColor == 0) {
+            intRectangleColor = getInitRectangleColor();
+            //saveRectangleColor(intRectangleColor);
         }
-        rectangleCardView.setBackgroundColor(rectangleColor);
-        registerForContextMenu(rectangleCardView);
+        cardViewRectangle.setBackgroundColor(intRectangleColor);
+        registerForContextMenu(cardViewRectangle);
         Log.d(LOG_TAG, "onCreateView() = " + getClass().getSimpleName());
-        return rectangleCardView;
+        return cardViewRectangle;
     }
 
     @Override
@@ -82,23 +95,34 @@ public abstract class ColorRectangleFragment extends Fragment {
         if (itemId >= 0 && itemId < 7) {
             int color = (ColorsForFragments.getColorsForFragments()
                     .getFragmentColor(itemId).getValueColor());
-            setRectangleColor(color);
-            saveRectangleColor(color);
+            setIntRectangleColor(color);
+            //saveRectangleColor(color);
             return true;
         } else {
             return super.onContextItemSelected(item);
         }
     }
 
-    public void setRectangleColor(int rectangleColor) {
-        this.rectangleColor = rectangleColor;
-        this.rectangleCardView.setBackgroundColor(rectangleColor);
-        Log.d(LOG_TAG, "setRectangleColor() = " + getClass().getSimpleName() +
-                "| rectangleCardView = " + rectangleCardView.hashCode());
+    public void setIntRectangleColor(int intRectangleColor) {
+        this.intRectangleColor = intRectangleColor;
+        this.cardViewRectangle.setBackgroundColor(intRectangleColor);
+        Log.d(LOG_TAG, "setIntRectangleColor() = " + getClass().getSimpleName() +
+                "| cardViewRectangle = " + cardViewRectangle.hashCode());
     }
 
     public void setRectangleVisibility(int visibility) {
-        rectangleCardView.setVisibility(visibility);
+        cardViewRectangle.setVisibility(visibility);
+    }
+
+    private int getInitRectangleColor() {
+        int color = FragmentsPreferences.getFragmentsPreferences().getBottomFragmentColor(getContext());
+        if (color == -1) {
+            Random random = new Random();
+            return ColorsForFragments.getColorsForFragments()
+                    .getFragmentColor(random.nextInt(7)).getValueColor();
+        } else {
+            return color;
+        }
     }
 
     private boolean isUsedColor(int menuItemColor) {

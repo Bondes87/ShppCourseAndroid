@@ -8,38 +8,36 @@
     android:padding="@dimen/default_padding"
     tools:context="com.dbondarenko.shpp.colorcombinations.MainActivity">
 
-    <fragment
-        android:id="@+id/fragmentTopLeft"
-        android:name="com.dbondarenko.shpp.colorcombinations.TopLeftColorRectangleFragment"
+
+    <FrameLayout
+        android:id="@+id/containerOfTopLeftFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/default_margin"
-        app:layout_constraintBottom_toTopOf="@+id/fragmentBottom"
+        app:layout_constraintBottom_toTopOf="@+id/containerOfBottomFragment"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/fragmentTopRight"
+        app:layout_constraintRight_toLeftOf="@+id/containerOfTopRightFragment"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <fragment
-        android:id="@+id/fragmentTopRight"
-        android:name="com.dbondarenko.shpp.colorcombinations.TopRightColorRectangleFragment"
+    <FrameLayout
+        android:id="@+id/containerOfTopRightFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/default_margin"
         android:layout_marginStart="@dimen/default_margin"
-        app:layout_constraintBottom_toBottomOf="@+id/fragmentTopLeft"
-        app:layout_constraintLeft_toRightOf="@+id/fragmentTopLeft"
+        app:layout_constraintBottom_toBottomOf="@+id/containerOfTopLeftFragment"
+        app:layout_constraintLeft_toRightOf="@+id/containerOfTopLeftFragment"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/fragmentTopLeft"/>
+        app:layout_constraintTop_toTopOf="@+id/containerOfTopLeftFragment"/>
 
-    <fragment
-        android:id="@+id/fragmentBottom"
-        android:name="com.dbondarenko.shpp.colorcombinations.BottomColorRectangleFragment"
+    <FrameLayout
+        android:id="@+id/containerOfBottomFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/default_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragmentTopLeft"/>
+        app:layout_constraintTop_toBottomOf="@+id/containerOfTopLeftFragment"/>
 
 </android.support.constraint.ConstraintLayout>
