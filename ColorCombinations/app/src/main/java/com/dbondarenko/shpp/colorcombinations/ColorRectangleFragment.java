@@ -71,8 +71,8 @@ public class ColorRectangleFragment extends Fragment {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         Log.d(LOG_TAG, "onCreateContextMenu()|" + getClass().getSimpleName());
-        for (int i = 0; i < ColorsForFragments.getColorsForFragments().getSize(); i++) {
-            int menuItemColor = ColorsForFragments.getColorsForFragments()
+        for (int i = 0; i < ColorsManager.getColorsManager().getSize(); i++) {
+            int menuItemColor = ColorsManager.getColorsManager()
                     .getFragmentColor(i).getValueColor();
             if (isUsedColor(menuItemColor)) {
                 menu.add(Menu.NONE, i, Menu.NONE, getMenuItemName(i, menuItemColor))
@@ -93,7 +93,7 @@ public class ColorRectangleFragment extends Fragment {
         Log.d(LOG_TAG, "onContextItemSelected() = " + getClass().getSimpleName());
         int itemId = item.getItemId();
         if (itemId >= 0 && itemId < 7) {
-            int color = (ColorsForFragments.getColorsForFragments()
+            int color = (ColorsManager.getColorsManager()
                     .getFragmentColor(itemId).getValueColor());
             setIntRectangleColor(color);
             //saveRectangleColor(color);
@@ -118,7 +118,7 @@ public class ColorRectangleFragment extends Fragment {
         int color = FragmentsPreferences.getFragmentsPreferences().getBottomFragmentColor(getContext());
         if (color == -1) {
             Random random = new Random();
-            return ColorsForFragments.getColorsForFragments()
+            return ColorsManager.getColorsManager()
                     .getFragmentColor(random.nextInt(7)).getValueColor();
         } else {
             return color;
@@ -137,7 +137,7 @@ public class ColorRectangleFragment extends Fragment {
     }
 
     private Spannable getMenuItemName(int index, int color) {
-        String nameColor = ColorsForFragments.getColorsForFragments().getFragmentColor(index).getNameColor();
+        String nameColor = ColorsManager.getColorsManager().getFragmentColor(index).getNameColor();
         Spannable spannable = new SpannableString("  - " + nameColor);
         ShapeDrawable circle = new ShapeDrawable(new OvalShape());
         circle.getPaint().setColor(color);

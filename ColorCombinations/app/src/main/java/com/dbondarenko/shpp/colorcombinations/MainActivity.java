@@ -10,6 +10,12 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "main_activity";
+    private static final String TOP_LEFT_FRAGMENT =
+            "com.dbondarenko.shpp.colorcombinations.TopLeftFragment";
+    private static final String TOP_RIGHT_FRAGMENT =
+            "com.dbondarenko.shpp.colorcombinations.TopRightFragment";
+    private static final String BOTTOM_FRAGMENT = "" +
+            "com.dbondarenko.shpp.colorcombinations.BottomFragment";
 
     private ColorRectangleFragment colorRectangleFragmentTopLeft;
     private ColorRectangleFragment colorRectangleFragmentTopRight;
@@ -83,9 +89,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFragments() {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.containerOfTopLeftFragment, ColorRectangleFragment.newInstance(Color.RED))
-                .add(R.id.containerOfTopRightFragment, ColorRectangleFragment.newInstance(Color.GREEN))
-                .add(R.id.containerOfBottomFragment, ColorRectangleFragment.newInstance(Color.CYAN))
+                .add(R.id.containerOfTopLeftFragment,
+                        ColorRectangleFragment.newInstance(Color.RED),
+                        TOP_LEFT_FRAGMENT)
+                .add(R.id.containerOfTopRightFragment,
+                        ColorRectangleFragment.newInstance(Color.GREEN),
+                        TOP_RIGHT_FRAGMENT)
+                .add(R.id.containerOfBottomFragment,
+                        ColorRectangleFragment.newInstance(Color.CYAN),
+                        BOTTOM_FRAGMENT)
                 .commit();
     }
 }

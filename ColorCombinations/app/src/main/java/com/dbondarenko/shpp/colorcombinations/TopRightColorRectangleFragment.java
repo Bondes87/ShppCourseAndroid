@@ -18,7 +18,7 @@ public class TopRightColorRectangleFragment extends ColorRectangleFragment {
         int color = FragmentsPreferences.getFragmentsPreferences().getTopRightFragmentColor(getContext());
         if (color == -1) {
             Random random = new Random();
-            return ColorsForFragments.getColorsForFragments()
+            return ColorsManager.getColorsManager()
                     .getFragmentColor(random.nextInt(2) + 2).getValueColor();
         } else {
             return color;
