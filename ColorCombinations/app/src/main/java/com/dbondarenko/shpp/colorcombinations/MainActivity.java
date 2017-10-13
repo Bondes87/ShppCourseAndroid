@@ -157,12 +157,14 @@ public class MainActivity extends AppCompatActivity {
                 (ColorFragment) fragmentManager.findFragmentByTag(fragmentTag);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (item.isChecked()) {
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
             fragmentTransaction.hide(selectedColorFragment);
             ColorsManager.getColorsManager().setAvailableColor(fragmentTag);
         } else {
             int colorValue = ColorsManager.getColorsManager().getUsedColor(fragmentTag)
                     .getValueColor();
             selectedColorFragment.setContentColorValue(colorValue);
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.show(selectedColorFragment);
         }
         fragmentTransaction.commit();
