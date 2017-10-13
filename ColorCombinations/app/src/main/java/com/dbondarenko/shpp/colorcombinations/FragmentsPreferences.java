@@ -9,7 +9,7 @@ import android.view.View;
  * File: FragmentsPreferences.java
  * Created by Dmitro Bondarenko on 10.10.2017.
  */
-public class FragmentsPreferences {
+class FragmentsPreferences {
     private static final String LOG_TAG = "alarm_preference";
 
     // The constant that specifies the name of the setting to save.
@@ -47,6 +47,15 @@ public class FragmentsPreferences {
                 .putInt(TOP_LEFT_FRAGMENT_VISIBILITY, firstFragmentVisibility)
                 .putInt(TOP_RIGHT_FRAGMENT_VISIBILITY, secondFragmentVisibility)
                 .putInt(BOTTOM_FRAGMENT_VISIBILITY, thirdFragmentVisibility)
+                .apply();
+    }
+
+    void saveFragmentVisibilitySetting(Context context, boolean fragmentVisibility,
+                                       String keyFragmentVisibility) {
+        Log.d(LOG_TAG, "saveFragmentVisibilitySetting()");
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(keyFragmentVisibility, fragmentVisibility)
                 .apply();
     }
 

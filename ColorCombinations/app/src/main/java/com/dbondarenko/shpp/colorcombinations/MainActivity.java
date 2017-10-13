@@ -3,6 +3,7 @@ package com.dbondarenko.shpp.colorcombinations;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(LOG_TAG, "onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+        setCheckboxesInOptionsMenu(menu);
         return true;
     }
 
@@ -110,6 +113,17 @@ public class MainActivity extends AppCompatActivity {
         registerViewsForContextMenu();
     }
 
+    private void setCheckboxesInOptionsMenu(Menu menu) {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for (int i = 0; i < fragments.size(); i++) {
+            if (fragments.get(i).isHidden()) {
+                menu.getItem(i).setChecked(false);
+            } else {
+                menu.getItem(i).setChecked(true);
+            }
+        }
+    }
+
     private void registerViewsForContextMenu() {
         registerForContextMenu(containerOfBottomFragment);
         registerForContextMenu(containerOfTopLeftFragment);
@@ -119,12 +133,10 @@ public class MainActivity extends AppCompatActivity {
     private void changeFragmentColor(int colorIndex, String fragmentTag) {
         ColorFragment selectedColorFragment = (ColorFragment) getSupportFragmentManager()
                 .findFragmentByTag(fragmentTag);
-        //int currentColorValue = selectedColorFragment.getColorValue();
         int newColorValue = ColorsManager.getColorsManager()
                 .getAvailableColor(colorIndex, fragmentTag)
                 .getValueColor();
         selectedColorFragment.setColorValue(newColorValue);
-        //ColorsManager.getColorsManager().setAvailableColor(currentColorValue);
     }
 
     private Spannable getContextMenuItem(Color color) {

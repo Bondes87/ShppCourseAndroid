@@ -4,17 +4,14 @@
     <group android:checkableBehavior="all">
         <item
             android:id="@+id/topLeftFragment"
-            android:checked="true"
             android:title="@string/top_left_fragment"
             app:showAsAction="never"/>
         <item
             android:id="@+id/topRightFragment"
-            android:checked="true"
             android:title="@string/top_right_fragment"
             app:showAsAction="never"/>
         <item
             android:id="@+id/bottomFragment"
-            android:checked="true"
             android:title="@string/bottom_fragment"
             app:showAsAction="never"/>
     </group>
