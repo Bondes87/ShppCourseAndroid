@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setCheckboxesInOptionsMenu(Menu menu) {
+        Log.d(LOG_TAG, "setCheckboxesInOptionsMenu()");
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         for (int i = 0; i < fragments.size(); i++) {
             if (fragments.get(i).isHidden()) {
@@ -126,12 +127,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerViewsForContextMenu() {
+        Log.d(LOG_TAG, "registerViewsForContextMenu()");
         registerForContextMenu(frameLayoutBottomFragment);
         registerForContextMenu(frameLayoutTopLeftFragment);
         registerForContextMenu(frameLayoutTopRightFragment);
     }
 
     private void changeFragmentColor(int colorIndex, String fragmentTag) {
+        Log.d(LOG_TAG, "changeFragmentColor()");
         ColorFragment selectedColorFragment = (ColorFragment) getSupportFragmentManager()
                 .findFragmentByTag(fragmentTag);
         int newColorValue = ColorsManager.getColorsManager()
@@ -141,18 +144,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Spannable getContextMenuItem(Color color) {
+        Log.d(LOG_TAG, "getContextMenuItem()");
         Spannable spannable = new SpannableString("  - " + color.getNameColor());
         ShapeDrawable circle = new ShapeDrawable(new OvalShape());
         circle.getPaint().setColor(color.getValueColor());
-        circle.setIntrinsicHeight(120);
-        circle.setIntrinsicWidth(120);
-        circle.setBounds(0, 0, 120, 120);
+       /* circle.setIntrinsicHeight(60);
+        circle.setIntrinsicWidth(60);*/
+        circle.setBounds(0, 0, 60, 60);
         spannable.setSpan(new ImageSpan(circle), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannable;
     }
 
-    private void setFragmentVisibility(MenuItem item, FragmentManager fragmentManager,
+    private void setFragmentVisibility(MenuItem item,
+                                       FragmentManager fragmentManager,
                                        String fragmentTag) {
+        Log.d(LOG_TAG, "setFragmentVisibility()");
         ColorFragment selectedColorFragment =
                 (ColorFragment) fragmentManager.findFragmentByTag(fragmentTag);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -171,31 +177,8 @@ public class MainActivity extends AppCompatActivity {
         item.setChecked(!item.isChecked());
     }
 
-    /* private void initFragmentVisibility() {
-        int[] fragmentsVisibility = FragmentsPreferences.getFragmentsPreferences()
-                .getFragmentsVisibilitySettings(getApplicationContext());
-        setFragmentsVisibility(fragmentsVisibility[0], fragmentsVisibility[1],
-                fragmentsVisibility[2]);
-    }*/
-
-   /* private void setFragmentsVisibility(int firstFragmentVisibility, int secondFragmentVisibility,
-                                        int thirdFragmentVisibility) {
-        colorRectangleFragmentTopLeft.setRectangleVisibility(firstFragmentVisibility);
-        colorRectangleFragmentTopRight.setRectangleVisibility(secondFragmentVisibility);
-        colorRectangleFragmentBottom.setRectangleVisibility(thirdFragmentVisibility);
-    }
-*/
-   /* private void saveFragmentVisibility(int firstFragmentVisibility, int secondFragmentVisibility,
-                                        int thirdFragmentVisibility) {
-        Log.d(LOG_TAG, "saveFragmentVisibility()" + firstFragmentVisibility);
-        Log.d(LOG_TAG, "saveFragmentVisibility()" + secondFragmentVisibility);
-        Log.d(LOG_TAG, "saveFragmentVisibility()" + thirdFragmentVisibility);
-        FragmentsPreferences.getFragmentsPreferences().
-                saveFragmentsVisibilitySettings(getApplicationContext(), firstFragmentVisibility,
-                        secondFragmentVisibility, thirdFragmentVisibility);
-    }*/
-
     private void initFragments() {
+        Log.d(LOG_TAG, "initFragments()");
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.frameLayoutTopLeftFragment,
                         ColorFragment.newInstance(ColorsManager.getColorsManager().
