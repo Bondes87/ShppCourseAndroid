@@ -23,6 +23,7 @@ class ColorsManager {
     private static final int PURPLE = 0xFF800080;
 
     private static ColorsManager colorsManager;
+
     private ArrayList<Color> arrayListAvailableColors;
     private HashMap<String, Color> hashMapUsedColors;
 

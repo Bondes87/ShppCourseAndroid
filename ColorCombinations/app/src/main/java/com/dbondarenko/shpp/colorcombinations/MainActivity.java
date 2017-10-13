@@ -34,13 +34,14 @@ public class MainActivity extends AppCompatActivity {
     private static final String BOTTOM_FRAGMENT = "" +
             "com.dbondarenko.shpp.colorcombinations.BottomFragment";
 
-    @BindView(R.id.containerOfTopLeftFragment)
-    FrameLayout containerOfTopLeftFragment;
-    @BindView(R.id.containerOfTopRightFragment)
-    FrameLayout containerOfTopRightFragment;
-    @BindView(R.id.containerOfBottomFragment)
-    FrameLayout containerOfBottomFragment;
-    private View viewSelected;
+    @BindView(R.id.frameLayoutTopLeftFragment)
+    FrameLayout frameLayoutTopLeftFragment;
+    @BindView(R.id.frameLayoutTopRightFragment)
+    FrameLayout frameLayoutTopRightFragment;
+    @BindView(R.id.frameLayoutBottomFragment)
+    FrameLayout frameLayoutBottomFragment;
+
+    private View viewSelectedFragment;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         Log.d(LOG_TAG, "onCreateContextMenu()");
-        viewSelected = v;
+        viewSelectedFragment = v;
         ArrayList<Color> arrayListColors = ColorsManager.getColorsManager().getAvailableColors();
         for (int i = 0; i < arrayListColors.size(); i++) {
             Color colorOfContextMenuItem = arrayListColors.get(i);
@@ -86,15 +87,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         Log.d(LOG_TAG, "onContextItemSelected() = ");
         int itemId = item.getItemId();
-        if (viewSelected.equals(containerOfTopLeftFragment)) {
+        if (viewSelectedFragment.equals(frameLayoutTopLeftFragment)) {
             changeFragmentColor(itemId, TOP_LEFT_FRAGMENT);
             return true;
         }
-        if (viewSelected.equals(containerOfTopRightFragment)) {
+        if (viewSelectedFragment.equals(frameLayoutTopRightFragment)) {
             changeFragmentColor(itemId, TOP_RIGHT_FRAGMENT);
             return true;
         }
-        if (viewSelected.equals(containerOfBottomFragment)) {
+        if (viewSelectedFragment.equals(frameLayoutBottomFragment)) {
             changeFragmentColor(itemId, BOTTOM_FRAGMENT);
             return true;
         }
@@ -125,9 +126,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void registerViewsForContextMenu() {
-        registerForContextMenu(containerOfBottomFragment);
-        registerForContextMenu(containerOfTopLeftFragment);
-        registerForContextMenu(containerOfTopRightFragment);
+        registerForContextMenu(frameLayoutBottomFragment);
+        registerForContextMenu(frameLayoutTopLeftFragment);
+        registerForContextMenu(frameLayoutTopRightFragment);
     }
 
     private void changeFragmentColor(int colorIndex, String fragmentTag) {
@@ -136,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         int newColorValue = ColorsManager.getColorsManager()
                 .getAvailableColor(colorIndex, fragmentTag)
                 .getValueColor();
-        selectedColorFragment.setColorValue(newColorValue);
+        selectedColorFragment.setContentColorValue(newColorValue);
     }
 
     private Spannable getContextMenuItem(Color color) {
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             int colorValue = ColorsManager.getColorsManager().getUsedColor(fragmentTag)
                     .getValueColor();
-            selectedColorFragment.setColorValue(colorValue);
+            selectedColorFragment.setContentColorValue(colorValue);
             fragmentTransaction.show(selectedColorFragment);
         }
         fragmentTransaction.commit();
@@ -194,15 +195,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFragments() {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.containerOfTopLeftFragment,
+                .add(R.id.frameLayoutTopLeftFragment,
                         ColorFragment.newInstance(ColorsManager.getColorsManager().
                                 getRandomAvailableColor(TOP_LEFT_FRAGMENT).getValueColor()),
                         TOP_LEFT_FRAGMENT)
-                .add(R.id.containerOfTopRightFragment,
+                .add(R.id.frameLayoutTopRightFragment,
                         ColorFragment.newInstance(ColorsManager.getColorsManager().
                                 getRandomAvailableColor(TOP_RIGHT_FRAGMENT).getValueColor()),
                         TOP_RIGHT_FRAGMENT)
-                .add(R.id.containerOfBottomFragment,
+                .add(R.id.frameLayoutBottomFragment,
                         ColorFragment.newInstance(ColorsManager.getColorsManager().
                                 getRandomAvailableColor(BOTTOM_FRAGMENT).getValueColor()),
                         BOTTOM_FRAGMENT)

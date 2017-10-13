@@ -15,17 +15,17 @@ public class ColorFragment extends Fragment {
 
     private static final String LOG_TAG = "color_fragment";
 
-    private static final String KEY_COLOR_VALUE =
-            "com.dbondarenko.shpp.colorcombinations.Color";
+    private static final String KEY_CONTENT_COLOR_VALUE =
+            "com.dbondarenko.shpp.colorcombinations.ContentColorValue";
 
-    private int colorValue;
+    private int contentColorValue;
 
-    private CardView cardView;
+    private CardView cardViewContent;
 
     public static ColorFragment newInstance(int colorValue) {
         ColorFragment colorFragment = new ColorFragment();
         Bundle args = new Bundle();
-        args.putInt(KEY_COLOR_VALUE, colorValue);
+        args.putInt(KEY_CONTENT_COLOR_VALUE, colorValue);
         colorFragment.setArguments(args);
         return colorFragment;
     }
@@ -33,7 +33,7 @@ public class ColorFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        colorValue = getArguments().getInt(KEY_COLOR_VALUE);
+        contentColorValue = getArguments().getInt(KEY_CONTENT_COLOR_VALUE);
         setRetainInstance(true);
         Log.d(LOG_TAG, "onCreate()");
     }
@@ -42,16 +42,13 @@ public class ColorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()");
-        cardView = new CardView(getActivity());
-        cardView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        cardView.setBackgroundColor(colorValue);
-        return cardView;
+        cardViewContent = (CardView) inflater.inflate(R.layout.fragment_color, container, false);
+        cardViewContent.setCardBackgroundColor(contentColorValue);
+        return cardViewContent;
     }
 
-    public void setColorValue(int newColorValue) {
-        colorValue = newColorValue;
-        cardView.setBackgroundColor(colorValue);
+    public void setContentColorValue(int newContentColorValue) {
+        contentColorValue = newContentColorValue;
+        cardViewContent.setCardBackgroundColor(contentColorValue);
     }
 }
