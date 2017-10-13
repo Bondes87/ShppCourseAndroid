@@ -13,7 +13,7 @@ import android.view.ViewGroup;
  */
 public class ColorFragment extends Fragment {
 
-    private static final String LOG_TAG = "abstract_fragment";
+    private static final String LOG_TAG = "color_fragment";
 
     private static final String KEY_COLOR_VALUE =
             "com.dbondarenko.shpp.colorcombinations.Color";
@@ -48,10 +48,6 @@ public class ColorFragment extends Fragment {
                 ViewGroup.LayoutParams.MATCH_PARENT));
         cardView.setBackgroundColor(colorValue);
         return cardView;
-    }
-
-    public int getColorValue() {
-        return colorValue;
     }
 
     public void setColorValue(int newColorValue) {

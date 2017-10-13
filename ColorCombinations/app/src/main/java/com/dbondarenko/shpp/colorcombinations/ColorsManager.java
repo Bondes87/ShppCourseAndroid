@@ -3,6 +3,8 @@ package com.dbondarenko.shpp.colorcombinations;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -22,15 +24,16 @@ class ColorsManager {
 
     private static ColorsManager colorsManager;
     private ArrayList<Color> arrayListAvailableColors;
-    private ArrayList<Color> arrayListUsedColors;
+    private HashMap<String, Color> hashMapUsedColors;
 
     private ColorsManager() {
         arrayListAvailableColors = new ArrayList<>();
-        arrayListUsedColors = new ArrayList<>();
+        hashMapUsedColors = new HashMap<>();
         initColors();
     }
 
     static ColorsManager getColorsManager() {
+        Log.d(LOG_TAG, "getColorsManager()");
         if (colorsManager == null) {
             colorsManager = new ColorsManager();
         }
@@ -38,6 +41,7 @@ class ColorsManager {
     }
 
     private void initColors() {
+        Log.d(LOG_TAG, "initColors()");
         arrayListAvailableColors.add(new Color("red", RED));
         arrayListAvailableColors.add(new Color("orange", ORANGE));
         arrayListAvailableColors.add(new Color("yellow", YELLOW));
@@ -47,33 +51,55 @@ class ColorsManager {
         arrayListAvailableColors.add(new Color("purple", PURPLE));
     }
 
+    private String findKeyByValue(Color color) {
+        Log.d(LOG_TAG, "findKeyByValue()");
+        String key = "";
+        for (Map.Entry<String, Color> entry : hashMapUsedColors.entrySet())
+            if (color.equals(entry.getValue())) {
+                key = entry.getKey();
+                break;
+            }
+        return key;
+    }
+
     ArrayList<Color> getAvailableColors() {
         Log.d(LOG_TAG, "getAvailableColors()");
         return arrayListAvailableColors;
     }
 
-    Color getAvailableColor(int colorIndex) {
+    Color getAvailableColor(int colorIndex, String fragmentTag) {
         Log.d(LOG_TAG, "getAvailableColor()");
-        Color color = arrayListAvailableColors.remove(colorIndex);
-        arrayListUsedColors.add(color);
-        return color;
-    }
-
-    Color getRandomAvailableColor() {
-        Log.d(LOG_TAG, "getAvailableColor()");
-        int randomIndex = new Random().nextInt(arrayListAvailableColors.size());
-        return getAvailableColor(randomIndex);
-    }
-
-    void setAvailableColor(int colorValue) {
-        Log.d(LOG_TAG, "setAvailableColor()");
-        int indexColor = 0;
-        for (int i = 0; i < arrayListUsedColors.size(); i++) {
-            if (arrayListUsedColors.get(i).getValueColor() == colorValue) {
-                indexColor = i;
-                break;
-            }
+        Color availableColor = arrayListAvailableColors.remove(colorIndex);
+        if (hashMapUsedColors.containsValue(availableColor)) {
+            hashMapUsedColors.put(findKeyByValue(availableColor), null);
         }
-        arrayListAvailableColors.add(0, arrayListUsedColors.remove(indexColor));
+        setAvailableColor(fragmentTag);
+        hashMapUsedColors.put(fragmentTag, availableColor);
+        return availableColor;
+    }
+
+    Color getRandomAvailableColor(String fragmentTag) {
+        Log.d(LOG_TAG, "getRandomAvailableColor()");
+        int randomIndex = new Random().nextInt(arrayListAvailableColors.size());
+        return getAvailableColor(randomIndex, fragmentTag);
+    }
+
+    Color getUsedColor(String fragmentTag) {
+        Log.d(LOG_TAG, "getUsedColor()");
+        Color usedColor = hashMapUsedColors.get(fragmentTag);
+        if (usedColor != null) {
+            arrayListAvailableColors.remove(usedColor);
+            return usedColor;
+        } else {
+            return getRandomAvailableColor(fragmentTag);
+        }
+    }
+
+    void setAvailableColor(String fragmentTag) {
+        Log.d(LOG_TAG, "setAvailableColor()");
+        Color usedColor = hashMapUsedColors.get(fragmentTag);
+        if (usedColor != null && !arrayListAvailableColors.contains(usedColor)) {
+            arrayListAvailableColors.add(0, usedColor);
+        }
     }
 }

@@ -119,11 +119,12 @@ public class MainActivity extends AppCompatActivity {
     private void changeFragmentColor(int colorIndex, String fragmentTag) {
         ColorFragment selectedColorFragment = (ColorFragment) getSupportFragmentManager()
                 .findFragmentByTag(fragmentTag);
-        int currentColorValue = selectedColorFragment.getColorValue();
-        int newColorValue = ColorsManager.getColorsManager().getAvailableColor(colorIndex)
+        //int currentColorValue = selectedColorFragment.getColorValue();
+        int newColorValue = ColorsManager.getColorsManager()
+                .getAvailableColor(colorIndex, fragmentTag)
                 .getValueColor();
         selectedColorFragment.setColorValue(newColorValue);
-        ColorsManager.getColorsManager().setAvailableColor(currentColorValue);
+        //ColorsManager.getColorsManager().setAvailableColor(currentColorValue);
     }
 
     private Spannable getContextMenuItem(Color color) {
@@ -144,10 +145,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (item.isChecked()) {
             fragmentTransaction.hide(selectedColorFragment);
-            ColorsManager.getColorsManager().setAvailableColor(
-                    selectedColorFragment.getColorValue());
+            ColorsManager.getColorsManager().setAvailableColor(fragmentTag);
         } else {
-            int colorValue = ColorsManager.getColorsManager().getAvailableColor(0)
+            int colorValue = ColorsManager.getColorsManager().getUsedColor(fragmentTag)
                     .getValueColor();
             selectedColorFragment.setColorValue(colorValue);
             fragmentTransaction.show(selectedColorFragment);
@@ -184,15 +184,15 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.containerOfTopLeftFragment,
                         ColorFragment.newInstance(ColorsManager.getColorsManager().
-                                getRandomAvailableColor().getValueColor()),
+                                getRandomAvailableColor(TOP_LEFT_FRAGMENT).getValueColor()),
                         TOP_LEFT_FRAGMENT)
                 .add(R.id.containerOfTopRightFragment,
                         ColorFragment.newInstance(ColorsManager.getColorsManager().
-                                getRandomAvailableColor().getValueColor()),
+                                getRandomAvailableColor(TOP_RIGHT_FRAGMENT).getValueColor()),
                         TOP_RIGHT_FRAGMENT)
                 .add(R.id.containerOfBottomFragment,
                         ColorFragment.newInstance(ColorsManager.getColorsManager().
-                                getRandomAvailableColor().getValueColor()),
+                                getRandomAvailableColor(BOTTOM_FRAGMENT).getValueColor()),
                         BOTTOM_FRAGMENT)
                 .commit();
     }
