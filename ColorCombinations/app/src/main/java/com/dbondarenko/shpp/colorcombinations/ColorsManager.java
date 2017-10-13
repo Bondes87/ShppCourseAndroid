@@ -1,10 +1,8 @@
 package com.dbondarenko.shpp.colorcombinations;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -14,14 +12,21 @@ import java.util.Random;
 class ColorsManager {
 
     private static final String LOG_TAG = "main_activity";
+    private static final int RED = 0xFFFF0000;
+    private static final int ORANGE = 0xFFFFA500;
+    private static final int YELLOW = 0xFFFFFF00;
+    private static final int GREEN = 0xFF00FF00;
+    private static final int CYAN = 0xFF00FFFF;
+    private static final int BLUE = 0xFF0000FF;
+    private static final int PURPLE = 0xFF800080;
 
     private static ColorsManager colorsManager;
     private ArrayList<Color> arrayListAvailableColors;
-    private HashMap<String, Color> hashMapUsedColors;
+    private ArrayList<Color> arrayListUsedColors;
 
     private ColorsManager() {
         arrayListAvailableColors = new ArrayList<>();
-        hashMapUsedColors = new HashMap<>();
+        arrayListUsedColors = new ArrayList<>();
         initColors();
     }
 
@@ -32,46 +37,43 @@ class ColorsManager {
         return colorsManager;
     }
 
+    private void initColors() {
+        arrayListAvailableColors.add(new Color("red", RED));
+        arrayListAvailableColors.add(new Color("orange", ORANGE));
+        arrayListAvailableColors.add(new Color("yellow", YELLOW));
+        arrayListAvailableColors.add(new Color("green", GREEN));
+        arrayListAvailableColors.add(new Color("cyan", CYAN));
+        arrayListAvailableColors.add(new Color("blue", BLUE));
+        arrayListAvailableColors.add(new Color("purple", PURPLE));
+    }
 
-    public ArrayList<Color> getAvailableColors() {
+    ArrayList<Color> getAvailableColors() {
         Log.d(LOG_TAG, "getAvailableColors()");
         return arrayListAvailableColors;
     }
 
-    /*public Color getAvailableColor() {
+    Color getAvailableColor(int colorIndex) {
         Log.d(LOG_TAG, "getAvailableColor()");
-        int randomIndex = new Random().nextInt(arrayListAvailableColors.size());
-        Color color = arrayListAvailableColors.remove(randomIndex);
-
-        return ;
-    }
-
-    public void setAvailableColor(Color color) {
-        Log.d(LOG_TAG, "setAvailableColor()");
-        arrayListAvailableColors.add(color);
-    }*/
-
-    public Color getAvailableColor(String tegOfFragment) {
-        Log.d(LOG_TAG, "getAvailableColor()");
-        if (TextUtils.isEmpty(tegOfFragment)) {
-            Log.d(LOG_TAG, "Error: tegOfFragment is null");
-        }
-        int randomIndex = new Random().nextInt(arrayListAvailableColors.size());
-        if (hashMapUsedColors.containsKey(tegOfFragment)) {
-            arrayListAvailableColors.add(hashMapUsedColors.remove(tegOfFragment));
-        }
-        Color color = arrayListAvailableColors.remove(randomIndex);
-        hashMapUsedColors.put(tegOfFragment, color);
+        Color color = arrayListAvailableColors.remove(colorIndex);
+        arrayListUsedColors.add(color);
         return color;
     }
 
-    private void initColors() {
-        arrayListAvailableColors.add(new Color("red", 0xFFFF0000));
-        arrayListAvailableColors.add(new Color("orange", 0xFFFFA500));
-        arrayListAvailableColors.add(new Color("yellow", 0xFFFFFF00));
-        arrayListAvailableColors.add(new Color("green", 0xFF00FF00));
-        arrayListAvailableColors.add(new Color("cyan", 0xFF00FFFF));
-        arrayListAvailableColors.add(new Color("blue", 0xFF0000FF));
-        arrayListAvailableColors.add(new Color("purple", 0xFF800080));
+    Color getRandomAvailableColor() {
+        Log.d(LOG_TAG, "getAvailableColor()");
+        int randomIndex = new Random().nextInt(arrayListAvailableColors.size());
+        return getAvailableColor(randomIndex);
+    }
+
+    void setAvailableColor(int colorValue) {
+        Log.d(LOG_TAG, "setAvailableColor()");
+        int indexColor = 0;
+        for (int i = 0; i < arrayListUsedColors.size(); i++) {
+            if (arrayListUsedColors.get(i).getValueColor() == colorValue) {
+                indexColor = i;
+                break;
+            }
+        }
+        arrayListAvailableColors.add(0, arrayListUsedColors.remove(indexColor));
     }
 }
