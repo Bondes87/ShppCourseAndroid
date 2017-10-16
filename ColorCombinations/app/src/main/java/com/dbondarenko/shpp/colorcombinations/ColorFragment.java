@@ -9,19 +9,29 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- *
+ * File: ColorFragment.java
+ * The fragment that changes color.
+ * Created by Dmitro Bondarenko on 11.10.2017.
  */
 public class ColorFragment extends Fragment {
 
     private static final String LOG_TAG = "color_fragment";
 
+    // The key for accessing the color value of a fragment
+    // in the arguments of a fragment.
     private static final String KEY_CONTENT_COLOR_VALUE =
             "com.dbondarenko.shpp.colorcombinations.ContentColorValue";
-
-    private int contentColorValue;
-
+    // The value of the color the background of the fragment.
+    private int backgroundColorValue;
+    // View to display the contents of a fragment.
     private CardView cardViewContent;
 
+    /**
+     * Returns a ColorFragment class object with the specified color.
+     *
+     * @param colorValue The color value for the background of the fragment.
+     * @return ColorFragment class object.
+     */
     public static ColorFragment newInstance(int colorValue) {
         ColorFragment colorFragment = new ColorFragment();
         Bundle args = new Bundle();
@@ -33,7 +43,7 @@ public class ColorFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        contentColorValue = getArguments().getInt(KEY_CONTENT_COLOR_VALUE);
+        backgroundColorValue = getArguments().getInt(KEY_CONTENT_COLOR_VALUE);
         setRetainInstance(true);
         Log.d(LOG_TAG, "onCreate()");
     }
@@ -42,13 +52,20 @@ public class ColorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()");
-        cardViewContent = (CardView) inflater.inflate(R.layout.fragment_color, container, false);
-        cardViewContent.setCardBackgroundColor(contentColorValue);
+        cardViewContent = (CardView) inflater.inflate(R.layout.fragment_color,
+                container, false);
+        cardViewContent.setCardBackgroundColor(backgroundColorValue);
         return cardViewContent;
     }
 
-    public void setContentColorValue(int newContentColorValue) {
-        contentColorValue = newContentColorValue;
-        cardViewContent.setCardBackgroundColor(contentColorValue);
+    /**
+     * Sets the background color of the fragment.
+     *
+     * @param newBackgroundColorValue The new color value for the background
+     *                                of the fragment.
+     */
+    public void setBackgroundColorValue(int newBackgroundColorValue) {
+        backgroundColorValue = newBackgroundColorValue;
+        cardViewContent.setCardBackgroundColor(backgroundColorValue);
     }
 }
