@@ -24,6 +24,7 @@ class ColorsManager {
     private static final int CYAN = 0xFF00FFFF;
     private static final int BLUE = 0xFF0000FF;
     private static final int PURPLE = 0xFF800080;
+    private static final int BLACK = 0xFF000000;
 
     private static ColorsManager colorsManager;
     // The list that contains the available colors.
@@ -136,6 +137,16 @@ class ColorsManager {
         } else {
             return getRandomAvailableColor(fragmentTag);
         }
+    }
+
+    /**
+     * Returns default of color of option menu item.
+     *
+     * @return the default of color of option menu item.
+     */
+    Color getColorDefaultOfOptionMenuItem() {
+        Log.d(LOG_TAG, "getColorDefaultOfOptionMenuItem()");
+        return new Color("black", BLACK);
     }
 
     /**

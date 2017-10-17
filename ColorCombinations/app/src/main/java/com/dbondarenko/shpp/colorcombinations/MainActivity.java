@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -84,6 +85,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for (int i = 0; i < fragments.size(); i++) {
+            Fragment fragment = fragments.get(i);
+            Color colorForMenuItem;
+            if (fragment.isHidden()) {
+                colorForMenuItem = ColorsManager.getColorsManager()
+                        .getColorDefaultOfOptionMenuItem();
+            } else {
+                colorForMenuItem = ColorsManager.getColorsManager()
+                        .getUsedColor(fragment.getTag());
+            }
+            setColorOfOptionMenuItem(menu.getItem(i), colorForMenuItem);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         Log.d(LOG_TAG, "onCreateContextMenu()");
@@ -125,6 +144,27 @@ public class MainActivity extends AppCompatActivity {
             initFragments();
         }
         registerViewsForContextMenu();
+    }
+
+    /**
+     * Sets the color of the menu item.
+     *
+     * @param menuItem         The item of menu.
+     * @param colorForMenuItem The color for changing the color of the menu item.
+     */
+    private void setColorOfOptionMenuItem(MenuItem menuItem, Color colorForMenuItem) {
+        Log.d(LOG_TAG, "setColorOfOptionMenuItem()");
+        if (menuItem == null) {
+            Log.e(LOG_TAG, "setFragmentVisibility(): menuItem is null!!!");
+            return;
+        }
+        if (colorForMenuItem == null) {
+            Log.e(LOG_TAG, "setFragmentVisibility(): fragmentTag is null!!!");
+            return;
+        }
+        SpannableString s = new SpannableString(menuItem.getTitle());
+        s.setSpan(new ForegroundColorSpan(colorForMenuItem.getValueColor()), 0, s.length(), 0);
+        menuItem.setTitle(s);
     }
 
     /**
