@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 /**
  * File: ColorFragment.java
  * The fragment that changes color.
@@ -25,20 +28,6 @@ public class ColorFragment extends Fragment {
     private int backgroundColorValue;
     // View to display the contents of a fragment.
     private CardView cardViewContent;
-
-    /**
-     * Returns a ColorFragment class object with the specified color.
-     *
-     * @param colorValue The color value for the background of the fragment.
-     * @return ColorFragment class object.
-     */
-    public static ColorFragment newInstance(int colorValue) {
-        ColorFragment colorFragment = new ColorFragment();
-        Bundle args = new Bundle();
-        args.putInt(KEY_CONTENT_COLOR_VALUE, colorValue);
-        colorFragment.setArguments(args);
-        return colorFragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,12 +48,45 @@ public class ColorFragment extends Fragment {
     }
 
     /**
+     * Returns a ColorFragment class object with the specified color.
+     *
+     * @param colorValue The color value for the background of the fragment.
+     * @return ColorFragment class object.
+     */
+    public static ColorFragment newInstance(int colorValue) {
+        ColorFragment colorFragment = new ColorFragment();
+        Bundle args = new Bundle();
+        args.putInt(KEY_CONTENT_COLOR_VALUE, colorValue);
+        colorFragment.setArguments(args);
+        return colorFragment;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe
+    public void onColorChangeEvent(ColorChangeEvent event) {
+        if (event.getFragmentTag().equals(getTag())) {
+            setBackgroundColorValue(event.getColorValue());
+        }
+    }
+
+    /**
      * Sets the background color of the fragment.
      *
      * @param newBackgroundColorValue The new color value for the background
      *                                of the fragment.
      */
-    public void setBackgroundColorValue(int newBackgroundColorValue) {
+    private void setBackgroundColorValue(int newBackgroundColorValue) {
         backgroundColorValue = newBackgroundColorValue;
         cardViewContent.setCardBackgroundColor(backgroundColorValue);
     }

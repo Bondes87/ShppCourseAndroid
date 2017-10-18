@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +58,18 @@ public class MainActivity extends AppCompatActivity {
 
     // View which contains the selected fragment for which the context menu is called.
     private View viewSelectedFragment;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate()");
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        if (savedInstanceState == null) {
+            initFragments();
+        }
+        registerViewsForContextMenu();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -134,18 +148,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "onCreate()");
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        if (savedInstanceState == null) {
-            initFragments();
-        }
-        registerViewsForContextMenu();
-    }
-
     /**
      * Sets the color of the menu item.
      *
@@ -212,12 +214,10 @@ public class MainActivity extends AppCompatActivity {
             Log.e(LOG_TAG, "changeFragmentColor(): fragmentTag is null!!!");
             return;
         }
-        ColorFragment selectedColorFragment = (ColorFragment) getSupportFragmentManager()
-                .findFragmentByTag(fragmentTag);
         int newColorValue = ColorsManager.getColorsManager()
                 .getAvailableColor(colorIndex, fragmentTag)
                 .getValueColor();
-        selectedColorFragment.setBackgroundColorValue(newColorValue);
+        EventBus.getDefault().post(new ColorChangeEvent(newColorValue, fragmentTag));
     }
 
     /**
@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
             int colorValue = ColorsManager.getColorsManager()
                     .getUsedColor(fragmentTag)
                     .getValueColor();
-            selectedColorFragment.setBackgroundColorValue(colorValue);
+            EventBus.getDefault().post(new ColorChangeEvent(colorValue, fragmentTag));
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .show(selectedColorFragment);
         }
