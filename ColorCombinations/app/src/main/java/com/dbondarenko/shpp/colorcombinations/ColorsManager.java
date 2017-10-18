@@ -14,7 +14,7 @@ import java.util.Random;
  */
 class ColorsManager {
 
-    private static final String LOG_TAG = "main_activity";
+    private static final String LOG_TAG = "colors_manager";
 
     // The colors values.
     private static final int RED = 0xFFFF0000;

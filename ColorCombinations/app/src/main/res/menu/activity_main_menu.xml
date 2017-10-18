@@ -5,14 +5,17 @@
         <item
             android:id="@+id/topLeftFragment"
             android:title="@string/top_left_fragment"
+            android:orderInCategory="0"
             app:showAsAction="never"/>
         <item
             android:id="@+id/topRightFragment"
             android:title="@string/top_right_fragment"
+            android:orderInCategory="1"
             app:showAsAction="never"/>
         <item
             android:id="@+id/bottomFragment"
             android:title="@string/bottom_fragment"
+            android:orderInCategory="2"
             app:showAsAction="never"/>
     </group>
 </menu>

@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         if (savedInstanceState == null) {
             initFragments();
+            OptionMenuState.getOptionMenuState().initCheckboxSettingsOfMenuItem();
         }
         registerViewsForContextMenu();
     }
@@ -181,12 +182,13 @@ public class MainActivity extends AppCompatActivity {
             Log.e(LOG_TAG, "setCheckboxesInOptionsMenu(): menu is null!!!");
             return;
         }
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        for (int i = 0; i < fragments.size(); i++) {
-            if (fragments.get(i).isHidden()) {
-                menu.getItem(i).setChecked(false);
-            } else {
+        boolean[] checkboxesSettings = OptionMenuState.getOptionMenuState()
+                .getCheckboxesSettingsForMenuItems();
+        for (int i = 0; i < checkboxesSettings.length; i++) {
+            if (checkboxesSettings[i]) {
                 menu.getItem(i).setChecked(true);
+            } else {
+                menu.getItem(i).setChecked(false);
             }
         }
     }
@@ -281,6 +283,8 @@ public class MainActivity extends AppCompatActivity {
         }
         fragmentTransaction.commit();
         menuItem.setChecked(!menuItem.isChecked());
+        OptionMenuState.getOptionMenuState().setCheckboxSettingsOfMenuItem(
+                menuItem.getOrder(), menuItem.isChecked());
     }
 
     /**
