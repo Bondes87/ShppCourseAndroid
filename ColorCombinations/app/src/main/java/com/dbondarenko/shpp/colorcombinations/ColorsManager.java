@@ -73,6 +73,7 @@ class ColorsManager {
      */
     private String findKeyByValue(Color color) {
         Log.d(LOG_TAG, "findKeyByValue()");
+        Utility.checkForNull(color);
         String key = "";
         for (Map.Entry<String, Color> entry : hashMapUsedColors.entrySet())
             if (color.equals(entry.getValue())) {
@@ -101,6 +102,8 @@ class ColorsManager {
      */
     Color getAvailableColor(int colorIndex, String fragmentTag) {
         Log.d(LOG_TAG, "getAvailableColor()");
+        Utility.checkStringToNull(fragmentTag);
+        Utility.checkIndexOutOfBounds(colorIndex,arrayListAvailableColors.size());
         Color availableColor = arrayListAvailableColors.remove(colorIndex);
         if (hashMapUsedColors.containsValue(availableColor)) {
             hashMapUsedColors.put(findKeyByValue(availableColor), null);
@@ -118,6 +121,7 @@ class ColorsManager {
      */
     Color getRandomAvailableColor(String fragmentTag) {
         Log.d(LOG_TAG, "getRandomAvailableColor()");
+        Utility.checkStringToNull(fragmentTag);
         int randomIndex = new Random().nextInt(arrayListAvailableColors.size());
         return getAvailableColor(randomIndex, fragmentTag);
     }
@@ -130,6 +134,7 @@ class ColorsManager {
      */
     Color getUsedColor(String fragmentTag) {
         Log.d(LOG_TAG, "getUsedColor()");
+        Utility.checkStringToNull(fragmentTag);
         Color usedColor = hashMapUsedColors.get(fragmentTag);
         if (usedColor != null) {
             arrayListAvailableColors.remove(usedColor);
@@ -157,6 +162,7 @@ class ColorsManager {
      */
     void setAvailableColor(String fragmentTag) {
         Log.d(LOG_TAG, "setAvailableColor()");
+        Utility.checkStringToNull(fragmentTag);
         Color usedColor = hashMapUsedColors.get(fragmentTag);
         if (usedColor != null && !arrayListAvailableColors.contains(usedColor)) {
             arrayListAvailableColors.add(0, usedColor);

@@ -3,36 +3,36 @@ package com.dbondarenko.shpp.colorcombinations;
 import android.util.Log;
 
 /**
- * File: OptionMenuState.java
+ * File: OptionsMenuState.java
  * The class that stores the checkboxes settings for the options menu.
  * Created by Dmitro Bondarenko on 18.10.2017.
  */
-class OptionMenuState {
+class OptionsMenuState {
 
     private static final String LOG_TAG = "option_menu_state";
 
     // The number of checkboxes in the options menu.
     private static final int NUMBER_OF_CHECKBOXES_IN_OPTIONS_MENU = 3;
 
-    private static OptionMenuState optionMenuState;
+    private static OptionsMenuState optionsMenuState;
     // Array for storing checkboxes settings for options menu.
     private boolean[] checkboxesSettingsForMenuItems;
 
-    private OptionMenuState() {
+    private OptionsMenuState() {
         checkboxesSettingsForMenuItems = new boolean[NUMBER_OF_CHECKBOXES_IN_OPTIONS_MENU];
     }
 
     /**
-     * Returns the OptionMenuState object. If an object is not created, it creates it.
+     * Returns the OptionsMenuState object. If an object is not created, it creates it.
      *
-     * @return OptionMenuState object.
+     * @return OptionsMenuState object.
      */
-    static OptionMenuState getOptionMenuState() {
-        Log.d(LOG_TAG, "getOptionMenuState()");
-        if (optionMenuState == null) {
-            optionMenuState = new OptionMenuState();
+    static OptionsMenuState getOptionsMenuState() {
+        Log.d(LOG_TAG, "getOptionsMenuState()");
+        if (optionsMenuState == null) {
+            optionsMenuState = new OptionsMenuState();
         }
-        return optionMenuState;
+        return optionsMenuState;
     }
 
     /**
@@ -53,9 +53,8 @@ class OptionMenuState {
      */
     void setCheckboxSettingsOfMenuItem(int menuItemIndex, boolean isSelectedCheckbox) {
         Log.d(LOG_TAG, "setCheckboxSettingsOfMenuItem()");
-        if (menuItemIndex >= 0 & menuItemIndex < checkboxesSettingsForMenuItems.length) {
-            checkboxesSettingsForMenuItems[menuItemIndex] = isSelectedCheckbox;
-        }
+        Utility.checkIndexOutOfBounds(menuItemIndex, checkboxesSettingsForMenuItems.length);
+        checkboxesSettingsForMenuItems[menuItemIndex] = isSelectedCheckbox;
     }
 
     /**

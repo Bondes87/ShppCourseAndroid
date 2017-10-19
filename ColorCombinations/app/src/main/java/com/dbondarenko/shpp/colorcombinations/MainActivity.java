@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.util.Log;
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         if (savedInstanceState == null) {
             initFragments();
-            OptionMenuState.getOptionMenuState().initCheckboxSettingsOfMenuItem();
+            OptionsMenuState.getOptionsMenuState().initCheckboxSettingsOfMenuItem();
         }
         registerViewsForContextMenu();
     }
@@ -157,14 +156,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setColorOfOptionMenuItem(MenuItem menuItem, Color colorForMenuItem) {
         Log.d(LOG_TAG, "setColorOfOptionMenuItem()");
-        if (menuItem == null) {
-            Log.e(LOG_TAG, "setFragmentVisibility(): menuItem is null!!!");
-            return;
-        }
-        if (colorForMenuItem == null) {
-            Log.e(LOG_TAG, "setFragmentVisibility(): fragmentTag is null!!!");
-            return;
-        }
+        Utility.checkForNull(menuItem, colorForMenuItem);
         SpannableString s = new SpannableString(menuItem.getTitle());
         s.setSpan(new ForegroundColorSpan(colorForMenuItem.getValueColor()), 0, s.length(), 0);
         menuItem.setTitle(s);
@@ -178,11 +170,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setCheckboxesInOptionsMenu(Menu menu) {
         Log.d(LOG_TAG, "setCheckboxesInOptionsMenu()");
-        if (menu == null) {
-            Log.e(LOG_TAG, "setCheckboxesInOptionsMenu(): menu is null!!!");
-            return;
-        }
-        boolean[] checkboxesSettings = OptionMenuState.getOptionMenuState()
+        Utility.checkForNull(menu);
+        boolean[] checkboxesSettings = OptionsMenuState.getOptionsMenuState()
                 .getCheckboxesSettingsForMenuItems();
         for (int i = 0; i < checkboxesSettings.length; i++) {
             if (checkboxesSettings[i]) {
@@ -212,10 +201,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void changeFragmentColor(int colorIndex, String fragmentTag) {
         Log.d(LOG_TAG, "changeFragmentColor()");
-        if (TextUtils.isEmpty(fragmentTag)) {
-            Log.e(LOG_TAG, "changeFragmentColor(): fragmentTag is null!!!");
-            return;
-        }
+        Utility.checkStringToNull(fragmentTag);
         int newColorValue = ColorsManager.getColorsManager()
                 .getAvailableColor(colorIndex, fragmentTag)
                 .getValueColor();
@@ -231,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private Spannable getContextMenuItem(Color color) {
         Log.d(LOG_TAG, "getContextMenuItem()");
+        Utility.checkForNull(color);
         Spannable spannableMenuItem = new SpannableString("  - " + color.getNameColor());
         ShapeDrawable circle = new ShapeDrawable(new OvalShape());
         circle.getPaint().setColor(color.getValueColor());
@@ -253,19 +240,8 @@ public class MainActivity extends AppCompatActivity {
     private void setFragmentVisibility(MenuItem menuItem,
                                        FragmentManager fragmentManager,
                                        String fragmentTag) {
-        Log.d(LOG_TAG, "setFragmentVisibility()");
-        if (menuItem == null) {
-            Log.e(LOG_TAG, "setFragmentVisibility(): menuItem is null!!!");
-            return;
-        }
-        if (fragmentManager == null) {
-            Log.e(LOG_TAG, "setFragmentVisibility(): fragmentManager is null!!!");
-            return;
-        }
-        if (TextUtils.isEmpty(fragmentTag)) {
-            Log.e(LOG_TAG, "setFragmentVisibility(): fragmentTag is null!!!");
-            return;
-        }
+        Utility.checkForNull(menuItem, fragmentManager);
+        Utility.checkStringToNull(fragmentTag);
         ColorFragment selectedColorFragment =
                 (ColorFragment) fragmentManager.findFragmentByTag(fragmentTag);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -283,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
         }
         fragmentTransaction.commit();
         menuItem.setChecked(!menuItem.isChecked());
-        OptionMenuState.getOptionMenuState().setCheckboxSettingsOfMenuItem(
+        OptionsMenuState.getOptionsMenuState().setCheckboxSettingsOfMenuItem(
                 menuItem.getOrder(), menuItem.isChecked());
     }
 

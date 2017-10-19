@@ -75,6 +75,7 @@ public class ColorFragment extends Fragment {
 
     @Subscribe
     public void onColorChangeEvent(ColorChangeEvent event) {
+        Utility.checkForNull(event);
         if (event.getFragmentTag().equals(getTag())) {
             setBackgroundColorValue(event.getColorValue());
         }
