@@ -56,6 +56,7 @@ class CookIslandsSQLiteManager {
                 arrayListOfIslands.add(island);
             } while (cursor.moveToNext());
         }
+        Log.d(LOG_TAG, "getIslands(): list: " + arrayListOfIslands);
         cursor.close();
         cookIslandsSQLiteOpenHelper.close();
         return arrayListOfIslands;
