@@ -1,4 +1,4 @@
-package com.dbondarenko.shpp.cookislands;
+package com.dbondarenko.shpp.cookislands.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.dbondarenko.shpp.cookislands.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,7 +19,7 @@ import butterknife.OnClick;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = "login_activity";
+    private static final String LOG_TAG = LoginActivity.class.getSimpleName();
 
     @BindView(R.id.editTextLogin)
     EditText editTextLogin;

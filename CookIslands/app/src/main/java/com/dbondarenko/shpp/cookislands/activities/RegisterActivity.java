@@ -1,4 +1,4 @@
-package com.dbondarenko.shpp.cookislands;
+package com.dbondarenko.shpp.cookislands.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.dbondarenko.shpp.cookislands.database.CookIslandsSQLiteManager;
+import com.dbondarenko.shpp.cookislands.models.IslandModel;
+import com.dbondarenko.shpp.cookislands.R;
+import com.dbondarenko.shpp.cookislands.models.UserModel;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -17,7 +22,7 @@ import butterknife.OnClick;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = "register_activity";
+    private static final String LOG_TAG = RegisterActivity.class.getSimpleName();
 
     @BindView(R.id.editTextLogin)
     EditText editTextLogin;
@@ -28,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.buttonRegister)
     Button buttonRegister;
 
-    ArrayList<Island> arrayListOfIslands;
+    ArrayList<IslandModel> arrayListOfIslands;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +51,15 @@ public class RegisterActivity extends AppCompatActivity {
     @OnClick(R.id.buttonRegister)
     public void onViewClicked() {
         Log.d(LOG_TAG, "onViewClicked()");
-        User newUser = new User(editTextLogin.getText().toString(),
+        UserModel newUser = new UserModel(editTextLogin.getText().toString(),
                 editTextPassword.getText().toString(),
                 spinnerIslandsNames.getSelectedItemPosition());
         Log.d(LOG_TAG, editTextLogin.getText().toString() + "\n" +
                 editTextPassword.getText().toString() + "\n" +
                 spinnerIslandsNames.getSelectedItemPosition());
-        //CookIslandsSQLiteManager.addUser(getApplicationContext(), newUser);
-        //runContentActivity();
+        if(CookIslandsSQLiteManager.addUser(getApplicationContext(), newUser)){
+            runContentActivity();
+        }
     }
 
     public String[] getIslandsName() {

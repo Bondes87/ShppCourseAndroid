@@ -1,14 +1,14 @@
-package com.dbondarenko.shpp.cookislands;
+package com.dbondarenko.shpp.cookislands.models;
 
 /**
- * File: Island.java
+ * File: IslandModel.java
  * Created by Dmitro Bondarenko on 24.10.2017.
  */
-class Island {
+public class IslandModel {
     private int id;
     private String name;
 
-    Island(int id, String name) {
+    public IslandModel(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -31,7 +31,7 @@ class Island {
 
     @Override
     public String toString() {
-        return "Island{" +
+        return "IslandModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';

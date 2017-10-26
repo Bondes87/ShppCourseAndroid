@@ -1,100 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="@dimen/default_padding"
-    tools:context="com.dbondarenko.shpp.cookislands.LoginActivity">
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayoutLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/small_margin"
-        android:layout_marginTop="@dimen/default_margin">
-
-        <EditText
-            android:id="@+id/editTextLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/text_login"
-            android:inputType="text"
-            android:maxLines="1"/>
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayoutPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:layout_marginTop="@dimen/small_margin">
-
-        <EditText
-            android:id="@+id/editTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/text_password"
-            android:inputType="textPassword"
-            android:maxLines="1"/>
-
-    </android.support.design.widget.TextInputLayout>
-
-    <Button
-        android:id="@+id/buttonLogIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:layout_marginTop="@dimen/default_margin"
-        android:text="@string/button_log_in"
-        android:textStyle="bold"/>
+    tools:context="com.dbondarenko.shpp.cookislands.activities.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:layout_marginEnd="@dimen/small_margin"
-        android:layout_marginStart="@dimen/small_margin"
-        android:layout_marginTop="@dimen/default_margin"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/default_padding">
 
-        <View
-            android:id="@+id/lineBeforeTextViewOr"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/line_height"
-            android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"/>
-
-        <TextView
-            android:id="@+id/textViewOr"
-            android:layout_width="wrap_content"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutLogin"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/small_margin"
+            android:layout_marginTop="@dimen/default_margin">
+
+            <EditText
+                android:id="@+id/editTextLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_login"
+                android:inputType="text"
+                android:maxLines="1"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayoutPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:layout_marginTop="@dimen/small_margin">
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_password"
+                android:inputType="textPassword"
+                android:maxLines="1"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/buttonLogIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@string/button_log_in"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
             android:layout_marginEnd="@dimen/small_margin"
             android:layout_marginStart="@dimen/small_margin"
-            android:text="@string/text_or"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            tools:text="@string/text_or"/>
+            android:layout_marginTop="@dimen/default_margin"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <View
-            android:id="@+id/lineAfterTextViewOr"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/line_height"
-            android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"/>
+            <View
+                android:id="@+id/lineBeforeTextViewOr"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_height"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"/>
+
+            <TextView
+                android:id="@+id/textViewOr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/small_margin"
+                android:layout_marginStart="@dimen/small_margin"
+                android:text="@string/text_or"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                tools:text="@string/text_or"/>
+
+            <View
+                android:id="@+id/lineAfterTextViewOr"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_height"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@string/button_register"
+            android:textStyle="bold"/>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/buttonRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:layout_marginTop="@dimen/default_margin"
-        android:text="@string/button_register"
-        android:textStyle="bold"/>
-
-</LinearLayout>
+</ScrollView>

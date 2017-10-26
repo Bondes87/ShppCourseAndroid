@@ -1,21 +1,21 @@
-package com.dbondarenko.shpp.cookislands;
+package com.dbondarenko.shpp.cookislands.models;
 
 /**
- * File: User.java
+ * File: UserModel.java
  * Created by Dmitro Bondarenko on 24.10.2017.
  */
-class User {
+public class UserModel {
     private String login;
     private String password;
     private int islandId;
 
-    public User(String login, String password, int islandId) {
+    public UserModel(String login, String password, int islandId) {
         this.login = login;
         this.password = password;
         this.islandId = islandId;
     }
 
-    String getLogin() {
+    public String getLogin() {
         return login;
     }
 
@@ -23,7 +23,7 @@ class User {
         this.login = login;
     }
 
-    String getPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -31,7 +31,7 @@ class User {
         this.password = password;
     }
 
-    int getIslandId() {
+    public int getIslandId() {
         return islandId;
     }
 
