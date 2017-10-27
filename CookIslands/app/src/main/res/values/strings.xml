@@ -11,10 +11,9 @@
     <string name="text_or">Or</string>
     <string name="text_hello">Hello</string>
     <string name="text_hint">Hint</string>
-    <string name="login_information">Use at least 6 characters. This can be letters (a-z, A-Z), numbers, and periods.</string>
-    <string name="error_invalid_character_in_login">Please use only letters (a-z, A-Z), numbers, and periods.</string>
-    <string name="password_information">Use at least 8 characters. This can be letters (a-z, A-Z), numbers, and common punctuation.</string>
-    <string name="error_invalid_character_in_password">Please use only letters ((a-z, A-Z), numbers, and common punctuation.</string>
+    <string name="login_information">Use at least 6 characters. This can be letters (a-z, A-Z) and numbers.</string>
+    <string name="error_invalid_character_in_login_or_password">Please use only letters (a-z, A-Z), and numbers.</string>
+    <string name="password_information">Use at least 8 characters. This can be letters (a-z, A-Z), and numbers.</string>
     <string name="error_passwords_do_not_match">These passwords don\'t match. Try again.</string>
     <string name="error_empty_field">You can\'t leave this empty.</string>
     <string name="error_short_login">Please use between 6 and 30 characters.</string>

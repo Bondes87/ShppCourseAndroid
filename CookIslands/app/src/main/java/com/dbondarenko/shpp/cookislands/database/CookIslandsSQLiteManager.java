@@ -20,22 +20,17 @@ public class CookIslandsSQLiteManager {
 
     private static final String LOG_TAG = CookIslandsSQLiteManager.class.getSimpleName();
 
-    public static boolean addUser(Context context, UserModel user) {
+    public static void addUser(Context context, UserModel user) {
         Log.d(LOG_TAG, "addUser()");
         CookIslandsSQLiteOpenHelper cookIslandsSQLiteOpenHelper =
                 new CookIslandsSQLiteOpenHelper(context);
         SQLiteDatabase db = cookIslandsSQLiteOpenHelper.getWritableDatabase();
-        if (isUserLoginAvailable(db, user.getLogin())) {
-            ContentValues values = new ContentValues();
-            values.put(Constants.COLUMN_USER_LOGIN, user.getLogin());
-            values.put(Constants.COLUMN_USER_PASSWORD, user.getPassword());
-            values.put(Constants.COLUMN_USER_ISLAND_ID, user.getIslandId());
-            db.insertOrThrow(Constants.TABLE_USERS, null, values);
-            cookIslandsSQLiteOpenHelper.close();
-            return true;
-        }
+        ContentValues values = new ContentValues();
+        values.put(Constants.COLUMN_USER_LOGIN, user.getLogin());
+        values.put(Constants.COLUMN_USER_PASSWORD, user.getPassword());
+        values.put(Constants.COLUMN_USER_ISLAND_ID, user.getIslandId());
+        db.insertOrThrow(Constants.TABLE_USERS, null, values);
         cookIslandsSQLiteOpenHelper.close();
-        return false;
     }
 
     public static ArrayList<IslandModel> getIslands(Context context) {
@@ -77,8 +72,11 @@ public class CookIslandsSQLiteManager {
         return isUserExist;
     }
 
-    private static boolean isUserLoginAvailable(SQLiteDatabase db, String userLogin) {
+    public static boolean isUserLoginAvailable(Context context, String userLogin) {
         Log.d(LOG_TAG, "isUserLoginAvailable()");
+        CookIslandsSQLiteOpenHelper cookIslandsSQLiteOpenHelper =
+                new CookIslandsSQLiteOpenHelper(context);
+        SQLiteDatabase db = cookIslandsSQLiteOpenHelper.getWritableDatabase();
         boolean isUserLoginAvailable;
         Cursor cursor = db.query(Constants.TABLE_USERS,
                 new String[]{Constants.COLUMN_USER_LOGIN},
@@ -87,6 +85,7 @@ public class CookIslandsSQLiteManager {
                 null, null, null);
         isUserLoginAvailable = !cursor.moveToFirst();
         cursor.close();
+        cookIslandsSQLiteOpenHelper.close();
         return isUserLoginAvailable;
     }
 }
