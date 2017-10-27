@@ -44,7 +44,8 @@ public class CookIslandsSQLiteManager {
         CookIslandsSQLiteOpenHelper cookIslandsSQLiteOpenHelper =
                 new CookIslandsSQLiteOpenHelper(context);
         SQLiteDatabase db = cookIslandsSQLiteOpenHelper.getReadableDatabase();
-        Cursor cursor = db.query(Constants.TABLE_ISLANDS, null, null, null, null, null, null);
+        Cursor cursor = db.query(Constants.TABLE_ISLANDS, null, null,
+                null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 IslandModel island = new IslandModel(
@@ -53,7 +54,6 @@ public class CookIslandsSQLiteManager {
                 arrayListOfIslands.add(island);
             } while (cursor.moveToNext());
         }
-        Log.d(LOG_TAG, "getIslands(): list: " + arrayListOfIslands);
         cursor.close();
         cookIslandsSQLiteOpenHelper.close();
         return arrayListOfIslands;
@@ -67,7 +67,8 @@ public class CookIslandsSQLiteManager {
         SQLiteDatabase db = cookIslandsSQLiteOpenHelper.getReadableDatabase();
         Cursor cursor = db.query(Constants.TABLE_USERS,
                 new String[]{Constants.COLUMN_USER_LOGIN, Constants.COLUMN_USER_PASSWORD},
-                Constants.COLUMN_USER_LOGIN + " = ? AND " + Constants.COLUMN_USER_PASSWORD + " = ?",
+                Constants.COLUMN_USER_LOGIN + " = ? AND " +
+                        Constants.COLUMN_USER_PASSWORD + " = ?",
                 new String[]{user.getLogin(), user.getPassword()},
                 null, null, null);
         isUserExist = cursor.moveToFirst();

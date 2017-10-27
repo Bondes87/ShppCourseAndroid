@@ -1,10 +1,24 @@
 <resources>
     <string name="app_name">CookIslands</string>
     <string name="text_login">Login</string>
+    <string name="text_create_login">Create a login</string>
     <string name="text_password">Password</string>
+    <string name="text_create_password">Create a password</string>
+    <string name="text_confirm_your_password">Confirm your password</string>
     <string name="text_select_an_island">Select an island</string>
     <string name="button_log_in">Log in</string>
     <string name="button_register">Register</string>
     <string name="text_or">Or</string>
     <string name="text_hello">Hello</string>
+    <string name="text_hint">Hint</string>
+    <string name="login_information">Use at least 6 characters. This can be letters (a-z, A-Z), numbers, and periods.</string>
+    <string name="error_invalid_character_in_login">Please use only letters (a-z, A-Z), numbers, and periods.</string>
+    <string name="password_information">Use at least 8 characters. This can be letters (a-z, A-Z), numbers, and common punctuation.</string>
+    <string name="error_invalid_character_in_password">Please use only letters ((a-z, A-Z), numbers, and common punctuation.</string>
+    <string name="error_passwords_do_not_match">These passwords don\'t match. Try again.</string>
+    <string name="error_empty_field">You can\'t leave this empty.</string>
+    <string name="error_short_login">Please use between 6 and 30 characters.</string>
+    <string name="error_short_password">Please use between 8 and 30 characters.</string>
+    <string name="error_login_is_busy">That login is taken. Try another.</string>
+    <string name="error_invalid_login_or_password">Incorrect login or password. Try again.</string>
 </resources>
