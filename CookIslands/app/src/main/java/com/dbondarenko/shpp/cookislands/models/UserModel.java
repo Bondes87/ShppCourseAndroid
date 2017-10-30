@@ -9,6 +9,10 @@ public class UserModel {
     private String password;
     private int islandId;
 
+    public UserModel(String login, String password) {
+        this(login, password, 0);
+    }
+
     public UserModel(String login, String password, int islandId) {
         this.login = login;
         this.password = password;

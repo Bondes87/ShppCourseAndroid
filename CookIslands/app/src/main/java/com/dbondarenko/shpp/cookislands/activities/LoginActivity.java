@@ -2,6 +2,7 @@ package com.dbondarenko.shpp.cookislands.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.dbondarenko.shpp.cookislands.R;
+import com.dbondarenko.shpp.cookislands.database.CookIslandsSQLiteManager;
+import com.dbondarenko.shpp.cookislands.models.UserModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,12 +46,34 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "onViewClicked()");
         switch (view.getId()) {
             case R.id.buttonLogIn:
-                runActivity(ContentActivity.class);
+                UserModel user = new UserModel(editTextLogin.getText().toString(),
+                        editTextPassword.getText().toString());
+                if (CookIslandsSQLiteManager.isUserExist(getApplicationContext(), user)) {
+                    runContentActivity();
+                } else {
+                    reportIncorrectLoginOrPassword(view);
+                }
                 break;
             case R.id.buttonRegister:
-                runActivity(RegisterActivity.class);
+                runRegisterActivity();
                 break;
         }
+    }
+
+    private void reportIncorrectLoginOrPassword(View view) {
+        Snackbar snackbar = Snackbar.make(view, getString(
+                R.string.error_invalid_login_or_password), Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+        snackbarView.setBackgroundColor((getResources().getColor(R.color.colorPrimary)));
+        snackbar.show();
+    }
+
+    private void runRegisterActivity() {
+        runActivity(RegisterActivity.class);
+    }
+
+    private void runContentActivity() {
+        runActivity(ContentActivity.class);
     }
 
     private void runActivity(Class<?> activityClass) {

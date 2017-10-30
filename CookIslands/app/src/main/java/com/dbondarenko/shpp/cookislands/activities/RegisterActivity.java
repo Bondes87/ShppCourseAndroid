@@ -64,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (validateLoginAndPassword()) {
                     UserModel newUser = new UserModel(editTextLogin.getText().toString(),
                             editTextPassword.getText().toString(),
-                            spinnerIslandsNames.getSelectedItemPosition());
+                            spinnerIslandsNames.getSelectedItemPosition()+1);
                     Log.d(LOG_TAG, editTextLogin.getText().toString() + "\n" +
                             editTextPassword.getText().toString() + "\n" +
                             spinnerIslandsNames.getSelectedItemPosition());

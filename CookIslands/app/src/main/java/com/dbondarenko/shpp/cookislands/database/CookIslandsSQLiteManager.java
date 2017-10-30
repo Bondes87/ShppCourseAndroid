@@ -76,7 +76,7 @@ public class CookIslandsSQLiteManager {
         Log.d(LOG_TAG, "isUserLoginAvailable()");
         CookIslandsSQLiteOpenHelper cookIslandsSQLiteOpenHelper =
                 new CookIslandsSQLiteOpenHelper(context);
-        SQLiteDatabase db = cookIslandsSQLiteOpenHelper.getWritableDatabase();
+        SQLiteDatabase db = cookIslandsSQLiteOpenHelper.getReadableDatabase();
         boolean isUserLoginAvailable;
         Cursor cursor = db.query(Constants.TABLE_USERS,
                 new String[]{Constants.COLUMN_USER_LOGIN},

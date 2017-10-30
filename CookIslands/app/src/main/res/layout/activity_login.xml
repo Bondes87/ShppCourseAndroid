@@ -10,15 +10,6 @@
     android:padding="@dimen/default_padding"
     tools:context="com.dbondarenko.shpp.cookislands.activities.LoginActivity">
 
-    <ImageView
-        android:id="@+id/imageViewFlag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:srcCompat="@drawable/flag"
-        tools:ignore="ContentDescription"
-        android:layout_marginBottom="@dimen/default_margin"/>
-
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayoutLogin"
         android:layout_width="match_parent"
