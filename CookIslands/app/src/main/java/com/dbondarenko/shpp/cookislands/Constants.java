@@ -52,4 +52,6 @@ public class Constants {
     public static final int MIN_LENGTH_PASSWORD = 8;
     public static final int MAX_LENGTH_LOGIN_OR_PASSWORD = 30;
 
+    // Key for saving and retrieving information about the user's login to the system.
+    public static final String KEY_USER_LOGGED_IN = "UserLoggedIn";
 }

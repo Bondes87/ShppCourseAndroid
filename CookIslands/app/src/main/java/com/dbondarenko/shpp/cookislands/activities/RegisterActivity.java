@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.dbondarenko.shpp.cookislands.Constants;
+import com.dbondarenko.shpp.cookislands.CookIslandsPreferences;
 import com.dbondarenko.shpp.cookislands.R;
 import com.dbondarenko.shpp.cookislands.database.CookIslandsSQLiteManager;
 import com.dbondarenko.shpp.cookislands.fragments.InfoDialogFragment;
@@ -64,12 +65,15 @@ public class RegisterActivity extends AppCompatActivity {
                 if (validateLoginAndPassword()) {
                     UserModel newUser = new UserModel(editTextLogin.getText().toString(),
                             editTextPassword.getText().toString(),
-                            spinnerIslandsNames.getSelectedItemPosition()+1);
+                            spinnerIslandsNames.getSelectedItemPosition() + 1);
                     Log.d(LOG_TAG, editTextLogin.getText().toString() + "\n" +
                             editTextPassword.getText().toString() + "\n" +
                             spinnerIslandsNames.getSelectedItemPosition());
                     CookIslandsSQLiteManager.addUser(getApplicationContext(), newUser);
+                    CookIslandsPreferences.getCookIslandsPreferences()
+                            .saveInformationAboutLogin(getApplicationContext());
                     runContentActivity();
+                    finish();
                 }
                 break;
             case R.id.imageViewLoginInfo:

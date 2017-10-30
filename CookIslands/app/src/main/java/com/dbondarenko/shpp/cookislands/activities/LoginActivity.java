@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.dbondarenko.shpp.cookislands.CookIslandsPreferences;
 import com.dbondarenko.shpp.cookislands.R;
 import com.dbondarenko.shpp.cookislands.database.CookIslandsSQLiteManager;
 import com.dbondarenko.shpp.cookislands.models.UserModel;
@@ -39,6 +40,11 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "onCreate()");
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        if (CookIslandsPreferences.getCookIslandsPreferences().
+                getInformationAboutLogin(getApplicationContext())) {
+            runContentActivity();
+            finish();
+        }
     }
 
     @OnClick({R.id.buttonLogIn, R.id.buttonRegister})
@@ -49,7 +55,10 @@ public class LoginActivity extends AppCompatActivity {
                 UserModel user = new UserModel(editTextLogin.getText().toString(),
                         editTextPassword.getText().toString());
                 if (CookIslandsSQLiteManager.isUserExist(getApplicationContext(), user)) {
+                    CookIslandsPreferences.getCookIslandsPreferences()
+                            .saveInformationAboutLogin(getApplicationContext());
                     runContentActivity();
+                    finish();
                 } else {
                     reportIncorrectLoginOrPassword(view);
                 }
@@ -61,8 +70,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void reportIncorrectLoginOrPassword(View view) {
-        Snackbar snackbar = Snackbar.make(view, getString(
-                R.string.error_invalid_login_or_password), Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(view,
+                getString(R.string.error_invalid_login_or_password),
+                Snackbar.LENGTH_LONG);
         View snackbarView = snackbar.getView();
         snackbarView.setBackgroundColor((getResources().getColor(R.color.colorPrimary)));
         snackbar.show();
