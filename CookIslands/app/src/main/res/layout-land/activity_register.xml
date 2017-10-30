@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:layout_marginTop="@dimen/small_margin"
         android:orientation="horizontal">
 
         <android.support.design.widget.TextInputLayout
@@ -36,22 +35,16 @@
             android:id="@+id/imageViewLoginInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_margin"
             app:srcCompat="@mipmap/ic_info"
             tools:ignore="ContentDescription"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayoutPassword"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/small_margin"
+            android:layout_marginStart="@dimen/small_margin"
             android:layout_weight="1">
 
             <EditText
@@ -75,8 +68,7 @@
         android:id="@+id/textInputLayoutRepeatedPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/small_margin"
-        android:layout_marginTop="@dimen/default_margin">
+        android:layout_marginTop="@dimen/small_margin">
 
         <EditText
             android:id="@+id/editTextRepeatedPassword"
@@ -87,28 +79,34 @@
             android:maxLines="1"/>
     </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:id="@+id/textViewOr"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/small_margin"
         android:layout_marginTop="@dimen/default_margin"
-        android:text="@string/text_select_an_island"
-        tools:text="@string/text_select_an_island"/>
+        android:gravity="center"
+        android:orientation="horizontal">
 
-    <Spinner
-        android:id="@+id/spinnerIslandsNames"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:layout_marginTop="@dimen/small_margin"
-        android:spinnerMode="dialog"/>
+        <TextView
+            android:id="@+id/textViewOr"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:gravity="center"
+            android:text="@string/text_select_an_island"
+            tools:text="@string/text_select_an_island"/>
+
+        <Spinner
+            android:id="@+id/spinnerIslandsNames"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:spinnerMode="dialog"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/buttonRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:text="@string/button_register"
         android:textStyle="bold"/>
