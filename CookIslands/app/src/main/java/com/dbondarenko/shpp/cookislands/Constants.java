@@ -54,4 +54,8 @@ public class Constants {
 
     // Key for saving and retrieving information about the user's login to the system.
     public static final String KEY_USER_LOGGED_IN = "UserLoggedIn";
+    public static final String KEY_USER_ISLAND_ID = "UserIslandId";
+
+    // Key for obtaining the page number for displaying the required information in pageView.
+    public static final String KEY_PAGE_NUMBER = "pageNumber";
 }

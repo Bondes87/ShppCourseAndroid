@@ -72,8 +72,6 @@ class CookIslandsSQLiteOpenHelper extends SQLiteOpenHelper {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error while trying to read names of islands from folder of assets");
         }
-        Log.d(LOG_TAG, "getIslandsNames(): list size = " + arrayListOfIslands.size());
-        Log.d(LOG_TAG, "getIslandsNames(): list: " + arrayListOfIslands.toString());
         return arrayListOfIslands;
     }
 }

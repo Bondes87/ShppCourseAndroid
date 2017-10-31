@@ -9,7 +9,7 @@
     <string name="button_log_in">Log in</string>
     <string name="button_register">Register</string>
     <string name="text_or">Or</string>
-    <string name="text_hello">Hello</string>
+    <string name="text_log_out">Log out</string>
     <string name="text_hint">Hint</string>
     <string name="login_information">Use at least 6 characters. This can be letters (a-z, A-Z) and numbers.</string>
     <string name="error_invalid_character_in_login_or_password">Please use only letters (a-z, A-Z), and numbers.</string>
@@ -20,4 +20,7 @@
     <string name="error_short_password">Please use between 8 and 30 characters.</string>
     <string name="error_login_is_busy">That login is taken. Try another.</string>
     <string name="error_invalid_login_or_password">Incorrect login or password. Try again.</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -9,10 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.dbondarenko.shpp.cookislands.CookIslandsPreferences;
 import com.dbondarenko.shpp.cookislands.R;
 import com.dbondarenko.shpp.cookislands.database.CookIslandsSQLiteManager;
 import com.dbondarenko.shpp.cookislands.models.UserModel;
+import com.dbondarenko.shpp.cookislands.utils.SharedPreferencesManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "onCreate()");
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        if (CookIslandsPreferences.getCookIslandsPreferences().
+        if (SharedPreferencesManager.getSharedPreferencesManager().
                 getInformationAboutLogin(getApplicationContext())) {
             runContentActivity();
             finish();
@@ -52,11 +52,11 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "onViewClicked()");
         switch (view.getId()) {
             case R.id.buttonLogIn:
-                UserModel user = new UserModel(editTextLogin.getText().toString(),
-                        editTextPassword.getText().toString());
-                if (CookIslandsSQLiteManager.isUserExist(getApplicationContext(), user)) {
-                    CookIslandsPreferences.getCookIslandsPreferences()
-                            .saveInformationAboutLogin(getApplicationContext());
+                UserModel user = CookIslandsSQLiteManager.getUser(getApplicationContext(),
+                        editTextLogin.getText().toString(), editTextPassword.getText().toString());
+                if (user != null) {
+                    SharedPreferencesManager.getSharedPreferencesManager()
+                            .saveInformationAboutLogin(getApplicationContext(), user.getIslandId());
                     runContentActivity();
                     finish();
                 } else {

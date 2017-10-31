@@ -54,22 +54,81 @@ public class CookIslandsSQLiteManager {
         return arrayListOfIslands;
     }
 
-    public static boolean isUserExist(Context context, UserModel user) {
+    public static int getIslandsCount(Context context) {
+        Log.d(LOG_TAG, "getIslandsCount()");
+        int islandsCount;
+        CookIslandsSQLiteOpenHelper cookIslandsSQLiteOpenHelper =
+                new CookIslandsSQLiteOpenHelper(context);
+        SQLiteDatabase db = cookIslandsSQLiteOpenHelper.getReadableDatabase();
+        Cursor cursor = db.query(Constants.TABLE_ISLANDS, null, null,
+                null, null, null, null);
+        islandsCount = cursor.getCount();
+        cursor.close();
+        cookIslandsSQLiteOpenHelper.close();
+        return islandsCount;
+    }
+
+    public static String getIslandName(Context context, int islandId) {
+        Log.d(LOG_TAG, "getIslandName()");
+        String islandName = null;
+        CookIslandsSQLiteOpenHelper cookIslandsSQLiteOpenHelper =
+                new CookIslandsSQLiteOpenHelper(context);
+        SQLiteDatabase db = cookIslandsSQLiteOpenHelper.getReadableDatabase();
+        Cursor cursor = db.query(Constants.TABLE_ISLANDS,
+                new String[]{Constants.COLUMN_ISLAND_NAME},
+                Constants.COLUMN_ISLAND_ID + " = ?",
+                new String[]{Integer.toString(islandId)},
+                null, null, null);
+        if (cursor.moveToFirst()) {
+            islandName = cursor.getString(cursor.getColumnIndex(Constants.COLUMN_ISLAND_NAME));
+        }
+        cursor.close();
+        cookIslandsSQLiteOpenHelper.close();
+        return islandName;
+    }
+
+    public static UserModel getUser(Context context, String login, String password) {
+        Log.d(LOG_TAG, "getUser()");
+        UserModel user = null;
+        CookIslandsSQLiteOpenHelper cookIslandsSQLiteOpenHelper =
+                new CookIslandsSQLiteOpenHelper(context);
+        SQLiteDatabase db = cookIslandsSQLiteOpenHelper.getReadableDatabase();
+        Cursor cursor = db.query(Constants.TABLE_USERS, null,
+                Constants.COLUMN_USER_LOGIN + " = ? AND " +
+                        Constants.COLUMN_USER_PASSWORD + " = ?",
+                new String[]{login, password},
+                null, null, null);
+        if (cursor.moveToFirst()) {
+            user = new UserModel(
+                    cursor.getString(cursor.getColumnIndex(Constants.COLUMN_USER_LOGIN)),
+                    cursor.getString(cursor.getColumnIndex(Constants.COLUMN_USER_PASSWORD)),
+                    cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_USER_ISLAND_ID))
+            );
+        }
+        cursor.close();
+        cookIslandsSQLiteOpenHelper.close();
+        return user;
+    }
+
+    public static int getUserIslandId(Context context, UserModel user) {
         Log.d(LOG_TAG, "isUserExist()");
-        boolean isUserExist;
+        int userIslandId = 0;
         CookIslandsSQLiteOpenHelper cookIslandsSQLiteOpenHelper =
                 new CookIslandsSQLiteOpenHelper(context);
         SQLiteDatabase db = cookIslandsSQLiteOpenHelper.getReadableDatabase();
         Cursor cursor = db.query(Constants.TABLE_USERS,
-                new String[]{Constants.COLUMN_USER_LOGIN, Constants.COLUMN_USER_PASSWORD},
+                new String[]{Constants.COLUMN_USER_ISLAND_ID},
                 Constants.COLUMN_USER_LOGIN + " = ? AND " +
                         Constants.COLUMN_USER_PASSWORD + " = ?",
                 new String[]{user.getLogin(), user.getPassword()},
                 null, null, null);
-        isUserExist = cursor.moveToFirst();
+        if (cursor.moveToFirst()) {
+            userIslandId = cursor.getInt(cursor.getColumnIndex(
+                    Constants.COLUMN_USER_ISLAND_ID));
+        }
         cursor.close();
         cookIslandsSQLiteOpenHelper.close();
-        return isUserExist;
+        return userIslandId;
     }
 
     public static boolean isUserLoginAvailable(Context context, String userLogin) {

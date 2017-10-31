@@ -13,12 +13,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.dbondarenko.shpp.cookislands.Constants;
-import com.dbondarenko.shpp.cookislands.CookIslandsPreferences;
 import com.dbondarenko.shpp.cookislands.R;
 import com.dbondarenko.shpp.cookislands.database.CookIslandsSQLiteManager;
 import com.dbondarenko.shpp.cookislands.fragments.InfoDialogFragment;
 import com.dbondarenko.shpp.cookislands.models.IslandModel;
 import com.dbondarenko.shpp.cookislands.models.UserModel;
+import com.dbondarenko.shpp.cookislands.utils.SharedPreferencesManager;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -63,15 +63,12 @@ public class RegisterActivity extends AppCompatActivity {
             case R.id.buttonRegister:
                 Log.d(LOG_TAG, "buttonRegister");
                 if (validateLoginAndPassword()) {
+                    int userIslandId = spinnerIslandsNames.getSelectedItemPosition() + 1;
                     UserModel newUser = new UserModel(editTextLogin.getText().toString(),
-                            editTextPassword.getText().toString(),
-                            spinnerIslandsNames.getSelectedItemPosition() + 1);
-                    Log.d(LOG_TAG, editTextLogin.getText().toString() + "\n" +
-                            editTextPassword.getText().toString() + "\n" +
-                            spinnerIslandsNames.getSelectedItemPosition());
+                            editTextPassword.getText().toString(), userIslandId);
                     CookIslandsSQLiteManager.addUser(getApplicationContext(), newUser);
-                    CookIslandsPreferences.getCookIslandsPreferences()
-                            .saveInformationAboutLogin(getApplicationContext());
+                    SharedPreferencesManager.getSharedPreferencesManager()
+                            .saveInformationAboutLogin(getApplicationContext(), userIslandId);
                     runContentActivity();
                     finish();
                 }
