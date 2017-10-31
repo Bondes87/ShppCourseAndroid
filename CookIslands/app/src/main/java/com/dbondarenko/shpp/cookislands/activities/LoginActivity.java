@@ -88,10 +88,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void runActivity(Class<?> activityClass) {
         Log.d(LOG_TAG, "runActivity()");
-        Intent intentToStartAlarmActivity = new Intent(getApplicationContext(),
+        Intent intentToStartNewActivity = new Intent(getApplicationContext(),
                 activityClass);
         // Set this action as the beginning of a new task in this history stack.
-        intentToStartAlarmActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intentToStartAlarmActivity);
+        intentToStartNewActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intentToStartNewActivity);
     }
 }

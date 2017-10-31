@@ -188,10 +188,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void runContentActivity() {
         Log.d(LOG_TAG, "runContentActivity()");
-        Intent intentToStartAlarmActivity = new Intent(getApplicationContext(),
+        Intent intentToStartNewActivity = new Intent(getApplicationContext(),
                 ContentActivity.class);
         // Set this action as the beginning of a new task in this history stack.
-        intentToStartAlarmActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intentToStartAlarmActivity);
+        intentToStartNewActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intentToStartNewActivity);
     }
 }
