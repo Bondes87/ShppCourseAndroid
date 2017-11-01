@@ -1,5 +1,7 @@
 package com.dbondarenko.shpp.cookislands.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -61,6 +64,7 @@ public class LoginFragment extends Fragment {
                 String login = editTextLogin.getText().toString();
                 String password = editTextPassword.getText().toString();
                 if (validateEmpty(editTextLogin, editTextPassword)) {
+                    hideSoftKeyboard(getContext(), buttonLogIn);
                     UserModel user = CookIslandsSQLiteManager.getUser(
                             getContext(), login, password);
                     if (user != null) {
@@ -76,6 +80,14 @@ public class LoginFragment extends Fragment {
             case R.id.buttonRegister:
                 showRegisterFragment();
                 break;
+        }
+    }
+
+    public void hideSoftKeyboard(Context context, View view) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (view != null && inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 

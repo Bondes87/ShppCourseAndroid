@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/default_padding"
-    tools:context="com.dbondarenko.shpp.cookislands.activities.RegisterActivity">
+    tools:context="com.dbondarenko.shpp.cookislands.fragments.RegisterFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
