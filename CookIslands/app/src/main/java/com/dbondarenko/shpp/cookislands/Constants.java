@@ -19,7 +19,7 @@ public class Constants {
     public static final String COLUMN_ISLAND_URL = "islandUrl";
 
     // Name of columns of the user table.
-    public static final String COLUMN_USER_ID = "id";
+    private static final String COLUMN_USER_ID = "id";
     public static final String COLUMN_USER_LOGIN = "userLogin";
     public static final String COLUMN_USER_PASSWORD = "userPassword";
     public static final String COLUMN_USER_ISLAND_ID = "islandId";

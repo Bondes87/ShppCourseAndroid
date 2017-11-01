@@ -1,5 +1,6 @@
 package com.dbondarenko.shpp.cookislands.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -23,6 +24,15 @@ public class ContentActivity extends AppCompatActivity {
     ViewPager viewPagerContent;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate()");
+        setContentView(R.layout.activity_content);
+        ButterKnife.bind(this);
+        setViewPagerContentSettings();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_content_menu, menu);
         return true;
@@ -33,7 +43,7 @@ public class ContentActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.itemLogOut) {
             SharedPreferencesManager.getSharedPreferencesManager()
                     .removeInformationAboutLogin(getApplicationContext());
-            runActivity(LoginActivity.class);
+            runMainActivity();
             finish();
             return true;
         } else {
@@ -41,27 +51,25 @@ public class ContentActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "onCreate()");
-        setContentView(R.layout.activity_content);
-        ButterKnife.bind(this);
-        viewPagerContent.setAdapter(getPagerAdapter());
-        viewPagerContent.setCurrentItem(SharedPreferencesManager.getSharedPreferencesManager()
+    public static Intent newInstance(Context context) {
+        Log.d(LOG_TAG, "runContentActivity()");
+        Intent intentToStartContentActivity = new Intent(context, ContentActivity.class);
+        intentToStartContentActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intentToStartContentActivity;
+    }
+
+    private void setViewPagerContentSettings() {
+        viewPagerContent.setAdapter(new ContentFragmentPagerAdapter(
+                getApplicationContext(), getSupportFragmentManager()));
+        viewPagerContent.setCurrentItem(SharedPreferencesManager
+                .getSharedPreferencesManager()
                 .getUserIslandId(getApplicationContext()) - 1);
     }
 
-    private ContentFragmentPagerAdapter getPagerAdapter() {
-        return new ContentFragmentPagerAdapter(getSupportFragmentManager(),
-                getApplicationContext());
-    }
-
-    private void runActivity(Class<?> activityClass) {
-        Log.d(LOG_TAG, "runActivity()");
+    private void runMainActivity() {
+        Log.d(LOG_TAG, "runMainActivity()");
         Intent intentToStartNewActivity = new Intent(
-                getApplicationContext(), activityClass);
-        // Set this action as the beginning of a new task in this history stack.
+                getApplicationContext(), MainActivity.class);
         intentToStartNewActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intentToStartNewActivity);
     }

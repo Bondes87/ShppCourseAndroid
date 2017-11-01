@@ -19,14 +19,6 @@ public class IslandModel {
         this.url = url;
     }
 
-    @Override
-    public String toString() {
-        return "IslandModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
     public String getUrl() {
         return url;
     }

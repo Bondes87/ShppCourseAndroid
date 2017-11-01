@@ -24,15 +24,6 @@ public class InfoDialogFragment extends DialogFragment {
     public InfoDialogFragment() {
     }
 
-    public static InfoDialogFragment newInstance(String dialogMessage) {
-        Log.d(LOG_TAG, "newInstance()");
-        InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
-        Bundle args = new Bundle();
-        args.putString(Constants.KEY_DIALOG_MESSAGE, dialogMessage);
-        infoDialogFragment.setArguments(args);
-        return infoDialogFragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreate()");
@@ -56,5 +47,14 @@ public class InfoDialogFragment extends DialogFragment {
             }
         });
         return infoDialog.create();
+    }
+
+    public static InfoDialogFragment newInstance(String dialogMessage) {
+        Log.d(LOG_TAG, "newInstance()");
+        InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
+        Bundle args = new Bundle();
+        args.putString(Constants.KEY_DIALOG_MESSAGE, dialogMessage);
+        infoDialogFragment.setArguments(args);
+        return infoDialogFragment;
     }
 }

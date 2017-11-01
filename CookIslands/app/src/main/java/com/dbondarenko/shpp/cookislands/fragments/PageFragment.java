@@ -31,15 +31,6 @@ public class PageFragment extends Fragment {
 
     private String pageUrl;
 
-    public static PageFragment newInstance(String pageUrl) {
-        Log.d(LOG_TAG, "newInstance()");
-        PageFragment pageFragment = new PageFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(Constants.KEY_PAGE_URL, pageUrl);
-        pageFragment.setArguments(arguments);
-        return pageFragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +49,15 @@ public class PageFragment extends Fragment {
         webViewPage.loadUrl(pageUrl);
         webViewPage.setWebViewClient(getWebViewClient());
         return viewContent;
+    }
+
+    public static PageFragment newInstance(String pageUrl) {
+        Log.d(LOG_TAG, "newInstance()");
+        PageFragment pageFragment = new PageFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString(Constants.KEY_PAGE_URL, pageUrl);
+        pageFragment.setArguments(arguments);
+        return pageFragment;
     }
 
     private WebViewClient getWebViewClient() {

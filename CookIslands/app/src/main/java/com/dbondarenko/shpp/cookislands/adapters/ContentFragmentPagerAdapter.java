@@ -22,7 +22,7 @@ public class ContentFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<IslandModel> arrayListIslands;
 
-    public ContentFragmentPagerAdapter(FragmentManager fragmentManager, Context context) {
+    public ContentFragmentPagerAdapter(Context context,FragmentManager fragmentManager) {
         super(fragmentManager);
         arrayListIslands = CookIslandsSQLiteManager.getIslands(context);
     }
@@ -41,6 +41,7 @@ public class ContentFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
+        Log.d(LOG_TAG, "getPageTitle()");
         return arrayListIslands.get(position).getName();
     }
 }
