@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.dbondarenko.shpp.cookislands.Constants;
+import com.dbondarenko.shpp.cookislands.models.IslandModel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,10 +46,11 @@ class CookIslandsSQLiteOpenHelper extends SQLiteOpenHelper {
         Log.d(LOG_TAG, "fillIslandsTable()");
         db.beginTransaction();
         try {
-            ArrayList<String> arrayListOfIslands = getIslandsNames();
-            for (String islandName : arrayListOfIslands) {
+            ArrayList<IslandModel> arrayListOfIslands = getIslandsNames();
+            for (IslandModel island : arrayListOfIslands) {
                 ContentValues values = new ContentValues();
-                values.put(Constants.COLUMN_ISLAND_NAME, islandName);
+                values.put(Constants.COLUMN_ISLAND_NAME, island.getName());
+                values.put(Constants.COLUMN_ISLAND_URL, island.getUrl());
                 db.insertOrThrow(Constants.TABLE_ISLANDS, null, values);
             }
             db.setTransactionSuccessful();
@@ -59,18 +61,20 @@ class CookIslandsSQLiteOpenHelper extends SQLiteOpenHelper {
         }
     }
 
-    private ArrayList<String> getIslandsNames() {
+    private ArrayList<IslandModel> getIslandsNames() {
         Log.d(LOG_TAG, "getIslandsNames()");
-        ArrayList<String> arrayListOfIslands = new ArrayList<>();
+        ArrayList<IslandModel> arrayListOfIslands = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(context.getAssets()
                         .open(Constants.FILE_NAME), Constants.UTF_8_ENCODING))) {
-            String islandName;
-            while ((islandName = reader.readLine()) != null) {
-                arrayListOfIslands.add(islandName);
+            String infoAboutIsland;
+            String[] island;
+            while ((infoAboutIsland = reader.readLine()) != null) {
+                island = infoAboutIsland.split(" ");
+                arrayListOfIslands.add(new IslandModel(island[0], island[1]));
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error while trying to read names of islands from folder of assets");
+            Log.e(LOG_TAG, "Error while trying to read information about islands from folder of assets");
         }
         return arrayListOfIslands;
     }

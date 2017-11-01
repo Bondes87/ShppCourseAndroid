@@ -1,17 +1,17 @@
-Penrhyn
-Rakahanga
-Manihiki
-Pukapuka
-Tema Reef
-Nassau
-Suwarrow
-Palmerston
-Aitutaki
-Manuae
-Takutea
-Mitiaro
-Atiu
-Mauke
-Winslow Reef
-Rarotonga
-Mangaia
+Penrhyn https://en.m.wikipedia.org/wiki/Penrhyn_(atoll)
+Rakahanga https://en.m.wikipedia.org/wiki/Rakahanga
+Manihiki https://en.m.wikipedia.org/wiki/Manihiki
+Pukapuka https://en.m.wikipedia.org/wiki/Pukapuka
+Tema https://en.m.wikipedia.org/wiki/Tema_Reef
+Nassau https://en.m.wikipedia.org/wiki/Nassau_(Cook_Islands)
+Suwarrow https://en.m.wikipedia.org/wiki/Suwarrow
+Palmerston https://en.m.wikipedia.org/wiki/Palmerston_Island
+Aitutaki https://en.m.wikipedia.org/wiki/Aitutaki
+Manuae https://en.m.wikipedia.org/wiki/Manuae_(Cook_Islands)
+Takutea https://en.m.wikipedia.org/wiki/Takutea
+Mitiaro https://en.m.wikipedia.org/wiki/Mitiaro
+Atiu https://en.m.wikipedia.org/wiki/Atiu
+Mauke https://en.m.wikipedia.org/wiki/Mauke
+Winslow https://en.m.wikipedia.org/wiki/Winslow_Reef,_Cook_Islands
+Rarotonga https://en.m.wikipedia.org/wiki/Rarotonga
+Mangaia https://en.m.wikipedia.org/wiki/Mangaia

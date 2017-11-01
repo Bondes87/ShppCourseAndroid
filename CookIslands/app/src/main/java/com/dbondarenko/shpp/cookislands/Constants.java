@@ -16,6 +16,7 @@ public class Constants {
     // Name of columns of the island table.
     public static final String COLUMN_ISLAND_ID = "id";
     public static final String COLUMN_ISLAND_NAME = "islandName";
+    public static final String COLUMN_ISLAND_URL = "islandUrl";
 
     // Name of columns of the user table.
     public static final String COLUMN_USER_ID = "id";
@@ -27,7 +28,8 @@ public class Constants {
     public static final String KEYS_TABLE_ISLANDS_CREATE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_ISLANDS + " (" +
             COLUMN_ISLAND_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_ISLAND_NAME + " TEXT NOT NULL" + ");";
+            COLUMN_ISLAND_NAME + " TEXT NOT NULL, " +
+            COLUMN_ISLAND_URL + " TEXT NOT NULL" + ");";
     public static final String KEYS_TABLE_USERS_CREATE = "CREATE TABLE IF NOT EXISTS " +
             TABLE_USERS + " (" +
             COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -57,5 +59,8 @@ public class Constants {
     public static final String KEY_USER_ISLAND_ID = "UserIslandId";
 
     // Key for obtaining the page number for displaying the required information in pageView.
-    public static final String KEY_PAGE_NUMBER = "pageNumber";
+    public static final String KEY_PAGE_URL = "pageUrl";
+
+    // User agent string for setting up an WebView.
+    public static final String USER_AGENT_STRING = "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0";
 }

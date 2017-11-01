@@ -7,10 +7,28 @@ package com.dbondarenko.shpp.cookislands.models;
 public class IslandModel {
     private int id;
     private String name;
+    private String url;
 
-    public IslandModel(int id, String name) {
+    public IslandModel(String name, String url) {
+        this(0, name, url);
+    }
+
+    public IslandModel(int id, String name, String url) {
         this.id = id;
         this.name = name;
+        this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "IslandModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public int getId() {
@@ -27,13 +45,5 @@ public class IslandModel {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "IslandModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
     }
 }

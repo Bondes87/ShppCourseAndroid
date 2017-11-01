@@ -8,6 +8,9 @@ import android.util.Log;
 
 import com.dbondarenko.shpp.cookislands.database.CookIslandsSQLiteManager;
 import com.dbondarenko.shpp.cookislands.fragments.PageFragment;
+import com.dbondarenko.shpp.cookislands.models.IslandModel;
+
+import java.util.ArrayList;
 
 /**
  * File: ContentFragmentPagerAdapter.java
@@ -17,27 +20,27 @@ public class ContentFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private static final String LOG_TAG = ContentFragmentPagerAdapter.class.getSimpleName();
 
-    private Context context;
+    private ArrayList<IslandModel> arrayListIslands;
 
     public ContentFragmentPagerAdapter(FragmentManager fragmentManager, Context context) {
         super(fragmentManager);
-        this.context = context;
+        arrayListIslands = CookIslandsSQLiteManager.getIslands(context);
     }
 
     @Override
     public Fragment getItem(int position) {
         Log.d(LOG_TAG, "getItem()");
-        return PageFragment.newInstance(position);
+        return PageFragment.newInstance(arrayListIslands.get(position).getUrl());
     }
 
     @Override
     public int getCount() {
         Log.d(LOG_TAG, "getCount()");
-        return CookIslandsSQLiteManager.getIslandsCount(context);
+        return arrayListIslands.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return CookIslandsSQLiteManager.getIslandName(context,position+1);
+        return arrayListIslands.get(position).getName();
     }
 }
