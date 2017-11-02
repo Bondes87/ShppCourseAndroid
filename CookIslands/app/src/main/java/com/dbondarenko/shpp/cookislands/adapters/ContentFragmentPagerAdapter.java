@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 /**
  * File: ContentFragmentPagerAdapter.java
+ * The class that is responsible for providing data about the Cook Islands.
  * Created by Dmitro Bondarenko on 31.10.2017.
  */
 public class ContentFragmentPagerAdapter extends FragmentStatePagerAdapter {
@@ -22,7 +23,7 @@ public class ContentFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<IslandModel> arrayListIslands;
 
-    public ContentFragmentPagerAdapter(Context context,FragmentManager fragmentManager) {
+    public ContentFragmentPagerAdapter(Context context, FragmentManager fragmentManager) {
         super(fragmentManager);
         arrayListIslands = CookIslandsSQLiteManager.getIslands(context);
     }

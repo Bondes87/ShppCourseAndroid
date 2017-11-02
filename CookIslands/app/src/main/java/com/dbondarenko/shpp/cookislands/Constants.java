@@ -2,6 +2,7 @@ package com.dbondarenko.shpp.cookislands;
 
 /**
  * File: Constants.java
+ * The class that contains all application constants.
  * Created by Dmitro Bondarenko on 26.10.2017.
  */
 public class Constants {

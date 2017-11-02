@@ -16,10 +16,16 @@ import android.widget.ProgressBar;
 
 import com.dbondarenko.shpp.cookislands.Constants;
 import com.dbondarenko.shpp.cookislands.R;
+import com.dbondarenko.shpp.cookislands.utils.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
+/**
+ * File: RegisterFragment.java
+ * The fragment that displays information about the island
+ * obtained from the Internet.
+ * Created by Dmitro Bondarenko on 31.10.2017.
+ */
 public class PageFragment extends Fragment {
 
     private static final String LOG_TAG = PageFragment.class.getSimpleName();
@@ -51,8 +57,15 @@ public class PageFragment extends Fragment {
         return viewContent;
     }
 
+    /**
+     * Create the PageFragment.
+     *
+     * @param pageUrl  The link to the page with information about the island
+     * @return the PageFragment.
+     */
     public static PageFragment newInstance(String pageUrl) {
         Log.d(LOG_TAG, "newInstance()");
+        Util.checkStringToNull(pageUrl);
         PageFragment pageFragment = new PageFragment();
         Bundle arguments = new Bundle();
         arguments.putString(Constants.KEY_PAGE_URL, pageUrl);

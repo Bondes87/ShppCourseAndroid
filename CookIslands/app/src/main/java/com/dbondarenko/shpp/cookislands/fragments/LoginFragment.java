@@ -20,11 +20,16 @@ import com.dbondarenko.shpp.cookislands.activities.ContentActivity;
 import com.dbondarenko.shpp.cookislands.database.CookIslandsSQLiteManager;
 import com.dbondarenko.shpp.cookislands.models.UserModel;
 import com.dbondarenko.shpp.cookislands.utils.SharedPreferencesManager;
+import com.dbondarenko.shpp.cookislands.utils.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
+/**
+ * File: LoginFragment.java
+ * The fragment that displays a login screen.
+ * Created by Dmitro Bondarenko on 01.11.2017.
+ */
 public class LoginFragment extends Fragment {
 
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
@@ -83,7 +88,16 @@ public class LoginFragment extends Fragment {
         }
     }
 
+    /**
+     * Hide the soft keyboard.
+     *
+     * @param context  The Context of the application package implementing this class.
+     * @param view The view from which a unique token is obtained that defines
+     *             the window to which this view is attached
+     */
     public void hideSoftKeyboard(Context context, View view) {
+        Log.d(LOG_TAG, "hideSoftKeyboard()");
+        Util.checkForNull(context,view);
         InputMethodManager inputMethodManager =
                 (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (view != null && inputMethodManager != null) {
@@ -91,8 +105,14 @@ public class LoginFragment extends Fragment {
         }
     }
 
+    /**
+     * Report wrong login or password. The message appears in the Snackbar.
+     *
+     * @param view The view for creating a Snackbar.
+     */
     private void reportIncorrectLoginOrPassword(View view) {
         Log.d(LOG_TAG, "reportIncorrectLoginOrPassword()");
+        Util.checkForNull(view);
         Snackbar snackbar = Snackbar.make(view,
                 getString(R.string.error_invalid_login_or_password),
                 Snackbar.LENGTH_LONG);
@@ -101,8 +121,15 @@ public class LoginFragment extends Fragment {
         snackbar.show();
     }
 
+    /**
+     * Check strings from editTexts for emptiness.
+     *
+     * @param editTexts The editTexts for validate.
+     * @return true if the validation was successful, otherwise false.
+     */
     private boolean validateEmpty(EditText... editTexts) {
         Log.d(LOG_TAG, "validateEmpty()");
+        Util.checkForNull((Object) editTexts);
         for (EditText editText : editTexts) {
             if (TextUtils.isEmpty(editText.getText().toString())) {
                 editText.setError(getString(R.string.error_empty_field));
@@ -112,6 +139,9 @@ public class LoginFragment extends Fragment {
         return true;
     }
 
+    /**
+     * Show registration screen.
+     */
     private void showRegisterFragment() {
         Log.d(LOG_TAG, "showRegisterFragment()");
         Fragment registerFragment = new RegisterFragment();

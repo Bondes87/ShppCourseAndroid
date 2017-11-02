@@ -10,9 +10,11 @@ import android.util.Log;
 
 import com.dbondarenko.shpp.cookislands.Constants;
 import com.dbondarenko.shpp.cookislands.R;
+import com.dbondarenko.shpp.cookislands.utils.Util;
 
 /**
  * File: InfoDialogFragment.java
+ * The fragment that displays a message in the form of a dialog box.
  * Created by Dmitro Bondarenko on 27.10.2017.
  */
 public class InfoDialogFragment extends DialogFragment {
@@ -41,16 +43,20 @@ public class InfoDialogFragment extends DialogFragment {
         AlertDialog.Builder infoDialog = new AlertDialog.Builder(getActivity());
         infoDialog.setTitle(R.string.text_hint);
         infoDialog.setMessage(dialogMessage);
-        infoDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int whichButton) {
-            }
+        infoDialog.setPositiveButton(android.R.string.ok,(dialog, whichButton) -> {
         });
         return infoDialog.create();
     }
 
+    /**
+     * Create the InfoDialogFragment.
+     *
+     * @param dialogMessage  The message for the dialog box.
+     * @return the InfoDialogFragment.
+     */
     public static InfoDialogFragment newInstance(String dialogMessage) {
         Log.d(LOG_TAG, "newInstance()");
+        Util.checkStringToNull(dialogMessage);
         InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
         Bundle args = new Bundle();
         args.putString(Constants.KEY_DIALOG_MESSAGE, dialogMessage);

@@ -8,6 +8,13 @@ import android.util.Log;
 import com.dbondarenko.shpp.cookislands.R;
 import com.dbondarenko.shpp.cookislands.fragments.LoginFragment;
 
+/**
+ * File: MainActivity.java
+ * The activity that is displayed when the program is started.
+ * This activity can provide a fragment of the user's login
+ * or registration.
+ * Created by Dmitro Bondarenko on 01.11.2017.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();

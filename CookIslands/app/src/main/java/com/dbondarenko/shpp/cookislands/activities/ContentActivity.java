@@ -12,10 +12,16 @@ import android.view.MenuItem;
 import com.dbondarenko.shpp.cookislands.R;
 import com.dbondarenko.shpp.cookislands.adapters.ContentFragmentPagerAdapter;
 import com.dbondarenko.shpp.cookislands.utils.SharedPreferencesManager;
+import com.dbondarenko.shpp.cookislands.utils.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * File: ContentActivity.java
+ * Activity which shows information about the island of Cook.
+ * Created by Dmitro Bondarenko on 23.10.2017.
+ */
 public class ContentActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = ContentActivity.class.getSimpleName();
@@ -51,13 +57,24 @@ public class ContentActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Get the intent to run ContentActivity.
+     *
+     * @param context  The Context of the application package implementing this class.
+     * @return the intent to run ContentActivity.
+     */
     public static Intent newInstance(Context context) {
         Log.d(LOG_TAG, "runContentActivity()");
+        Util.checkForNull(context);
         Intent intentToStartContentActivity = new Intent(context, ContentActivity.class);
         intentToStartContentActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return intentToStartContentActivity;
     }
 
+    /**
+     * Set ViewPager settings for displaying information. Set the adapter
+     * and the number of the item.
+     */
     private void setViewPagerContentSettings() {
         viewPagerContent.setAdapter(new ContentFragmentPagerAdapter(
                 getApplicationContext(), getSupportFragmentManager()));
@@ -66,6 +83,9 @@ public class ContentActivity extends AppCompatActivity {
                 .getUserIslandId(getApplicationContext()) - 1);
     }
 
+    /**
+     * Run the MainActivity.
+     */
     private void runMainActivity() {
         Log.d(LOG_TAG, "runMainActivity()");
         Intent intentToStartNewActivity = new Intent(

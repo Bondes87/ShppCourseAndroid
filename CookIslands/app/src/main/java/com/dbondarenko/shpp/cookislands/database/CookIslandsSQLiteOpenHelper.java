@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.dbondarenko.shpp.cookislands.Constants;
 import com.dbondarenko.shpp.cookislands.models.IslandModel;
+import com.dbondarenko.shpp.cookislands.utils.Util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 
 /**
  * File: CookIslandsSQLiteOpenHelper.java
+ * The class in which the databases are created, if they were not created,
+ * and access to databases is provided.
  * Created by Dmitro Bondarenko on 24.10.2017.
  */
 class CookIslandsSQLiteOpenHelper extends SQLiteOpenHelper {
@@ -42,8 +45,14 @@ class CookIslandsSQLiteOpenHelper extends SQLiteOpenHelper {
         Log.d(LOG_TAG, "onUpgrade()");
     }
 
+    /**
+     * Fill in the island database table with islands information.
+     *
+     * @param db The SQLiteDatabase.
+     */
     private void fillIslandsTable(SQLiteDatabase db) {
         Log.d(LOG_TAG, "fillIslandsTable()");
+        Util.checkForNull(db);
         db.beginTransaction();
         try {
             ArrayList<IslandModel> arrayListOfIslands = getIslandsNames();
@@ -61,6 +70,11 @@ class CookIslandsSQLiteOpenHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Get islands list from the assets folder.
+     *
+     * @return the list of islands.
+     */
     private ArrayList<IslandModel> getIslandsNames() {
         Log.d(LOG_TAG, "getIslandsNames()");
         ArrayList<IslandModel> arrayListOfIslands = new ArrayList<>();
