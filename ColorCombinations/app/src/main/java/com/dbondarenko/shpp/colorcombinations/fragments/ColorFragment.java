@@ -1,4 +1,4 @@
-package com.dbondarenko.shpp.colorcombinations;
+package com.dbondarenko.shpp.colorcombinations.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.dbondarenko.shpp.colorcombinations.Constants;
+import com.dbondarenko.shpp.colorcombinations.R;
+import com.dbondarenko.shpp.colorcombinations.models.ColorChangeEventModel;
+import com.dbondarenko.shpp.colorcombinations.utils.Util;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,12 +23,8 @@ import org.greenrobot.eventbus.Subscribe;
  */
 public class ColorFragment extends Fragment {
 
-    private static final String LOG_TAG = "color_fragment";
+    private static final String LOG_TAG = ColorFragment.class.getSimpleName();
 
-    // The key for accessing the color value of a fragment
-    // in the arguments of a fragment.
-    private static final String KEY_CONTENT_COLOR_VALUE =
-            "com.dbondarenko.shpp.colorcombinations.ContentColorValue";
     // The value of the color the background of the fragment.
     private int backgroundColorValue;
     // View to display the contents of a fragment.
@@ -32,7 +33,7 @@ public class ColorFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        backgroundColorValue = getArguments().getInt(KEY_CONTENT_COLOR_VALUE);
+        backgroundColorValue = getArguments().getInt(Constants.KEY_CONTENT_COLOR_VALUE);
         setRetainInstance(true);
         Log.d(LOG_TAG, "onCreate()");
     }
@@ -56,7 +57,7 @@ public class ColorFragment extends Fragment {
     public static ColorFragment newInstance(int colorValue) {
         ColorFragment colorFragment = new ColorFragment();
         Bundle args = new Bundle();
-        args.putInt(KEY_CONTENT_COLOR_VALUE, colorValue);
+        args.putInt(Constants.KEY_CONTENT_COLOR_VALUE, colorValue);
         colorFragment.setArguments(args);
         return colorFragment;
     }
@@ -74,8 +75,8 @@ public class ColorFragment extends Fragment {
     }
 
     @Subscribe
-    public void onColorChangeEvent(ColorChangeEvent event) {
-        Utility.checkForNull(event);
+    public void onColorChangeEvent(ColorChangeEventModel event) {
+        Util.checkForNull(event);
         if (event.getFragmentTag().equals(getTag())) {
             setBackgroundColorValue(event.getColorValue());
         }

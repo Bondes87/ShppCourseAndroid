@@ -1,9 +1,8 @@
-package com.dbondarenko.shpp.colorcombinations;
+package com.dbondarenko.shpp.colorcombinations.activities;
 
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -18,10 +17,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.dbondarenko.shpp.colorcombinations.Constants;
+import com.dbondarenko.shpp.colorcombinations.R;
+import com.dbondarenko.shpp.colorcombinations.fragments.ColorFragment;
+import com.dbondarenko.shpp.colorcombinations.models.ColorChangeEventModel;
+import com.dbondarenko.shpp.colorcombinations.models.ColorModel;
+import com.dbondarenko.shpp.colorcombinations.utils.ColorsManager;
+import com.dbondarenko.shpp.colorcombinations.utils.OptionsMenuState;
+import com.dbondarenko.shpp.colorcombinations.utils.Util;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,27 +40,15 @@ import butterknife.ButterKnife;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = "main_activity";
-
-    // The tags for color fragments.
-    private static final String TOP_LEFT_FRAGMENT =
-            "com.dbondarenko.shpp.colorcombinations.TopLeftFragment";
-    private static final String TOP_RIGHT_FRAGMENT =
-            "com.dbondarenko.shpp.colorcombinations.TopRightFragment";
-    private static final String BOTTOM_FRAGMENT = "" +
-            "com.dbondarenko.shpp.colorcombinations.BottomFragment";
-    // The size of circle for the context menu item.
-    private static final int CIRCLE_SIZE_FOR_MENU_ITEM = 60;
-    // The context menu header.
-    private static final String CONTEXT_MENU_HEADER = "Select the color";
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     // Containers for placing fragments.
     @BindView(R.id.frameLayoutTopLeftFragment)
-    FrameLayout frameLayoutTopLeftFragment;
+    public FrameLayout frameLayoutTopLeftFragment;
     @BindView(R.id.frameLayoutTopRightFragment)
-    FrameLayout frameLayoutTopRightFragment;
+    public FrameLayout frameLayoutTopRightFragment;
     @BindView(R.id.frameLayoutBottomFragment)
-    FrameLayout frameLayoutBottomFragment;
+    public FrameLayout frameLayoutBottomFragment;
 
     // View which contains the selected fragment for which the context menu is called.
     private View viewSelectedFragment;
@@ -65,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         if (savedInstanceState == null) {
+            ColorsManager.getColorsManager().initColors(getApplicationContext());
             initFragments();
             OptionsMenuState.getOptionsMenuState().initCheckboxSettingsOfMenuItem();
         }
@@ -85,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         switch (item.getItemId()) {
             case R.id.topLeftFragment:
-                setFragmentVisibility(item, fragmentManager, TOP_LEFT_FRAGMENT);
+                setFragmentVisibility(item, fragmentManager, Constants.TOP_LEFT_FRAGMENT);
                 return true;
             case R.id.topRightFragment:
-                setFragmentVisibility(item, fragmentManager, TOP_RIGHT_FRAGMENT);
+                setFragmentVisibility(item, fragmentManager, Constants.TOP_RIGHT_FRAGMENT);
                 return true;
             case R.id.bottomFragment:
-                setFragmentVisibility(item, fragmentManager, BOTTOM_FRAGMENT);
+                setFragmentVisibility(item, fragmentManager, Constants.BOTTOM_FRAGMENT);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -100,16 +96,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        for (int i = 0; i < fragments.size(); i++) {
-            Fragment fragment = fragments.get(i);
-            Color colorForMenuItem;
-            if (fragment.isHidden()) {
+        boolean[] checkboxesSettings = OptionsMenuState.getOptionsMenuState()
+                .getCheckboxesSettingsForMenuItems();
+        for (int i = 0; i < checkboxesSettings.length; i++) {
+            ColorModel colorForMenuItem;
+            if (checkboxesSettings[i]) {
                 colorForMenuItem = ColorsManager.getColorsManager()
-                        .getColorDefaultOfOptionMenuItem();
+                        .getUsedColor(getSupportFragmentManager()
+                                .getFragments().get(i).getTag());
+
             } else {
                 colorForMenuItem = ColorsManager.getColorsManager()
-                        .getUsedColor(fragment.getTag());
+                        .getColorDefaultOfOptionMenuItem(getApplicationContext());
             }
             setColorOfOptionMenuItem(menu.getItem(i), colorForMenuItem);
         }
@@ -121,28 +119,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
         Log.d(LOG_TAG, "onCreateContextMenu()");
         viewSelectedFragment = v;
-        ArrayList<Color> arrayListColors = ColorsManager.getColorsManager().getAvailableColors();
+        ArrayList<ColorModel> arrayListColors = ColorsManager
+                .getColorsManager().getAvailableColors();
         for (int i = 0; i < arrayListColors.size(); i++) {
-            Color colorOfContextMenuItem = arrayListColors.get(i);
+            ColorModel colorOfContextMenuItem = arrayListColors.get(i);
             menu.add(Menu.NONE, i, Menu.NONE, getContextMenuItem(colorOfContextMenuItem));
         }
-        menu.setHeaderTitle(CONTEXT_MENU_HEADER);
+        menu.setHeaderTitle(Constants.CONTEXT_MENU_HEADER);
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         Log.d(LOG_TAG, "onContextItemSelected() = ");
+        boolean[] checkboxesSettings = OptionsMenuState.getOptionsMenuState()
+                .getCheckboxesSettingsForMenuItems();
         int itemId = item.getItemId();
-        if (viewSelectedFragment.equals(frameLayoutTopLeftFragment)) {
-            changeFragmentColor(itemId, TOP_LEFT_FRAGMENT);
+        if (viewSelectedFragment.equals(frameLayoutTopLeftFragment) &&
+                checkboxesSettings[0]) {
+            changeFragmentColor(itemId, Constants.TOP_LEFT_FRAGMENT);
             return true;
         }
-        if (viewSelectedFragment.equals(frameLayoutTopRightFragment)) {
-            changeFragmentColor(itemId, TOP_RIGHT_FRAGMENT);
+        if (viewSelectedFragment.equals(frameLayoutTopRightFragment) &&
+                checkboxesSettings[1]) {
+            changeFragmentColor(itemId, Constants.TOP_RIGHT_FRAGMENT);
             return true;
         }
-        if (viewSelectedFragment.equals(frameLayoutBottomFragment)) {
-            changeFragmentColor(itemId, BOTTOM_FRAGMENT);
+        if (viewSelectedFragment.equals(frameLayoutBottomFragment) &&
+                checkboxesSettings[2]) {
+            changeFragmentColor(itemId, Constants.BOTTOM_FRAGMENT);
             return true;
         }
         return super.onContextItemSelected(item);
@@ -154,9 +158,9 @@ public class MainActivity extends AppCompatActivity {
      * @param menuItem         The item of menu.
      * @param colorForMenuItem The color for changing the color of the menu item.
      */
-    private void setColorOfOptionMenuItem(MenuItem menuItem, Color colorForMenuItem) {
+    private void setColorOfOptionMenuItem(MenuItem menuItem, ColorModel colorForMenuItem) {
         Log.d(LOG_TAG, "setColorOfOptionMenuItem()");
-        Utility.checkForNull(menuItem, colorForMenuItem);
+        Util.checkForNull(menuItem, colorForMenuItem);
         SpannableString s = new SpannableString(menuItem.getTitle());
         s.setSpan(new ForegroundColorSpan(colorForMenuItem.getValueColor()), 0, s.length(), 0);
         menuItem.setTitle(s);
@@ -170,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setCheckboxesInOptionsMenu(Menu menu) {
         Log.d(LOG_TAG, "setCheckboxesInOptionsMenu()");
-        Utility.checkForNull(menu);
+        Util.checkForNull(menu);
         boolean[] checkboxesSettings = OptionsMenuState.getOptionsMenuState()
                 .getCheckboxesSettingsForMenuItems();
         for (int i = 0; i < checkboxesSettings.length; i++) {
@@ -201,27 +205,28 @@ public class MainActivity extends AppCompatActivity {
      */
     private void changeFragmentColor(int colorIndex, String fragmentTag) {
         Log.d(LOG_TAG, "changeFragmentColor()");
-        Utility.checkStringToNull(fragmentTag);
+        Util.checkStringToNull(fragmentTag);
         int newColorValue = ColorsManager.getColorsManager()
                 .getAvailableColor(colorIndex, fragmentTag)
                 .getValueColor();
-        EventBus.getDefault().post(new ColorChangeEvent(newColorValue, fragmentTag));
+        EventBus.getDefault().post(new ColorChangeEventModel(newColorValue, fragmentTag));
     }
 
     /**
      * Returns the name and icon of a shortcut menu item with a Spannable object.
-     * An icon is a circle, the color of which is extracted from the object Color.
+     * An icon is a circle, the color of which is extracted from the object ColorModel.
      *
      * @param color The color, which contains the name of the color and the color value.
      * @return Spannable object that contains the name and icon of the shortcut menu item.
      */
-    private Spannable getContextMenuItem(Color color) {
+    private Spannable getContextMenuItem(ColorModel color) {
         Log.d(LOG_TAG, "getContextMenuItem()");
-        Utility.checkForNull(color);
+        Util.checkForNull(color);
         Spannable spannableMenuItem = new SpannableString("  - " + color.getNameColor());
         ShapeDrawable circle = new ShapeDrawable(new OvalShape());
         circle.getPaint().setColor(color.getValueColor());
-        circle.setBounds(0, 0, CIRCLE_SIZE_FOR_MENU_ITEM, CIRCLE_SIZE_FOR_MENU_ITEM);
+        circle.setBounds(0, 0, Constants.CIRCLE_SIZE_FOR_MENU_ITEM,
+                Constants.CIRCLE_SIZE_FOR_MENU_ITEM);
         spannableMenuItem.setSpan(new ImageSpan(circle), 0, 1,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableMenuItem;
@@ -240,8 +245,8 @@ public class MainActivity extends AppCompatActivity {
     private void setFragmentVisibility(MenuItem menuItem,
                                        FragmentManager fragmentManager,
                                        String fragmentTag) {
-        Utility.checkForNull(menuItem, fragmentManager);
-        Utility.checkStringToNull(fragmentTag);
+        Util.checkForNull(menuItem, fragmentManager);
+        Util.checkStringToNull(fragmentTag);
         ColorFragment selectedColorFragment =
                 (ColorFragment) fragmentManager.findFragmentByTag(fragmentTag);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -250,10 +255,9 @@ public class MainActivity extends AppCompatActivity {
                     .hide(selectedColorFragment);
             ColorsManager.getColorsManager().setAvailableColor(fragmentTag);
         } else {
-            int colorValue = ColorsManager.getColorsManager()
-                    .getUsedColor(fragmentTag)
+            int colorValue = ColorsManager.getColorsManager().getUsedColor(fragmentTag)
                     .getValueColor();
-            EventBus.getDefault().post(new ColorChangeEvent(colorValue, fragmentTag));
+            EventBus.getDefault().post(new ColorChangeEventModel(colorValue, fragmentTag));
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .show(selectedColorFragment);
         }
@@ -270,17 +274,17 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "initFragments()");
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.frameLayoutTopLeftFragment,
-                        ColorFragment.newInstance(ColorsManager.getColorsManager().
-                                getRandomAvailableColor(TOP_LEFT_FRAGMENT).getValueColor()),
-                        TOP_LEFT_FRAGMENT)
+                        ColorFragment.newInstance(ColorsManager.getColorsManager()
+                                .getRandomAvailableColor(Constants.TOP_LEFT_FRAGMENT)
+                                .getValueColor()), Constants.TOP_LEFT_FRAGMENT)
                 .add(R.id.frameLayoutTopRightFragment,
-                        ColorFragment.newInstance(ColorsManager.getColorsManager().
-                                getRandomAvailableColor(TOP_RIGHT_FRAGMENT).getValueColor()),
-                        TOP_RIGHT_FRAGMENT)
+                        ColorFragment.newInstance(ColorsManager.getColorsManager()
+                                .getRandomAvailableColor(Constants.TOP_RIGHT_FRAGMENT)
+                                .getValueColor()), Constants.TOP_RIGHT_FRAGMENT)
                 .add(R.id.frameLayoutBottomFragment,
-                        ColorFragment.newInstance(ColorsManager.getColorsManager().
-                                getRandomAvailableColor(BOTTOM_FRAGMENT).getValueColor()),
-                        BOTTOM_FRAGMENT)
+                        ColorFragment.newInstance(ColorsManager.getColorsManager()
+                                .getRandomAvailableColor(Constants.BOTTOM_FRAGMENT)
+                                .getValueColor()), Constants.BOTTOM_FRAGMENT)
                 .commit();
     }
 }
