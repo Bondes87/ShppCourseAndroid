@@ -14,6 +14,13 @@ public class ContentActivity extends AppCompatActivity {
     private static final String LOG_TAG = ContentActivity.class.getSimpleName();
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate()");
+        setContentView(R.layout.activity_content);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(LOG_TAG, "onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.activity_content_menu, menu);
@@ -30,13 +37,6 @@ public class ContentActivity extends AppCompatActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "onCreate()");
-        setContentView(R.layout.activity_content);
     }
 
     /**

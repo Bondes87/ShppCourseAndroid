@@ -19,4 +19,6 @@
     <string name="error_short_password">Please use between 8 and 30 characters.</string>
     <string name="error_login_is_busy">That login is taken. Try another.</string>
     <string name="error_invalid_login_or_password">Incorrect login or password. Try again.</string>
+    <string name="text_use_local_database">local database</string>
+    <string name="text_use_server_database">server database</string>
 </resources>

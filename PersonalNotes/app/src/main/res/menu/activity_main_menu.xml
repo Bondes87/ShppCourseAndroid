@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/localDatabase"
+            android:orderInCategory="0"
+            android:title="@string/text_use_local_database"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/serverDatabase"
+            android:orderInCategory="1"
+            android:title="@string/text_use_server_database"
+            android:checked="true"
+            app:showAsAction="never"/>
+    </group>
+</menu>
