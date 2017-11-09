@@ -13,7 +13,7 @@ import com.dbondarenko.shpp.personalnotes.R;
 /**
  * File: InfoDialogFragment.java
  * The fragment that displays a message in the form of a dialog box.
- * Created by Dmitro Bondarenko on 27.10.2017.
+ * Created by Dmitro Bondarenko on 08.11.2017.
  */
 public class InfoDialogFragment extends DialogFragment {
 

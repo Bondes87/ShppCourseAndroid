@@ -71,7 +71,7 @@
         android:layout_marginTop="@dimen/small_margin">
 
         <EditText
-            android:id="@+id/editTextRepeatedPassword"
+            android:id="@+id/editTextConfirmedPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_confirm_your_password"

@@ -1,6 +1,5 @@
 package com.dbondarenko.shpp.personalnotes.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,14 +12,6 @@ import com.dbondarenko.shpp.personalnotes.R;
 public class ContentActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = ContentActivity.class.getSimpleName();
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "onCreate()");
-        setContentView(R.layout.activity_content);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -39,6 +30,13 @@ public class ContentActivity extends AppCompatActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate()");
+        setContentView(R.layout.activity_content);
     }
 
     /**

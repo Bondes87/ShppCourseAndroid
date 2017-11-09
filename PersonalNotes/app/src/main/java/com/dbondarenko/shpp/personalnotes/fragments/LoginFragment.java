@@ -2,6 +2,7 @@ package com.dbondarenko.shpp.personalnotes.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,7 @@ import butterknife.OnClick;
 /**
  * File: LoginFragment.java
  * The fragment that displays a login screen.
- * Created by Dmitro Bondarenko on 01.11.2017.
+ * Created by Dmitro Bondarenko on 08.11.2017.
  */
 public class LoginFragment extends Fragment {
 
@@ -54,15 +55,37 @@ public class LoginFragment extends Fragment {
         Log.d(LOG_TAG, "onViewClicked()");
         switch (view.getId()) {
             case R.id.buttonLogIn:
-                String login = editTextLogin.getText().toString();
-                String password = editTextPassword.getText().toString();
-                EventBus.getDefault().post(
-                        Constants.COMMAND_FOR_RUN_CONTENT_ACTIVITY);
+                if (validateCredentials()) {
+                    EventBus.getDefault().post(
+                            Constants.COMMAND_FOR_RUN_CONTENT_ACTIVITY);
+                }
                 break;
             case R.id.buttonRegister:
                 EventBus.getDefault().post(
                         Constants.COMMAND_FOR_RUN_REGISTER_FRAGMENT);
                 break;
         }
+    }
+
+    private boolean validateCredentials() {
+        Log.d(LOG_TAG, "validateCredentials()");
+        String login = editTextLogin.getText().toString();
+        String password = editTextPassword.getText().toString();
+        if (validateEmpty(login)) {
+            editTextLogin.setError(getString(R.string.error_empty_field));
+            editTextLogin.requestFocus();
+            return false;
+        }
+        if (validateEmpty(password)) {
+            editTextPassword.setError(getString(R.string.error_empty_field));
+            editTextPassword.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateEmpty(String text) {
+        Log.d(LOG_TAG, "validateEmpty()");
+        return TextUtils.isEmpty(text);
     }
 }

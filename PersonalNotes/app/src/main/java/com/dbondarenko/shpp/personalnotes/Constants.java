@@ -21,4 +21,10 @@ public class Constants {
             "RunInfoDialogFragmentForPassword";
     public static final String COMMAND_FOR_RUN_REGISTER_FRAGMENT = "RunRegisterFragment";
     public static final String COMMAND_FOR_RUN_CONTENT_ACTIVITY = "RunContentActivity";
+
+    // Information for validate of login and password.
+    public static final String LOGIN_AND_PASSWORD_PATTERN = "[a-zA-Z0-9]{1,256}";
+    public static final int MIN_LENGTH_LOGIN = 6;
+    public static final int MIN_LENGTH_PASSWORD = 8;
+    public static final int MAX_LENGTH_LOGIN_OR_PASSWORD = 30;
 }
