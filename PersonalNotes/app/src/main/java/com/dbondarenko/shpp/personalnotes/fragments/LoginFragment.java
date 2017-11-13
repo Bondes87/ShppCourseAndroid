@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
@@ -17,10 +18,9 @@ import android.widget.EditText;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
+import com.dbondarenko.shpp.personalnotes.activities.ContentActivity;
 import com.dbondarenko.shpp.personalnotes.loader.UsersManagementAsyncTaskLoader;
 import com.dbondarenko.shpp.personalnotes.models.UserModel;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,8 +75,8 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             return;
         }
         if (data) {
-            EventBus.getDefault().post(
-                    Constants.COMMAND_FOR_RUN_CONTENT_ACTIVITY);
+            startActivity(ContentActivity.newInstance(getContext()));
+            getActivity().finish();
         } else {
             hideSoftKeyboard();
             reportIncorrectLoginOrPassword();
@@ -100,8 +100,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
                 }
                 break;
             case R.id.buttonRegister:
-                EventBus.getDefault().post(
-                        Constants.COMMAND_FOR_RUN_REGISTER_FRAGMENT);
+                showRegisterFragment();
                 break;
         }
     }
@@ -147,5 +146,17 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         View snackbarView = snackbar.getView();
         snackbarView.setBackgroundColor((getResources().getColor(R.color.colorPrimary)));
         snackbar.show();
+    }
+
+    /**
+     * Show registration screen.
+     */
+    private void showRegisterFragment() {
+        Log.d(LOG_TAG, "showRegisterFragment()");
+        Fragment registerFragment = new RegisterFragment();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayoutContainer, registerFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

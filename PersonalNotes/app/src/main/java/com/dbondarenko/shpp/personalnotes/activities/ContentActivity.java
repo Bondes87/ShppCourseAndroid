@@ -1,5 +1,6 @@
 package com.dbondarenko.shpp.personalnotes.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -49,4 +50,18 @@ public class ContentActivity extends AppCompatActivity {
         intentToStartNewActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intentToStartNewActivity);
     }
+
+    /**
+     * Get the intent to run ContentActivity.
+     *
+     * @param context  The Context of the application package implementing this class.
+     * @return the intent to run ContentActivity.
+     */
+    public static Intent newInstance(Context context) {
+        Log.d(LOG_TAG, "runContentActivity()");
+        Intent intentToStartContentActivity = new Intent(context, ContentActivity.class);
+        intentToStartContentActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intentToStartContentActivity;
+    }
+
 }

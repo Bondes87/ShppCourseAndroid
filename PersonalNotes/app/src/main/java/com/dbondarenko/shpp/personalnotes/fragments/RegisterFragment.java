@@ -15,10 +15,9 @@ import android.widget.ImageView;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
+import com.dbondarenko.shpp.personalnotes.activities.ContentActivity;
 import com.dbondarenko.shpp.personalnotes.loader.UsersManagementAsyncTaskLoader;
 import com.dbondarenko.shpp.personalnotes.models.UserModel;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -80,8 +79,8 @@ public class RegisterFragment extends Fragment implements LoaderManager.LoaderCa
             return;
         }
         if (data) {
-            EventBus.getDefault().post(
-                    Constants.COMMAND_FOR_RUN_CONTENT_ACTIVITY);
+            startActivity(ContentActivity.newInstance(getContext()));
+            getActivity().finish();
         } else {
             editTextLogin.setError(getString(R.string.error_login_is_busy));
             editTextLogin.requestFocus();
@@ -105,12 +104,12 @@ public class RegisterFragment extends Fragment implements LoaderManager.LoaderCa
                 }
                 break;
             case R.id.imageViewLoginInfo:
-                EventBus.getDefault().post(
-                        Constants.COMMAND_FOR_RUN_INFO_DIALOG_FRAGMENT_FOR_LOGIN);
+                showDialogFragment(getString(R.string.login_information),
+                        Constants.TAG_OF_INFO_DIALOG_FRAGMENT_FOR_LOGIN);
                 break;
             case R.id.imageViewPasswordInfo:
-                EventBus.getDefault().post(
-                        Constants.COMMAND_FOR_RUN_INFO_DIALOG_FRAGMENT_FOR_PASSWORD);
+                showDialogFragment(getString(R.string.password_information),
+                        Constants.TAG_OF_INFO_DIALOG_FRAGMENT_FOR_PASSWORD);
                 break;
         }
     }
@@ -215,5 +214,12 @@ public class RegisterFragment extends Fragment implements LoaderManager.LoaderCa
         Log.d(LOG_TAG, "validatePasswordsMatch()");
         return !Objects.equals(editTextPassword.getText().toString(),
                 editTextConfirmedPassword.getText().toString());
+    }
+
+    private void showDialogFragment(String dialogMessage, String fragmentTag) {
+        Log.d(LOG_TAG, "showDialogFragment()");
+        InfoDialogFragment infoDialogFragment = InfoDialogFragment
+                .newInstance(dialogMessage);
+        infoDialogFragment.show(getActivity().getSupportFragmentManager(), fragmentTag);
     }
 }
