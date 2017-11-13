@@ -2,7 +2,6 @@ package com.dbondarenko.shpp.personalnotes.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -69,11 +68,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(LOG_TAG, "onCreate()");
         setContentView(R.layout.activity_main);
-        Fragment loginFragment = new LoginFragment();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.frameLayoutContainer, loginFragment)
-                .commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.frameLayoutContainer, new LoginFragment())
+                    .commit();
+        }
     }
 
     @Subscribe

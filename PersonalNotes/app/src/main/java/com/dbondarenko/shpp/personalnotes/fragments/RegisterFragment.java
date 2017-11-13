@@ -2,6 +2,8 @@ package com.dbondarenko.shpp.personalnotes.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,8 @@ import android.widget.ImageView;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
+import com.dbondarenko.shpp.personalnotes.loader.UsersManagementAsyncTaskLoader;
+import com.dbondarenko.shpp.personalnotes.models.UserModel;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -28,7 +32,7 @@ import butterknife.OnClick;
  * The fragment that displays a register screen.
  * Created by Dmitro Bondarenko on 08.11.2017.
  */
-public class RegisterFragment extends Fragment {
+public class RegisterFragment extends Fragment implements LoaderManager.LoaderCallbacks<Boolean> {
 
     private static final String LOG_TAG = RegisterFragment.class.getSimpleName();
 
@@ -58,14 +62,46 @@ public class RegisterFragment extends Fragment {
         return viewContent;
     }
 
+    @Override
+    public Loader<Boolean> onCreateLoader(int id, Bundle args) {
+        Log.d(LOG_TAG, "onCreateLoader");
+        UserModel user = new UserModel(
+                editTextLogin.getText().toString(),
+                editTextPassword.getText().toString());
+        return new UsersManagementAsyncTaskLoader(
+                getContext().getApplicationContext(),
+                user, Constants.COMMAND_ADD_USER);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+        Log.d(LOG_TAG, "onFinishLoader");
+        if (data == null) {
+            return;
+        }
+        if (data) {
+            EventBus.getDefault().post(
+                    Constants.COMMAND_FOR_RUN_CONTENT_ACTIVITY);
+        } else {
+            editTextLogin.setError(getString(R.string.error_login_is_busy));
+            editTextLogin.requestFocus();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Boolean> loader) {
+        Log.d(LOG_TAG, "onLoaderReset");
+    }
+
     @OnClick({R.id.buttonRegister, R.id.imageViewLoginInfo, R.id.imageViewPasswordInfo})
     public void onViewClicked(View view) {
         Log.d(LOG_TAG, "onViewClicked()");
         switch (view.getId()) {
             case R.id.buttonRegister:
                 if (validateCredentials()) {
-                    EventBus.getDefault().post(
-                            Constants.COMMAND_FOR_RUN_CONTENT_ACTIVITY);
+                    getLoaderManager().restartLoader(
+                            Constants.ID_USERS_MANAGEMENT_ASYNC_TASK_LOADER,
+                            null, this);
                 }
                 break;
             case R.id.imageViewLoginInfo:

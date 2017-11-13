@@ -7,6 +7,10 @@ package com.dbondarenko.shpp.personalnotes;
  */
 public class Constants {
 
+    // Information about the database.
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "personalnotes.db";
+
     // Key and tags for creating information dialog fragments.
     public static final String KEY_DIALOG_MESSAGE = "KeyDialogMessage";
     public static final String TAG_OF_INFO_DIALOG_FRAGMENT_FOR_LOGIN =
@@ -27,4 +31,11 @@ public class Constants {
     public static final int MIN_LENGTH_LOGIN = 6;
     public static final int MIN_LENGTH_PASSWORD = 8;
     public static final int MAX_LENGTH_LOGIN_OR_PASSWORD = 30;
+
+    // Commands for the asynchronous task loaders.
+    public static final String COMMAND_ADD_USER = "AddUser";
+    public static final String COMMAND_IS_SER_EXIST = "IsUserExists";
+
+    // IDs for the asynchronous task loaders.
+    public static final int ID_USERS_MANAGEMENT_ASYNC_TASK_LOADER = 1;
 }
