@@ -8,8 +8,8 @@ import com.dbondarenko.shpp.personalnotes.models.UserModel;
  */
 public interface DatabaseManager {
 
-    public boolean addUser(UserModel user);
+    void addUser(UserModel user);
 
-    public boolean isUserExists(UserModel user);
+    void isUserExists(UserModel user);
 }
 

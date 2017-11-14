@@ -18,4 +18,7 @@ public interface UserDao {
 
     @Query("SELECT * FROM users WHERE login = :login AND password = :password")
     UserModel getUser(String login, String password);
+
+    @Query("SELECT * FROM users WHERE login = :login")
+    UserModel isLoginAvailable(String login);
 }

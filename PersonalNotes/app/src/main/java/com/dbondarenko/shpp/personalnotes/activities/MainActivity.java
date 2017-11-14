@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import com.dbondarenko.shpp.personalnotes.R;
 import com.dbondarenko.shpp.personalnotes.fragments.LoginFragment;
+import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,6 +17,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+        if (SharedPreferencesManager.getSharedPreferencesManager()
+                .isUseFirebase(getApplicationContext())) {
+            menu.getItem(1).setChecked(true);
+        } else {
+            menu.getItem(0).setChecked(true);
+        }
         return true;
     }
 
@@ -23,23 +30,25 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.localDatabase:
-                if (item.isChecked()) {
-                    item.setChecked(false);
-                } else {
-                    item.setChecked(true);
-                }
+                item.setChecked(!item.isChecked());
+                SharedPreferencesManager.getSharedPreferencesManager()
+                        .saveInformationAboutDatabase(getApplicationContext(),
+                                false);
                 return true;
             case R.id.serverDatabase:
-                if (item.isChecked()) {
-                    item.setChecked(false);
-                } else {
-                    item.setChecked(true);
-                }
+                item.setChecked(!item.isChecked());
+                SharedPreferencesManager.getSharedPreferencesManager()
+                        .saveInformationAboutDatabase(getApplicationContext(),
+                                true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

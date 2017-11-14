@@ -2,11 +2,10 @@ package com.dbondarenko.shpp.personalnotes.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,11 +15,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
 import com.dbondarenko.shpp.personalnotes.activities.ContentActivity;
-import com.dbondarenko.shpp.personalnotes.loader.UsersManagementAsyncTaskLoader;
+import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
+import com.dbondarenko.shpp.personalnotes.database.OnGetDataListener;
+import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
+import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
 import com.dbondarenko.shpp.personalnotes.models.UserModel;
+import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +33,7 @@ import butterknife.OnClick;
  * The fragment that displays a login screen.
  * Created by Dmitro Bondarenko on 08.11.2017.
  */
-public class LoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<Boolean> {
+public class LoginFragment extends Fragment {
 
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
 
@@ -44,6 +46,8 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     @BindView(R.id.buttonRegister)
     Button buttonRegister;
 
+    DatabaseManager databaseManager;
+
     public LoginFragment() {
     }
 
@@ -54,38 +58,8 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         View viewContent = inflater.inflate(R.layout.fragment_login, container,
                 false);
         ButterKnife.bind(this, viewContent);
+        initDatabase();
         return viewContent;
-    }
-
-    @Override
-    public Loader<Boolean> onCreateLoader(int id, Bundle args) {
-        Log.d(LOG_TAG, "onCreateLoader");
-        UserModel user = new UserModel(
-                editTextLogin.getText().toString(),
-                editTextPassword.getText().toString());
-        return new UsersManagementAsyncTaskLoader(
-                getContext().getApplicationContext(),
-                user, Constants.COMMAND_IS_SER_EXIST);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
-        Log.d(LOG_TAG, "onFinishLoader");
-        if (data == null) {
-            return;
-        }
-        if (data) {
-            startActivity(ContentActivity.newInstance(getContext()));
-            getActivity().finish();
-        } else {
-            hideSoftKeyboard();
-            reportIncorrectLoginOrPassword();
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Boolean> loader) {
-        Log.d(LOG_TAG, "onLoaderReset");
     }
 
     @OnClick({R.id.buttonLogIn, R.id.buttonRegister})
@@ -94,15 +68,54 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         switch (view.getId()) {
             case R.id.buttonLogIn:
                 if (validateCredentials()) {
-                    getLoaderManager().restartLoader(
-                            Constants.ID_USERS_MANAGEMENT_ASYNC_TASK_LOADER,
-                            null, this);
+                    UserModel user = new UserModel(
+                            editTextLogin.getText().toString(),
+                            editTextPassword.getText().toString());
+                    databaseManager.isUserExists(user);
                 }
                 break;
             case R.id.buttonRegister:
                 showRegisterFragment();
                 break;
         }
+    }
+
+    private void initDatabase() {
+        if (SharedPreferencesManager.getSharedPreferencesManager().isUseFirebase(
+                getContext().getApplicationContext())) {
+            databaseManager = new FirebaseManager(getDataListener());
+        } else {
+            databaseManager = new SQLiteManager(
+                    getContext().getApplicationContext(), getDataListener()
+            );
+        }
+    }
+
+    @NonNull
+    private OnGetDataListener getDataListener() {
+        return new OnGetDataListener() {
+            @Override
+            public void onSuccess() {
+                startActivity(ContentActivity.newInstance(getContext()));
+                getActivity().finish();
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+
+            }
+
+            @Override
+            public void onFailed() {
+                hideSoftKeyboard();
+                reportIncorrectLoginOrPassword();
+            }
+
+            @Override
+            public void onFailed(Object data) {
+
+            }
+        };
     }
 
     private void hideSoftKeyboard() {

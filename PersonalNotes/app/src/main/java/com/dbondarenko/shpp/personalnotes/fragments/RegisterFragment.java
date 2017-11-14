@@ -1,9 +1,8 @@
 package com.dbondarenko.shpp.personalnotes.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +15,12 @@ import android.widget.ImageView;
 import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
 import com.dbondarenko.shpp.personalnotes.activities.ContentActivity;
-import com.dbondarenko.shpp.personalnotes.loader.UsersManagementAsyncTaskLoader;
+import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
+import com.dbondarenko.shpp.personalnotes.database.OnGetDataListener;
+import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
+import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
 import com.dbondarenko.shpp.personalnotes.models.UserModel;
+import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -31,7 +34,7 @@ import butterknife.OnClick;
  * The fragment that displays a register screen.
  * Created by Dmitro Bondarenko on 08.11.2017.
  */
-public class RegisterFragment extends Fragment implements LoaderManager.LoaderCallbacks<Boolean> {
+public class RegisterFragment extends Fragment {
 
     private static final String LOG_TAG = RegisterFragment.class.getSimpleName();
 
@@ -48,6 +51,8 @@ public class RegisterFragment extends Fragment implements LoaderManager.LoaderCa
     @BindView(R.id.buttonRegister)
     Button buttonRegister;
 
+    DatabaseManager databaseManager;
+
     public RegisterFragment() {
     }
 
@@ -58,38 +63,8 @@ public class RegisterFragment extends Fragment implements LoaderManager.LoaderCa
         View viewContent = inflater.inflate(
                 R.layout.fragment_register, container, false);
         ButterKnife.bind(this, viewContent);
+        initDatabase();
         return viewContent;
-    }
-
-    @Override
-    public Loader<Boolean> onCreateLoader(int id, Bundle args) {
-        Log.d(LOG_TAG, "onCreateLoader");
-        UserModel user = new UserModel(
-                editTextLogin.getText().toString(),
-                editTextPassword.getText().toString());
-        return new UsersManagementAsyncTaskLoader(
-                getContext().getApplicationContext(),
-                user, Constants.COMMAND_ADD_USER);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
-        Log.d(LOG_TAG, "onFinishLoader");
-        if (data == null) {
-            return;
-        }
-        if (data) {
-            startActivity(ContentActivity.newInstance(getContext()));
-            getActivity().finish();
-        } else {
-            editTextLogin.setError(getString(R.string.error_login_is_busy));
-            editTextLogin.requestFocus();
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Boolean> loader) {
-        Log.d(LOG_TAG, "onLoaderReset");
     }
 
     @OnClick({R.id.buttonRegister, R.id.imageViewLoginInfo, R.id.imageViewPasswordInfo})
@@ -98,9 +73,10 @@ public class RegisterFragment extends Fragment implements LoaderManager.LoaderCa
         switch (view.getId()) {
             case R.id.buttonRegister:
                 if (validateCredentials()) {
-                    getLoaderManager().restartLoader(
-                            Constants.ID_USERS_MANAGEMENT_ASYNC_TASK_LOADER,
-                            null, this);
+                    UserModel user = new UserModel(
+                            editTextLogin.getText().toString(),
+                            editTextPassword.getText().toString());
+                    databaseManager.addUser(user);
                 }
                 break;
             case R.id.imageViewLoginInfo:
@@ -112,6 +88,44 @@ public class RegisterFragment extends Fragment implements LoaderManager.LoaderCa
                         Constants.TAG_OF_INFO_DIALOG_FRAGMENT_FOR_PASSWORD);
                 break;
         }
+    }
+
+    private void initDatabase() {
+        if (SharedPreferencesManager.getSharedPreferencesManager().isUseFirebase(
+                getContext().getApplicationContext())) {
+            databaseManager = new FirebaseManager(getDataListener());
+        } else {
+            databaseManager = new SQLiteManager(
+                    getContext().getApplicationContext(), getDataListener()
+            );
+        }
+    }
+
+    @NonNull
+    private OnGetDataListener getDataListener() {
+        return new OnGetDataListener() {
+            @Override
+            public void onSuccess() {
+                startActivity(ContentActivity.newInstance(getContext()));
+                getActivity().finish();
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+
+            }
+
+            @Override
+            public void onFailed() {
+                editTextLogin.setError(getString(R.string.error_login_is_busy));
+                editTextLogin.requestFocus();
+            }
+
+            @Override
+            public void onFailed(Object data) {
+
+            }
+        };
     }
 
     private boolean validateCredentials() {

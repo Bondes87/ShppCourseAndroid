@@ -34,8 +34,9 @@ public class Constants {
 
     // Commands for the asynchronous task loaders.
     public static final String COMMAND_ADD_USER = "AddUser";
-    public static final String COMMAND_IS_SER_EXIST = "IsUserExists";
+    public static final String COMMAND_IS_USER_EXIST = "IsUserExists";
 
-    // IDs for the asynchronous task loaders.
-    public static final int ID_USERS_MANAGEMENT_ASYNC_TASK_LOADER = 1;
+    // Key for saving and retrieving information about the use database.
+    public static final String KEY_USE_DATABASE = "UseDatabase";
+
 }
