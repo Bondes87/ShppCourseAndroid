@@ -10,6 +10,7 @@ import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
 import com.dbondarenko.shpp.personalnotes.database.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.models.UserModel;
+import com.dbondarenko.shpp.personalnotes.models.UserSQLiteModel;
 
 /**
  * File: SQLiteManager.java
@@ -27,15 +28,16 @@ public class SQLiteManager implements DatabaseManager {
     }
 
     @Override
-    public void addUser(UserModel user) {
+    public void addUser(String login, String password) {
         Handler handler = new UserHandler();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 Message message = handler.obtainMessage();
                 Bundle bundle = new Bundle();
+                UserSQLiteModel user = new UserSQLiteModel(login,password);
                 if (sQLiteRoomDatabase.getUserDao().isLoginAvailable(
-                        user.getLogin()) == null) {
+                        login) == null) {
                     sQLiteRoomDatabase.getUserDao().insertUser(user);
                     bundle.putBoolean("Key", true);
                 } else {
@@ -49,7 +51,7 @@ public class SQLiteManager implements DatabaseManager {
     }
 
     @Override
-    public void isUserExists(UserModel user) {
+    public void isUserExists(String login, String password) {
         Handler handler = new UserHandler();
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -57,7 +59,7 @@ public class SQLiteManager implements DatabaseManager {
                 Message message = handler.obtainMessage();
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("Key", sQLiteRoomDatabase.getUserDao()
-                        .getUser(user.getLogin(), user.getPassword()) != null);
+                        .getUser(login,password) != null);
                 message.setData(bundle);
                 handler.sendMessage(message);
             }

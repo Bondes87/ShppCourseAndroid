@@ -12,7 +12,7 @@ import android.os.Parcelable;
  */
 @Entity(tableName = "notes",
         foreignKeys = @ForeignKey(
-                entity = UserModel.class,
+                entity = UserSQLiteModel.class,
                 parentColumns = "login",
                 childColumns = "userLogin"))
 

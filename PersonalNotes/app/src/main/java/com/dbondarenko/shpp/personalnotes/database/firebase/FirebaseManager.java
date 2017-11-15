@@ -2,7 +2,7 @@ package com.dbondarenko.shpp.personalnotes.database.firebase;
 
 import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
 import com.dbondarenko.shpp.personalnotes.database.OnGetDataListener;
-import com.dbondarenko.shpp.personalnotes.models.UserModel;
+import com.dbondarenko.shpp.personalnotes.models.UserFirebaseModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,12 +27,12 @@ public class FirebaseManager implements DatabaseManager {
     }
 
     @Override
-    public void addUser(UserModel user) {
+    public void addUser(String login, String password) {
         Query queryForIsUserExists = firebaseDatabase
                 .getReference()
                 .child("users")
                 .orderByKey()
-                .equalTo(user.getLogin());
+                .equalTo(login);
         queryForIsUserExists.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
@@ -41,7 +41,8 @@ public class FirebaseManager implements DatabaseManager {
                     onGetDataListener.onFailed();
                 } else {
                     DatabaseReference databaseReferenceForAddUser = firebaseDatabase
-                            .getReference().child("users").child(user.getLogin());
+                            .getReference().child("users").child(login);
+                    UserFirebaseModel user = new UserFirebaseModel(login, password);
                     databaseReferenceForAddUser.setValue(user);
                     onGetDataListener.onSuccess();
                 }
@@ -54,27 +55,22 @@ public class FirebaseManager implements DatabaseManager {
     }
 
     @Override
-    public void isUserExists(UserModel user) {
-        Query queryForIsUserExists = firebaseDatabase
+    public void isUserExists(String login, String password) {
+        DatabaseReference referenceForIsUserExists = firebaseDatabase
                 .getReference()
                 .child("users")
-                .orderByKey()
-                .equalTo(user.getLogin());
-        queryForIsUserExists.addListenerForSingleValueEvent(new ValueEventListener() {
-
+                .child(login);
+        referenceForIsUserExists.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null) {
+                if (!dataSnapshot.exists() || dataSnapshot.getValue() == null) {
                     onGetDataListener.onFailed();
                     return;
                 }
-                for (DataSnapshot dataUser : dataSnapshot.getChildren()) {
-                    for (DataSnapshot dataPassword : dataUser.getChildren()) {
-                        if (Objects.equals(dataPassword.getValue(), user.getPassword())) {
-                            onGetDataListener.onSuccess();
-                            return;
-                        }
-                    }
+                UserFirebaseModel user = dataSnapshot.getValue(UserFirebaseModel.class);
+                if (user != null && Objects.equals(user.getPassword(), password)) {
+                    onGetDataListener.onSuccess();
+                    return;
                 }
                 onGetDataListener.onFailed();
             }

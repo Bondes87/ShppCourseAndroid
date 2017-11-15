@@ -68,10 +68,8 @@ public class LoginFragment extends Fragment {
         switch (view.getId()) {
             case R.id.buttonLogIn:
                 if (validateCredentials()) {
-                    UserModel user = new UserModel(
-                            editTextLogin.getText().toString(),
+                    databaseManager.isUserExists(editTextLogin.getText().toString(),
                             editTextPassword.getText().toString());
-                    databaseManager.isUserExists(user);
                 }
                 break;
             case R.id.buttonRegister:

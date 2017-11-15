@@ -19,7 +19,6 @@ import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
 import com.dbondarenko.shpp.personalnotes.database.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
 import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
-import com.dbondarenko.shpp.personalnotes.models.UserModel;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 
 import java.util.Objects;
@@ -73,10 +72,8 @@ public class RegisterFragment extends Fragment {
         switch (view.getId()) {
             case R.id.buttonRegister:
                 if (validateCredentials()) {
-                    UserModel user = new UserModel(
-                            editTextLogin.getText().toString(),
+                    databaseManager.addUser(editTextLogin.getText().toString(),
                             editTextPassword.getText().toString());
-                    databaseManager.addUser(user);
                 }
                 break;
             case R.id.imageViewLoginInfo:
