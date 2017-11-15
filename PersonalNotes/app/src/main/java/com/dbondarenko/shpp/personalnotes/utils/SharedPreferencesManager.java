@@ -1,10 +1,14 @@
 package com.dbondarenko.shpp.personalnotes.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
+import com.dbondarenko.shpp.personalnotes.models.User;
+import com.dbondarenko.shpp.personalnotes.models.UserFirebaseModel;
+import com.dbondarenko.shpp.personalnotes.models.UserSQLiteModel;
 
 /**
  * File: SharedPreferencesManager.java
@@ -38,5 +42,38 @@ public class SharedPreferencesManager {
         Log.d(LOG_TAG, "isUseFirebase()");
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getBoolean(Constants.KEY_USE_DATABASE, false);
+    }
+
+    public void saveInformationAboutUser(Context context, String login, String password) {
+        Log.d(LOG_TAG, "saveInformationAboutUser()");
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(Constants.KEY_USER_LOGIN, login)
+                .putString(Constants.KEY_USER_PASSWORD, password)
+                .apply();
+    }
+
+    public User getUser(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String login = sharedPreferences.getString(Constants.KEY_USER_LOGIN, null);
+        String password = sharedPreferences.getString(Constants.KEY_USER_PASSWORD, null);
+        if (login != null && password != null) {
+            if (isUseFirebase(context)) {
+                return new UserFirebaseModel(login, password);
+            } else {
+                return new UserSQLiteModel(login, password);
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public void deleteInformationAboutUser(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove(Constants.KEY_USER_LOGIN)
+                .remove(Constants.KEY_USER_PASSWORD)
+                .apply();
     }
 }

@@ -21,7 +21,6 @@ import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
 import com.dbondarenko.shpp.personalnotes.database.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
 import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
-import com.dbondarenko.shpp.personalnotes.models.UserModel;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 
 import butterknife.BindView;
@@ -94,6 +93,12 @@ public class LoginFragment extends Fragment {
         return new OnGetDataListener() {
             @Override
             public void onSuccess() {
+                SharedPreferencesManager
+                        .getSharedPreferencesManager()
+                        .saveInformationAboutUser(
+                                getContext().getApplicationContext(),
+                                editTextLogin.getText().toString(),
+                                editTextPassword.getText().toString());
                 startActivity(ContentActivity.newInstance(getContext()));
                 getActivity().finish();
             }

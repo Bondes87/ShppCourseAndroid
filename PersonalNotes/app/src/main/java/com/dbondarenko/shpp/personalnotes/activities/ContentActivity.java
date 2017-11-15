@@ -9,16 +9,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dbondarenko.shpp.personalnotes.R;
+import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 
 public class ContentActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = ContentActivity.class.getSimpleName();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "onCreate()");
-        setContentView(R.layout.activity_content);
+    /**
+     * Get the intent to run ContentActivity.
+     *
+     * @param context The Context of the application package implementing this class.
+     * @return the intent to run ContentActivity.
+     */
+    public static Intent newInstance(Context context) {
+        Log.d(LOG_TAG, "runContentActivity()");
+        Intent intentToStartContentActivity = new Intent(context, ContentActivity.class);
+        intentToStartContentActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intentToStartContentActivity;
     }
 
     @Override
@@ -32,12 +39,21 @@ public class ContentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(LOG_TAG, "onOptionsItemSelected()");
         if (item.getItemId() == R.id.itemLogOut) {
+            SharedPreferencesManager.getSharedPreferencesManager()
+                    .deleteInformationAboutUser(getApplicationContext());
             runMainActivity();
             finish();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate()");
+        setContentView(R.layout.activity_content);
     }
 
     /**
@@ -49,19 +65,6 @@ public class ContentActivity extends AppCompatActivity {
                 getApplicationContext(), MainActivity.class);
         intentToStartNewActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intentToStartNewActivity);
-    }
-
-    /**
-     * Get the intent to run ContentActivity.
-     *
-     * @param context  The Context of the application package implementing this class.
-     * @return the intent to run ContentActivity.
-     */
-    public static Intent newInstance(Context context) {
-        Log.d(LOG_TAG, "runContentActivity()");
-        Intent intentToStartContentActivity = new Intent(context, ContentActivity.class);
-        intentToStartContentActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        return intentToStartContentActivity;
     }
 
 }

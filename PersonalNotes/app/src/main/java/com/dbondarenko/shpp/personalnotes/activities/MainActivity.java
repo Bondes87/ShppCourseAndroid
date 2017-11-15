@@ -56,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(LOG_TAG, "onCreate()");
         setContentView(R.layout.activity_main);
+        if (SharedPreferencesManager.getSharedPreferencesManager()
+                .getUser(getApplicationContext()) != null) {
+            startActivity(ContentActivity.newInstance(getApplicationContext()));
+            finish();
+        }
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()

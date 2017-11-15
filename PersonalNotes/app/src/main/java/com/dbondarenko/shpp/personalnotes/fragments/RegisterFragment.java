@@ -103,6 +103,12 @@ public class RegisterFragment extends Fragment {
         return new OnGetDataListener() {
             @Override
             public void onSuccess() {
+                SharedPreferencesManager
+                        .getSharedPreferencesManager()
+                        .saveInformationAboutUser(
+                                getContext().getApplicationContext(),
+                                editTextLogin.getText().toString(),
+                                editTextPassword.getText().toString());
                 startActivity(ContentActivity.newInstance(getContext()));
                 getActivity().finish();
             }
