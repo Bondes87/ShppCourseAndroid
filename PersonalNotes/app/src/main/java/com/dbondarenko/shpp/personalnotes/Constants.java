@@ -42,5 +42,4 @@ public class Constants {
     // Keys for saving and retrieving information about the user who logged in.
     public static final String KEY_USER_LOGIN = "UserLogin";
     public static final String KEY_USER_PASSWORD = "UserPassword";
-
 }

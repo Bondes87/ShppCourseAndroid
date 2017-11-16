@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -169,10 +168,10 @@ public class LoginFragment extends Fragment {
      */
     private void showRegisterFragment() {
         Log.d(LOG_TAG, "showRegisterFragment()");
-        Fragment registerFragment = new RegisterFragment();
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayoutContainer, registerFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frameLayoutContainer, new RegisterFragment())
+                .addToBackStack(null)
+                .commit();
     }
 }
