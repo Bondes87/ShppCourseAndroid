@@ -1,7 +1,10 @@
 package com.dbondarenko.shpp.personalnotes.database.firebase;
 
+import android.util.Log;
+
 import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
-import com.dbondarenko.shpp.personalnotes.database.OnGetDataListener;
+import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
+import com.dbondarenko.shpp.personalnotes.models.NoteModel;
 import com.dbondarenko.shpp.personalnotes.models.UserFirebaseModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,6 +21,8 @@ import java.util.Objects;
  */
 public class FirebaseManager implements DatabaseManager {
 
+    private static final String LOG_TAG = FirebaseManager.class.getSimpleName();
+
     private FirebaseDatabase firebaseDatabase;
     private OnGetDataListener onGetDataListener;
 
@@ -28,13 +33,13 @@ public class FirebaseManager implements DatabaseManager {
 
     @Override
     public void addUser(String login, String password) {
+        Log.d(LOG_TAG, "addUser()");
         Query queryForIsUserExists = firebaseDatabase
                 .getReference()
                 .child("users")
                 .orderByKey()
                 .equalTo(login);
         queryForIsUserExists.addListenerForSingleValueEvent(new ValueEventListener() {
-
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -55,7 +60,8 @@ public class FirebaseManager implements DatabaseManager {
     }
 
     @Override
-    public void isUserExists(String login, String password) {
+    public void checkIsUserExists(String login, String password) {
+        Log.d(LOG_TAG, "checkIsUserExists()");
         DatabaseReference referenceForIsUserExists = firebaseDatabase
                 .getReference()
                 .child("users")
@@ -79,5 +85,20 @@ public class FirebaseManager implements DatabaseManager {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    @Override
+    public void addNote(NoteModel note) {
+        Log.d(LOG_TAG, "addNote()");
+    }
+
+    @Override
+    public void updateNote(NoteModel note) {
+        Log.d(LOG_TAG, "updateNote()");
+    }
+
+    @Override
+    public void requestNotes(String userLogin, int startNotesPosition) {
+        Log.d(LOG_TAG, "requestNotes()");
     }
 }

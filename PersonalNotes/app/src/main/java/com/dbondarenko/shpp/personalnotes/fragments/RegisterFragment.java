@@ -16,11 +16,13 @@ import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
 import com.dbondarenko.shpp.personalnotes.activities.ContentActivity;
 import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
-import com.dbondarenko.shpp.personalnotes.database.OnGetDataListener;
+import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
 import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
+import com.dbondarenko.shpp.personalnotes.models.NoteModel;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -66,7 +68,8 @@ public class RegisterFragment extends Fragment {
         return viewContent;
     }
 
-    @OnClick({R.id.buttonRegister, R.id.imageViewLoginInfo, R.id.imageViewPasswordInfo})
+    @OnClick({R.id.buttonRegister, R.id.imageViewLoginInfo,
+            R.id.imageViewPasswordInfo})
     public void onViewClicked(View view) {
         Log.d(LOG_TAG, "onViewClicked()");
         switch (view.getId()) {
@@ -88,6 +91,7 @@ public class RegisterFragment extends Fragment {
     }
 
     private void initDatabase() {
+        Log.d(LOG_TAG, "initDatabase()");
         if (SharedPreferencesManager.getSharedPreferencesManager().isUseFirebase(
                 getContext().getApplicationContext())) {
             databaseManager = new FirebaseManager(getDataListener());
@@ -100,9 +104,11 @@ public class RegisterFragment extends Fragment {
 
     @NonNull
     private OnGetDataListener getDataListener() {
+        Log.d(LOG_TAG, "getDataListener()");
         return new OnGetDataListener() {
             @Override
             public void onSuccess() {
+                Log.d(LOG_TAG, "onSuccess()");
                 SharedPreferencesManager
                         .getSharedPreferencesManager()
                         .saveInformationAboutUser(
@@ -114,19 +120,15 @@ public class RegisterFragment extends Fragment {
             }
 
             @Override
-            public void onSuccess(Object data) {
-
+            public void onSuccess(List<NoteModel> notes) {
+                Log.d(LOG_TAG, "onSuccess()");
             }
 
             @Override
             public void onFailed() {
+                Log.d(LOG_TAG, "onFailed()");
                 editTextLogin.setError(getString(R.string.error_login_is_busy));
                 editTextLogin.requestFocus();
-            }
-
-            @Override
-            public void onFailed(Object data) {
-
             }
         };
     }

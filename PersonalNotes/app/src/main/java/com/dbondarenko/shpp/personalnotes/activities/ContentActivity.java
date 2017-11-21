@@ -9,24 +9,31 @@ import android.util.Log;
 import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
 import com.dbondarenko.shpp.personalnotes.fragments.NotesListFragment;
+import com.dbondarenko.shpp.personalnotes.listeners.OnEventNoteListener;
+import com.dbondarenko.shpp.personalnotes.models.NoteModel;
 
-import butterknife.OnClick;
-
-public class ContentActivity extends AppCompatActivity {
+public class ContentActivity extends AppCompatActivity implements OnEventNoteListener {
 
     private static final String LOG_TAG = ContentActivity.class.getSimpleName();
 
-    /**
-     * Get the intent to run ContentActivity.
-     *
-     * @param context The Context of the application package implementing this class.
-     * @return the intent to run ContentActivity.
-     */
     public static Intent newInstance(Context context) {
         Log.d(LOG_TAG, "runContentActivity()");
         Intent intentToStartContentActivity = new Intent(context, ContentActivity.class);
         intentToStartContentActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return intentToStartContentActivity;
+    }
+
+    @Override
+    public void onAddNote(NoteModel note) {
+        NotesListFragment notesListFragment = (NotesListFragment)
+                getSupportFragmentManager()
+                        .findFragmentByTag(Constants.TAG_OF_NOTES_LIST_FRAGMENT);
+        notesListFragment.addNoteToAdapter(note);
+    }
+
+    @Override
+    public void onDeleteNote(NoteModel note) {
+
     }
 
     @Override
@@ -37,7 +44,8 @@ public class ContentActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.frameLayoutContainerForContent, new NotesListFragment())
+                    .add(R.id.frameLayoutContainerForContent, new NotesListFragment(),
+                            Constants.TAG_OF_NOTES_LIST_FRAGMENT)
                     .commit();
         }
     }

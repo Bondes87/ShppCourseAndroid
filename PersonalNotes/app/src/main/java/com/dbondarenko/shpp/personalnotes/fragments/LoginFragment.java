@@ -17,10 +17,13 @@ import android.widget.EditText;
 import com.dbondarenko.shpp.personalnotes.R;
 import com.dbondarenko.shpp.personalnotes.activities.ContentActivity;
 import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
-import com.dbondarenko.shpp.personalnotes.database.OnGetDataListener;
+import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
 import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
+import com.dbondarenko.shpp.personalnotes.models.NoteModel;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,7 +69,7 @@ public class LoginFragment extends Fragment {
         switch (view.getId()) {
             case R.id.buttonLogIn:
                 if (validateCredentials()) {
-                    databaseManager.isUserExists(editTextLogin.getText().toString(),
+                    databaseManager.checkIsUserExists(editTextLogin.getText().toString(),
                             editTextPassword.getText().toString());
                 }
                 break;
@@ -77,6 +80,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void initDatabase() {
+        Log.d(LOG_TAG, "initDatabase()");
         if (SharedPreferencesManager.getSharedPreferencesManager().isUseFirebase(
                 getContext().getApplicationContext())) {
             databaseManager = new FirebaseManager(getDataListener());
@@ -89,9 +93,11 @@ public class LoginFragment extends Fragment {
 
     @NonNull
     private OnGetDataListener getDataListener() {
+        Log.d(LOG_TAG, "getDataListener()");
         return new OnGetDataListener() {
             @Override
             public void onSuccess() {
+                Log.d(LOG_TAG, "onSuccess()");
                 SharedPreferencesManager
                         .getSharedPreferencesManager()
                         .saveInformationAboutUser(
@@ -103,19 +109,15 @@ public class LoginFragment extends Fragment {
             }
 
             @Override
-            public void onSuccess(Object data) {
-
+            public void onSuccess(List<NoteModel> notes) {
+                Log.d(LOG_TAG, "onSuccess()");
             }
 
             @Override
             public void onFailed() {
+                Log.d(LOG_TAG, "onFailed()");
                 hideSoftKeyboard();
                 reportIncorrectLoginOrPassword();
-            }
-
-            @Override
-            public void onFailed(Object data) {
-
             }
         };
     }
@@ -163,9 +165,6 @@ public class LoginFragment extends Fragment {
         snackbar.show();
     }
 
-    /**
-     * Show registration screen.
-     */
     private void showRegisterFragment() {
         Log.d(LOG_TAG, "showRegisterFragment()");
         getFragmentManager()

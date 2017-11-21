@@ -1,7 +1,9 @@
 package com.dbondarenko.shpp.personalnotes.fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,13 +17,19 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
+import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
+import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
+import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
+import com.dbondarenko.shpp.personalnotes.listeners.OnEventNoteListener;
+import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
+import com.dbondarenko.shpp.personalnotes.models.NoteModel;
+import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
+import com.dbondarenko.shpp.personalnotes.utils.Util;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,25 +43,49 @@ public class NoteFragment extends Fragment {
     @BindView(R.id.editTextMessage)
     EditText editTextMessage;
 
-    private long messageDatetime;
+    private OnEventNoteListener onEventNoteListener;
+    private DatabaseManager databaseManager;
+    private NoteModel note;
+    private long datetime;
 
     public NoteFragment() {
     }
 
     @Override
+    public void onAttach(Context context) {
+        Log.d(LOG_TAG, "onAttach()");
+        super.onAttach(context);
+        if (context instanceof OnEventNoteListener) {
+            onEventNoteListener = (OnEventNoteListener) context;
+        }
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onCreate()");
         super.onCreate(savedInstanceState);
-        messageDatetime = Calendar.getInstance().getTimeInMillis();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            note = getArguments().getParcelable(Constants.KEY_NOTE);
+        }
         setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onCreateView()");
         View viewContent = inflater.inflate(R.layout.fragment_note, container,
                 false);
         ButterKnife.bind(this, viewContent);
-        textViewDatetime.setText(getTime(messageDatetime));
+        initDatabase();
+        if (note != null) {
+            textViewDatetime.setText(Util.getStringDatetime(note.getDatetime()));
+            editTextMessage.setText(note.getMessage());
+        } else {
+            datetime = Calendar.getInstance().getTimeInMillis();
+            textViewDatetime.setText(Util.getStringDatetime(datetime));
+        }
         return viewContent;
     }
 
@@ -62,7 +94,17 @@ public class NoteFragment extends Fragment {
         Log.d(LOG_TAG, "onOptionsItemSelected()");
         switch (item.getItemId()) {
             case R.id.itemSaveNote:
-                showNotesListFragment();
+                String message = editTextMessage.getText().toString();
+                if (note == null) {
+                    String userLogin = SharedPreferencesManager.getSharedPreferencesManager()
+                            .getUser(getContext().getApplicationContext()).getLogin();
+                    NoteModel newNote = new NoteModel(userLogin, datetime, message);
+                    databaseManager.addNote(newNote);
+                    onEventNoteListener.onAddNote(newNote);
+                } else {
+                    note.setMessage(message);
+                    databaseManager.updateNote(note);
+                }
                 return true;
             case R.id.itemDeleteNote:
                 showNotesListFragment();
@@ -80,24 +122,43 @@ public class NoteFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private String getTime(long datetime) {
-        Log.d(LOG_TAG, "getTime()");
-        DateFormat dateFormat = new SimpleDateFormat(
-                "MMMM d, yyyy h:mm a", Locale.US);
-        return dateFormat.format(new Date(datetime));
+    private void initDatabase() {
+        Log.d(LOG_TAG, "initDatabase()");
+        if (SharedPreferencesManager.getSharedPreferencesManager().isUseFirebase(
+                getContext().getApplicationContext())) {
+            databaseManager = new FirebaseManager(getDataListener());
+        } else {
+            databaseManager = new SQLiteManager(
+                    getContext().getApplicationContext(), getDataListener()
+            );
+        }
     }
 
-    /**
-     * Show registration screen.
-     */
+    @NonNull
+    private OnGetDataListener getDataListener() {
+        Log.d(LOG_TAG, "getDataListener()");
+        return new OnGetDataListener() {
+            @Override
+            public void onSuccess() {
+                Log.d(LOG_TAG, "onSuccess()");
+                showNotesListFragment();
+            }
+
+            @Override
+            public void onSuccess(List<NoteModel> notes) {
+                Log.d(LOG_TAG, "onSuccess()");
+            }
+
+            @Override
+            public void onFailed() {
+                Log.d(LOG_TAG, "onFailed()");
+            }
+        };
+    }
+
     private void showNotesListFragment() {
         Log.d(LOG_TAG, "showRegisterFragment()");
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.popBackStack();
-        fragmentManager
-                .beginTransaction()
-                .replace(R.id.frameLayoutContainerForContent, new NotesListFragment())
-                .commit();
     }
-
 }
