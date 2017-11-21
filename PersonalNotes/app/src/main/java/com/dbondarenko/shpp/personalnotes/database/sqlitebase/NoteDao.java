@@ -1,6 +1,7 @@
 package com.dbondarenko.shpp.personalnotes.database.sqlitebase;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
@@ -24,8 +25,11 @@ public interface NoteDao {
     List<NoteModel> getNotes(String userLogin, int startNotesPosition);
 
     @Insert
-    void insertNote(NoteModel noteModel);
+    void insertNote(NoteModel note);
 
     @Update
-    void updateNote(NoteModel noteModel);
+    void updateNote(NoteModel note);
+
+    @Delete
+    void deleteNote(NoteModel note);
 }

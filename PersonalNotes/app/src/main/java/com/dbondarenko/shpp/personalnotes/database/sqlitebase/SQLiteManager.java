@@ -95,6 +95,19 @@ public class SQLiteManager implements DatabaseManager {
     }
 
     @Override
+    public void deleteNote(NoteModel note) {
+        Log.d(LOG_TAG, "deleteNote()");
+        runJobInNewThread(() -> {
+            Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
+            Bundle bundle = new Bundle();
+            sQLiteRoomDatabase.getNoteDao().deleteNote(note);
+            bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT, Constants.TRUE);
+            message.setData(bundle);
+            handler.sendMessage(message);
+        });
+    }
+
+    @Override
     public void requestNotes(String userLogin, int startNotesPosition) {
         Log.d(LOG_TAG, "requestNotes()");
         runJobInNewThread(() -> {

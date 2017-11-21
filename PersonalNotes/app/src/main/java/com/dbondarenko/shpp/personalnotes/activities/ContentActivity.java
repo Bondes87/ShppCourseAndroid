@@ -33,7 +33,10 @@ public class ContentActivity extends AppCompatActivity implements OnEventNoteLis
 
     @Override
     public void onDeleteNote(NoteModel note) {
-
+        NotesListFragment notesListFragment = (NotesListFragment)
+                getSupportFragmentManager()
+                        .findFragmentByTag(Constants.TAG_OF_NOTES_LIST_FRAGMENT);
+        notesListFragment.deleteNoteFromAdapter(note);
     }
 
     @Override

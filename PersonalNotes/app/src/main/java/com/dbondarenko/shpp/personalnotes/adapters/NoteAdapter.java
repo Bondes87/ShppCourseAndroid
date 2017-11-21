@@ -68,6 +68,11 @@ public class NoteAdapter extends
         notesList.add(0, note);
     }
 
+    public void deleteNote(NoteModel note) {
+        Log.d(LOG_TAG, "deleteNote()");
+        notesList.remove(note);
+    }
+
     public NoteModel getNote(int position) {
         Log.d(LOG_TAG, "getNote()");
         return notesList.get(position);

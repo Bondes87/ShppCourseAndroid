@@ -119,6 +119,11 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         noteAdapter.notifyDataSetChanged();
     }
 
+    public void deleteNoteFromAdapter(NoteModel note){
+        Log.d(LOG_TAG, "deleteNoteFromAdapter()");
+        noteAdapter.deleteNote(note);
+        noteAdapter.notifyDataSetChanged();
+    }
     private void showNoteFragment(NoteFragment noteFragment) {
         Log.d(LOG_TAG, "showNoteFragment()");
         getFragmentManager()

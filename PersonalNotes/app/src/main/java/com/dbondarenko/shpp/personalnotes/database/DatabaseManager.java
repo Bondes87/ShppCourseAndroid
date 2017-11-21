@@ -12,9 +12,11 @@ public interface DatabaseManager {
 
     void checkIsUserExists(String login, String password);
 
+    void requestNotes(String userLogin, int startNotesPosition);
+
     void addNote(NoteModel note);
 
     void updateNote(NoteModel note);
 
-    void requestNotes(String userLogin, int startNotesPosition);
+    void deleteNote(NoteModel note);
 }

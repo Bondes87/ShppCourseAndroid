@@ -98,6 +98,11 @@ public class FirebaseManager implements DatabaseManager {
     }
 
     @Override
+    public void deleteNote(NoteModel note) {
+        Log.d(LOG_TAG, "deleteNote()");
+    }
+
+    @Override
     public void requestNotes(String userLogin, int startNotesPosition) {
         Log.d(LOG_TAG, "requestNotes()");
     }

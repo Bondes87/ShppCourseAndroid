@@ -22,6 +22,7 @@ import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
 import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
 import com.dbondarenko.shpp.personalnotes.models.NoteModel;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
+import com.dbondarenko.shpp.personalnotes.utils.Util;
 
 import java.util.List;
 
@@ -116,7 +117,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onFailed() {
                 Log.d(LOG_TAG, "onFailed()");
-                hideSoftKeyboard();
+                Util.hideSoftKeyboard(getContext().getApplicationContext(),getView());
                 reportIncorrectLoginOrPassword();
             }
         };

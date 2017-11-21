@@ -5,8 +5,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -86,6 +87,10 @@ public class NoteFragment extends Fragment {
             datetime = Calendar.getInstance().getTimeInMillis();
             textViewDatetime.setText(Util.getStringDatetime(datetime));
         }
+        editTextMessage.requestFocus();
+        if (editTextMessage.isFocused()) {
+            Util.showSoftKeyboard(getContext().getApplicationContext());
+        }
         return viewContent;
     }
 
@@ -95,6 +100,10 @@ public class NoteFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.itemSaveNote:
                 String message = editTextMessage.getText().toString();
+                if (TextUtils.isEmpty(message)) {
+                    reportNoteIsEmpty();
+                    return true;
+                }
                 if (note == null) {
                     String userLogin = SharedPreferencesManager.getSharedPreferencesManager()
                             .getUser(getContext().getApplicationContext()).getLogin();
@@ -105,13 +114,17 @@ public class NoteFragment extends Fragment {
                     note.setMessage(message);
                     databaseManager.updateNote(note);
                 }
+                Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                 return true;
             case R.id.itemDeleteNote:
-                showNotesListFragment();
+                if (note != null) {
+                    onEventNoteListener.onDeleteNote(note);
+                    databaseManager.deleteNote(note);
+                }
+                Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
@@ -120,6 +133,14 @@ public class NoteFragment extends Fragment {
         Log.d(LOG_TAG, "onCreateOptionsMenu()");
         inflater.inflate(R.menu.fragment_note_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (note == null) {
+            menu.findItem(R.id.itemDeleteNote).setVisible(false);
+        }
     }
 
     private void initDatabase() {
@@ -141,7 +162,7 @@ public class NoteFragment extends Fragment {
             @Override
             public void onSuccess() {
                 Log.d(LOG_TAG, "onSuccess()");
-                showNotesListFragment();
+                getFragmentManager().popBackStack();
             }
 
             @Override
@@ -156,9 +177,17 @@ public class NoteFragment extends Fragment {
         };
     }
 
-    private void showNotesListFragment() {
-        Log.d(LOG_TAG, "showRegisterFragment()");
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.popBackStack();
+    private void reportNoteIsEmpty() {
+        Log.d(LOG_TAG, "reportIncorrectLoginOrPassword()");
+        View layoutView = getView();
+        Snackbar snackbar;
+        if (layoutView != null) {
+            snackbar = Snackbar.make(layoutView,
+                    getString(R.string.error_note_is_empty),
+                    Snackbar.LENGTH_LONG);
+            View snackbarView = snackbar.getView();
+            snackbarView.setBackgroundColor((getResources().getColor(R.color.colorPrimary)));
+            snackbar.show();
+        }
     }
 }
