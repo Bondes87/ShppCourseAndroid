@@ -22,6 +22,7 @@ import com.dbondarenko.shpp.personalnotes.adapters.NoteAdapter;
 import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
 import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
 import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
+import com.dbondarenko.shpp.personalnotes.listeners.OnEndlessRecyclerScrollListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnListItemClickListener;
 import com.dbondarenko.shpp.personalnotes.models.NoteModel;
@@ -53,13 +54,6 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         Log.d(LOG_TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (savedInstanceState == null) {
-            initDatabase();
-            databaseManager.requestNotes(
-                    SharedPreferencesManager.getSharedPreferencesManager()
-                            .getUser(getContext().getApplicationContext())
-                            .getLogin(), 0);
-        }
         setRetainInstance(true);
     }
 
@@ -70,8 +64,11 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         View viewContent = inflater.inflate(R.layout.fragment_notes_list, container,
                 false);
         ButterKnife.bind(this, viewContent);
-        recyclerViewNotesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerViewNotesList.setAdapter(noteAdapter);
+        initDatabase();
+        if (noteAdapter == null) {
+            downloadNotes(0);
+        }
+        initRecyclerView();
         return viewContent;
     }
 
@@ -119,11 +116,33 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         noteAdapter.notifyDataSetChanged();
     }
 
-    public void deleteNoteFromAdapter(NoteModel note){
+    public void deleteNoteFromAdapter(NoteModel note) {
         Log.d(LOG_TAG, "deleteNoteFromAdapter()");
         noteAdapter.deleteNote(note);
         noteAdapter.notifyDataSetChanged();
     }
+
+    private void initRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerViewNotesList.setLayoutManager(linearLayoutManager);
+        recyclerViewNotesList.setAdapter(noteAdapter);
+        recyclerViewNotesList.addOnScrollListener(
+                new OnEndlessRecyclerScrollListener() {
+                    @Override
+                    public void onLoadMore() {
+                        Log.d(LOG_TAG, "onLoadMore()");
+                        downloadNotes(noteAdapter.getItemCount());
+                    }
+                });
+    }
+
+    private void downloadNotes(int startNotesPosition) {
+        databaseManager.requestNotes(
+                SharedPreferencesManager.getSharedPreferencesManager()
+                        .getUser(getContext().getApplicationContext())
+                        .getLogin(), startNotesPosition);
+    }
+
     private void showNoteFragment(NoteFragment noteFragment) {
         Log.d(LOG_TAG, "showNoteFragment()");
         getFragmentManager()

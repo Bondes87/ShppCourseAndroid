@@ -50,6 +50,7 @@ public class Constants {
     // The tags of fragments.
     public static final String TAG_OF_NOTES_LIST_FRAGMENT = "TagNotesListFragment";
 
-    public static final boolean TRUE = true;
-    public static final boolean FALSE = false;
+    // The minimum number of items to have below your current scroll position
+    // before loading more.
+    public static final int VISIBLE_THRESHOLD = 5;
 }

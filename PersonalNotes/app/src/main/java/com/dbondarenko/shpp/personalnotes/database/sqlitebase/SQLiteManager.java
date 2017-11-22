@@ -44,11 +44,9 @@ public class SQLiteManager implements DatabaseManager {
             if (sQLiteRoomDatabase.getUserDao().isLoginAvailable(
                     login) == null) {
                 sQLiteRoomDatabase.getUserDao().insertUser(user);
-                bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT,
-                        Constants.FALSE);
+                bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT, false);
             } else {
-                bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT,
-                        Constants.TRUE);
+                bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT, true);
             }
             message.setData(bundle);
             handler.sendMessage(message);
@@ -75,7 +73,7 @@ public class SQLiteManager implements DatabaseManager {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
             Bundle bundle = new Bundle();
             sQLiteRoomDatabase.getNoteDao().insertNote(note);
-            bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT, Constants.TRUE);
+            bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT, true);
             message.setData(bundle);
             handler.sendMessage(message);
         });
@@ -88,7 +86,7 @@ public class SQLiteManager implements DatabaseManager {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
             Bundle bundle = new Bundle();
             sQLiteRoomDatabase.getNoteDao().updateNote(note);
-            bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT, Constants.TRUE);
+            bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT, true);
             message.setData(bundle);
             handler.sendMessage(message);
         });
@@ -101,7 +99,7 @@ public class SQLiteManager implements DatabaseManager {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
             Bundle bundle = new Bundle();
             sQLiteRoomDatabase.getNoteDao().deleteNote(note);
-            bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT, Constants.TRUE);
+            bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT, true);
             message.setData(bundle);
             handler.sendMessage(message);
         });
