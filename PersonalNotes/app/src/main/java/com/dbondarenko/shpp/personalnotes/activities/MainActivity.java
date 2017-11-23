@@ -15,6 +15,24 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate()");
+        setContentView(R.layout.activity_main);
+        if (SharedPreferencesManager.getSharedPreferencesManager()
+                .getUser(getApplicationContext()) != null) {
+            startActivity(ContentActivity.newInstance(getApplicationContext()));
+            finish();
+        }
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.frameLayoutContainer, new LoginFragment())
+                    .commit();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
         if (SharedPreferencesManager.getSharedPreferencesManager()
@@ -43,29 +61,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "onCreate()");
-        setContentView(R.layout.activity_main);
-        if (SharedPreferencesManager.getSharedPreferencesManager()
-                .getUser(getApplicationContext()) != null) {
-            startActivity(ContentActivity.newInstance(getApplicationContext()));
-            finish();
-        }
-        if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.frameLayoutContainer, new LoginFragment())
-                    .commit();
         }
     }
 }

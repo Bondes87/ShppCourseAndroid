@@ -106,23 +106,11 @@ public class NoteFragment extends Fragment {
                     reportNoteIsEmpty();
                     return true;
                 }
-                if (note == null) {
-                    String userLogin = SharedPreferencesManager.getSharedPreferencesManager()
-                            .getUser(getContext().getApplicationContext()).getLogin();
-                    Note newNote = createNote(message, userLogin);
-                    databaseManager.addNote(newNote);
-                    onEventNoteListener.onAddNote(newNote);
-                } else {
-                    note.setMessage(message);
-                    databaseManager.updateNote(note);
-                }
+                saveNote(message);
                 Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                 return true;
             case R.id.itemDeleteNote:
-                if (note != null) {
-                    onEventNoteListener.onDeleteNote(note);
-                    databaseManager.deleteNote(note);
-                }
+                deleteNote();
                 Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                 return true;
             default:
@@ -139,22 +127,44 @@ public class NoteFragment extends Fragment {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        Log.d(LOG_TAG, "onPrepareOptionsMenu()");
         super.onPrepareOptionsMenu(menu);
         if (note == null) {
             menu.findItem(R.id.itemDeleteNote).setVisible(false);
         }
     }
 
+    private void deleteNote() {
+        Log.d(LOG_TAG, "deleteNote()");
+        if (note != null) {
+            onEventNoteListener.onDeleteNote(note);
+            databaseManager.deleteNote(note);
+        }
+    }
+
+    private void saveNote(String message) {
+        Log.d(LOG_TAG, "saveNote()");
+        if (note == null) {
+            String userLogin = SharedPreferencesManager.getSharedPreferencesManager()
+                    .getUser(getContext().getApplicationContext()).getLogin();
+            Note newNote = createNote(message, userLogin);
+            databaseManager.addNote(newNote);
+            onEventNoteListener.onAddNote(newNote);
+        } else {
+            note.setMessage(message);
+            databaseManager.updateNote(note);
+        }
+    }
+
     @NonNull
     private Note createNote(String message, String userLogin) {
-        Note newNote;
+        Log.d(LOG_TAG, "createNote()");
         if (SharedPreferencesManager.getSharedPreferencesManager()
                 .isUseFirebase(getContext().getApplicationContext())) {
-            newNote = new NoteFirebaseModel(userLogin, datetime, message);
+            return new NoteFirebaseModel(userLogin, datetime, message);
         } else {
-            newNote = new NoteSQLiteModel(userLogin, datetime, message);
+            return new NoteSQLiteModel(userLogin, datetime, message);
         }
-        return newNote;
     }
 
     private void initDatabase() {

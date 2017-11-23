@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.models.NoteSQLiteModel;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface NoteDao {
     @Query("SELECT * FROM notes " +
             "WHERE userLogin = :userLogin " +
             "ORDER BY datetime DESC " +
-            "LIMIT 20 " +
+            "LIMIT " + Constants.MAX_LENGTH_LOGIN_OR_PASSWORD + " " +
             "OFFSET :startNotesPosition")
     List<NoteSQLiteModel> getNotes(String userLogin, int startNotesPosition);
 

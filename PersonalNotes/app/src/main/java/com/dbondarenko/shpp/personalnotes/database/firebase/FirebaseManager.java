@@ -102,7 +102,9 @@ public class FirebaseManager implements DatabaseManager {
                              Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "requestNotes()");
         System.out.println(String.valueOf(startNotesPosition));
-        Query queryToDownloadNotes = getQueryToDownloadNotes(userLogin, startNotesPosition,
+        Query queryToDownloadNotes = getQueryToDownloadNotes(
+                userLogin,
+                startNotesPosition,
                 lastNoteFromTheLastDownload);
         queryToDownloadNotes.addListenerForSingleValueEvent(
                 getValueEventListenerToDownloadNotes(startNotesPosition));
@@ -110,6 +112,7 @@ public class FirebaseManager implements DatabaseManager {
 
     @NonNull
     private ValueEventListener getValueEventListenerToCheckIsUserExists(String password) {
+        Log.d(LOG_TAG, "getValueEventListenerToCheckIsUserExists()");
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -133,6 +136,7 @@ public class FirebaseManager implements DatabaseManager {
 
     @NonNull
     private ValueEventListener getValueEventListenerToAddUser(String login, String password) {
+        Log.d(LOG_TAG, "getValueEventListenerToAddUser()");
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -155,6 +159,7 @@ public class FirebaseManager implements DatabaseManager {
 
     @NonNull
     private ValueEventListener getValueEventListenerToDownloadNotes(int startNotesPosition) {
+        Log.d(LOG_TAG, "getValueEventListenerToDownloadNotes()");
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -187,27 +192,27 @@ public class FirebaseManager implements DatabaseManager {
 
     private Query getQueryToDownloadNotes(String userLogin, int startNotesPosition,
                                           Note lastNoteFromTheLastDownload) {
-        Query query;
+        Log.d(LOG_TAG, "getQueryToDownloadNotes()");
         if (startNotesPosition == 0) {
-            query = firebaseDatabase
+            return firebaseDatabase
                     .getReference()
                     .child(Constants.TABLE_NOTES)
                     .child(userLogin)
                     .orderByKey()
-                    .limitToLast(20);
+                    .limitToLast(Constants.MAXIMUM_COUNT_OF_NOTES_TO_LOAD);
         } else {
-            query = firebaseDatabase
+            return firebaseDatabase
                     .getReference()
                     .child(Constants.TABLE_NOTES)
                     .child(userLogin)
                     .orderByKey()
                     .endAt(String.valueOf(lastNoteFromTheLastDownload.getDatetime()))
-                    .limitToLast(21);
+                    .limitToLast(Constants.MAXIMUM_COUNT_OF_NOTES_TO_LOAD + 1);
         }
-        return query;
     }
 
     private void sortNotes(List<Note> notesList) {
+        Log.d(LOG_TAG, "sortNotes()");
         Collections.sort(notesList, (note1, note2) -> {
             if (note1.getDatetime() == note2.getDatetime()) {
                 return 0;

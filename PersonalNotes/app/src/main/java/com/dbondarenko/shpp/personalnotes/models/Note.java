@@ -8,11 +8,7 @@ public interface Note {
 
     String getUserLogin();
 
-    void setUserLogin(String userLogin);
-
     long getDatetime();
-
-    void setDatetime(long datetime);
 
     String getMessage();
 

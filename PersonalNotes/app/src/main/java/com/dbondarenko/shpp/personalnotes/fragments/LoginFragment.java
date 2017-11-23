@@ -70,7 +70,8 @@ public class LoginFragment extends Fragment {
         switch (view.getId()) {
             case R.id.buttonLogIn:
                 if (validateCredentials()) {
-                    databaseManager.checkIsUserExists(editTextLogin.getText().toString(),
+                    databaseManager.checkIsUserExists(
+                            editTextLogin.getText().toString(),
                             editTextPassword.getText().toString());
                 }
                 break;
@@ -121,17 +122,6 @@ public class LoginFragment extends Fragment {
                 reportIncorrectLoginOrPassword();
             }
         };
-    }
-
-    private void hideSoftKeyboard() {
-        Log.d(LOG_TAG, "hideSoftKeyboard()");
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) getContext().getApplicationContext()
-                        .getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if (buttonLogIn != null && inputMethodManager != null) {
-            inputMethodManager.hideSoftInputFromWindow(
-                    buttonLogIn.getWindowToken(), 0);
-        }
     }
 
     private boolean validateCredentials() {

@@ -47,18 +47,8 @@ public class NoteFirebaseModel implements Note, Parcelable {
     }
 
     @Override
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
-    }
-
-    @Override
     public long getDatetime() {
         return datetime;
-    }
-
-    @Override
-    public void setDatetime(long datetime) {
-        this.datetime = datetime;
     }
 
     @Override

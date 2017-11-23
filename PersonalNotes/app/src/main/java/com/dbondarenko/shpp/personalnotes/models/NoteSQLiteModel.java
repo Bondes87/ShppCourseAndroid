@@ -57,18 +57,9 @@ public class NoteSQLiteModel implements Note, Parcelable {
         return datetime;
     }
 
-    public void setDatetime(long datetime) {
-        this.datetime = datetime;
-    }
-
     @Override
     public String getUserLogin() {
         return userLogin;
-    }
-
-    @Override
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
     }
 
     @Override

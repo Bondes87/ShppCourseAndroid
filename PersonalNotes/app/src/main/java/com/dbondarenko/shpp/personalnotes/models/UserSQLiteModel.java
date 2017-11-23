@@ -50,18 +50,8 @@ public class UserSQLiteModel implements User, Parcelable {
     }
 
     @Override
-    public void setLogin(@NonNull String login) {
-        this.login = login;
-    }
-
-    @Override
     public String getPassword() {
         return password;
-    }
-
-    @Override
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     @Override

@@ -58,4 +58,5 @@ public class Constants {
     // The minimum number of items to have below your current scroll position
     // before loading more.
     public static final int VISIBLE_THRESHOLD = 5;
+    public static final int MAXIMUM_COUNT_OF_NOTES_TO_LOAD = 20;
 }
