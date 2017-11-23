@@ -1,6 +1,7 @@
 package com.dbondarenko.shpp.personalnotes.fragments;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -130,6 +131,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewNotesList.setLayoutManager(linearLayoutManager);
+        recyclerViewNotesList.addItemDecoration(getMarginDecoration());
         recyclerViewNotesList.setAdapter(noteAdapter);
         recyclerViewNotesList.addOnScrollListener(
                 new OnEndlessRecyclerScrollListener() {
@@ -141,7 +143,32 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
                 });
     }
 
+    @NonNull
+    private RecyclerView.ItemDecoration getMarginDecoration() {
+        Log.d(LOG_TAG, "getMarginDecoration()");
+        return new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view,
+                                       RecyclerView parent,
+                                       RecyclerView.State state) {
+                int marginSmall = getResources().
+                        getDimensionPixelSize(R.dimen.very_small_margin_between_content);
+                int margin = getResources().
+                        getDimensionPixelOffset(R.dimen.small_margin_between_content);
+                if (parent.getChildAdapterPosition(view) == 0) {
+                    outRect.set(margin, margin, margin, marginSmall);
+                } else if (parent.getChildAdapterPosition(view) ==
+                        parent.getAdapter().getItemCount() - 1) {
+                    outRect.set(margin, marginSmall, margin, margin);
+                } else {
+                    outRect.set(margin, marginSmall, margin, marginSmall);
+                }
+            }
+        };
+    }
+
     private void downloadNotes(int startNotesPosition) {
+        Log.d(LOG_TAG, "downloadNotes()");
         Note note = null;
         if (startNotesPosition != 0) {
             note = noteAdapter.getNote(startNotesPosition - 1);

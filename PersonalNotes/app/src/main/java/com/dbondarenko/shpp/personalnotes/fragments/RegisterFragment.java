@@ -221,7 +221,7 @@ public class RegisterFragment extends Fragment {
 
     private boolean validateMatchingCharacters(String text) {
         Log.d(LOG_TAG, "validateMatchingCharacters()");
-        return !Pattern.compile(Constants.LOGIN_AND_PASSWORD_PATTERN)
+        return !Pattern.compile(Constants.PATTERN_LOGIN_AND_PASSWORD)
                 .matcher(text).matches();
     }
 

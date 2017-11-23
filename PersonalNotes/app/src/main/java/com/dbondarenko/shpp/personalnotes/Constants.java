@@ -24,7 +24,7 @@ public class Constants {
             "TagOfInfoDialogFragmentForPassword";
 
     // Information for validate of login and password.
-    public static final String LOGIN_AND_PASSWORD_PATTERN = "[a-zA-Z0-9]{1,256}";
+    public static final String PATTERN_LOGIN_AND_PASSWORD = "[a-zA-Z0-9]{1,256}";
     public static final int MIN_LENGTH_LOGIN = 6;
     public static final int MIN_LENGTH_PASSWORD = 8;
     public static final int MAX_LENGTH_LOGIN_OR_PASSWORD = 30;
@@ -49,7 +49,7 @@ public class Constants {
 
     // The patterns for displaying the date and time on the screen.
     public static final String PATTERN_DATETIME = "MMMM d, yyyy h:mm a";
-    public static final String PATTERN_DATE = "dd:MM:yyyy";
+    public static final String PATTERN_DATE = "dd-MM-yyyy";
     public static final String PATTERN_TIME = "HH:mm";
 
     // The tags of fragments.

@@ -9,6 +9,7 @@
     <string name="button_register">Register</string>
     <string name="text_or">Or</string>
     <string name="text_log_out">Log out</string>
+    <string name="text_hint_for_message">Enter note</string>
     <string name="text_hint">Hint</string>
     <string name="login_information">Use at least 6 characters. This can be letters (a-z, A-Z) and numbers.</string>
     <string name="error_invalid_character_in_login_or_password">Please use only letters (a-z, A-Z), and numbers.</string>
