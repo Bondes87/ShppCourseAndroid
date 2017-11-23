@@ -2,10 +2,12 @@ package com.dbondarenko.shpp.personalnotes.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
+import com.dbondarenko.shpp.personalnotes.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -53,5 +55,15 @@ public class Util {
         if (inputMethodManager != null) {
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
+    }
+
+    public static void reportAnError(Context context,
+                                     View view,
+                                     String errorMessage) {
+        Snackbar snackbar = Snackbar.make(view, errorMessage, Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+        snackbarView.setBackgroundColor(
+                (context.getResources().getColor(R.color.colorPrimary)));
+        snackbar.show();
     }
 }

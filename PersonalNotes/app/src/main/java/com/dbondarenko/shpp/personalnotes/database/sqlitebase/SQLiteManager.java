@@ -114,7 +114,9 @@ public class SQLiteManager implements DatabaseManager {
     public void requestNotes(String userLogin, int startNotesPosition,
                              Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "requestNotes()");
-        onGetDataListener.onStart();
+        if (startNotesPosition!=0){
+            onGetDataListener.onStart();
+        }
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_RESULT_WITH_LIST);
             Bundle bundle = new Bundle();

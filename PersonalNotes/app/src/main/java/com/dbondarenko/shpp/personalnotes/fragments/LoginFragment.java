@@ -61,7 +61,6 @@ public class LoginFragment extends Fragment {
         View viewContent = inflater.inflate(R.layout.fragment_login, container,
                 false);
         ButterKnife.bind(this, viewContent);
-        initDatabase();
         return viewContent;
     }
 
@@ -70,6 +69,7 @@ public class LoginFragment extends Fragment {
         Log.d(LOG_TAG, "onViewClicked()");
         switch (view.getId()) {
             case R.id.buttonLogIn:
+                initDatabase();
                 if (validateCredentials()) {
                     databaseManager.checkIsUserExists(
                             editTextLogin.getText().toString(),
@@ -127,7 +127,9 @@ public class LoginFragment extends Fragment {
                 Log.d(LOG_TAG, "onFailed()");
                 progressBarLoginUser.setVisibility(View.GONE);
                 Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
-                reportIncorrectLoginOrPassword();
+                Util.reportAnError(getContext().getApplicationContext(),
+                        getView(), getString(R.string.error_invalid_login_or_password));
+                //reportAnError();
             }
         };
     }
@@ -155,7 +157,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void reportIncorrectLoginOrPassword() {
-        Log.d(LOG_TAG, "reportIncorrectLoginOrPassword()");
+        Log.d(LOG_TAG, "reportAnError()");
         Snackbar snackbar = Snackbar.make(buttonLogIn,
                 getString(R.string.error_invalid_login_or_password),
                 Snackbar.LENGTH_LONG);

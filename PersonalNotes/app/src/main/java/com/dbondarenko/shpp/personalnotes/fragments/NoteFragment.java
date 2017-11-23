@@ -211,7 +211,7 @@ public class NoteFragment extends Fragment {
     }
 
     private void reportNoteIsEmpty() {
-        Log.d(LOG_TAG, "reportIncorrectLoginOrPassword()");
+        Log.d(LOG_TAG, "reportAnError()");
         View layoutView = getView();
         Snackbar snackbar;
         if (layoutView != null) {

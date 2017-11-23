@@ -106,7 +106,9 @@ public class FirebaseManager implements DatabaseManager {
     public void requestNotes(String userLogin, int startNotesPosition,
                              Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "requestNotes()");
-        onGetDataListener.onStart();
+        if (startNotesPosition != 0) {
+            onGetDataListener.onStart();
+        }
         System.out.println(String.valueOf(startNotesPosition));
         Query queryToDownloadNotes = getQueryToDownloadNotes(
                 userLogin,

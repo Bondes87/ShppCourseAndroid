@@ -68,7 +68,6 @@ public class RegisterFragment extends Fragment {
         View viewContent = inflater.inflate(
                 R.layout.fragment_register, container, false);
         ButterKnife.bind(this, viewContent);
-        initDatabase();
         return viewContent;
     }
 
@@ -78,6 +77,7 @@ public class RegisterFragment extends Fragment {
         Log.d(LOG_TAG, "onViewClicked()");
         switch (view.getId()) {
             case R.id.buttonRegister:
+                initDatabase();
                 if (validateCredentials()) {
                     databaseManager.addUser(editTextLogin.getText().toString(),
                             editTextPassword.getText().toString());
