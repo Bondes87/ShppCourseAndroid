@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
@@ -45,6 +46,8 @@ public class NoteFragment extends Fragment {
     TextView textViewDatetime;
     @BindView(R.id.editTextMessage)
     EditText editTextMessage;
+    @BindView(R.id.progressBarActionsWithNote)
+    ProgressBar progressBarActionsWithNote;
 
     private OnEventNoteListener onEventNoteListener;
     private DatabaseManager databaseManager;
@@ -184,7 +187,13 @@ public class NoteFragment extends Fragment {
         Log.d(LOG_TAG, "getDataListener()");
         return new OnGetDataListener() {
             @Override
+            public void onStart() {
+                progressBarActionsWithNote.setVisibility(View.VISIBLE);
+            }
+
+            @Override
             public void onSuccess() {
+                progressBarActionsWithNote.setVisibility(View.GONE);
                 Log.d(LOG_TAG, "onSuccess()");
                 getFragmentManager().popBackStack();
             }

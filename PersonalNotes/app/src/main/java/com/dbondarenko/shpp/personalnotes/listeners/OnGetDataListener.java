@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface OnGetDataListener {
 
+    void onStart();
+
     void onSuccess();
 
     void onSuccess(List<Note> notes);

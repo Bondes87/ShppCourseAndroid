@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
@@ -52,6 +53,8 @@ public class RegisterFragment extends Fragment {
     ImageView imageViewPasswordInfo;
     @BindView(R.id.buttonRegister)
     Button buttonRegister;
+    @BindView(R.id.progressBarRegisterUser)
+    ProgressBar progressBarRegisterUser;
 
     DatabaseManager databaseManager;
 
@@ -109,8 +112,14 @@ public class RegisterFragment extends Fragment {
         Log.d(LOG_TAG, "getDataListener()");
         return new OnGetDataListener() {
             @Override
+            public void onStart() {
+                progressBarRegisterUser.setVisibility(View.VISIBLE);
+            }
+
+            @Override
             public void onSuccess() {
                 Log.d(LOG_TAG, "onSuccess()");
+                progressBarRegisterUser.setVisibility(View.GONE);
                 SharedPreferencesManager
                         .getSharedPreferencesManager()
                         .saveInformationAboutUser(
@@ -129,6 +138,7 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onFailed() {
                 Log.d(LOG_TAG, "onFailed()");
+                progressBarRegisterUser.setVisibility(View.GONE);
                 editTextLogin.setError(getString(R.string.error_login_is_busy));
                 editTextLogin.requestFocus();
             }

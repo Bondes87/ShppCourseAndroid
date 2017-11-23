@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
@@ -44,6 +45,8 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
     FloatingActionButton floatingActionButtonAddNote;
     @BindView(R.id.recyclerViewNotesList)
     RecyclerView recyclerViewNotesList;
+    @BindView(R.id.progressBarNotesLoading)
+    ProgressBar progressBarNotesLoading;
 
     NoteAdapter noteAdapter;
     DatabaseManager databaseManager;
@@ -208,6 +211,11 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         Log.d(LOG_TAG, "getDataListener()");
         return new OnGetDataListener() {
             @Override
+            public void onStart() {
+                progressBarNotesLoading.setVisibility(View.VISIBLE);
+            }
+
+            @Override
             public void onSuccess() {
                 Log.d(LOG_TAG, "onSuccess()");
             }
@@ -215,6 +223,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
             @Override
             public void onSuccess(List<Note> notes) {
                 Log.d(LOG_TAG, "onSuccess()");
+                progressBarNotesLoading.setVisibility(View.GONE);
                 if (noteAdapter == null) {
                     noteAdapter = new NoteAdapter(notes,
                             NotesListFragment.this);

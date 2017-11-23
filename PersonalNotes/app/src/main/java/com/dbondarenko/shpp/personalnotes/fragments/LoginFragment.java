@@ -1,6 +1,5 @@
 package com.dbondarenko.shpp.personalnotes.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -10,9 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.dbondarenko.shpp.personalnotes.R;
 import com.dbondarenko.shpp.personalnotes.activities.ContentActivity;
@@ -47,6 +46,8 @@ public class LoginFragment extends Fragment {
     Button buttonLogIn;
     @BindView(R.id.buttonRegister)
     Button buttonRegister;
+    @BindView(R.id.progressBarLoginUser)
+    ProgressBar progressBarLoginUser;
 
     DatabaseManager databaseManager;
 
@@ -98,8 +99,14 @@ public class LoginFragment extends Fragment {
         Log.d(LOG_TAG, "getDataListener()");
         return new OnGetDataListener() {
             @Override
+            public void onStart() {
+                progressBarLoginUser.setVisibility(View.VISIBLE);
+            }
+
+            @Override
             public void onSuccess() {
                 Log.d(LOG_TAG, "onSuccess()");
+                progressBarLoginUser.setVisibility(View.GONE);
                 SharedPreferencesManager
                         .getSharedPreferencesManager()
                         .saveInformationAboutUser(
@@ -118,6 +125,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onFailed() {
                 Log.d(LOG_TAG, "onFailed()");
+                progressBarLoginUser.setVisibility(View.GONE);
                 Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                 reportIncorrectLoginOrPassword();
             }

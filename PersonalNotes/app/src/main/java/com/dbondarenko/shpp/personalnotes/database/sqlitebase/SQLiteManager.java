@@ -38,6 +38,7 @@ public class SQLiteManager implements DatabaseManager {
     @Override
     public void addUser(String login, String password) {
         Log.d(LOG_TAG, "addUser()");
+        onGetDataListener.onStart();
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
             Bundle bundle = new Bundle();
@@ -56,6 +57,7 @@ public class SQLiteManager implements DatabaseManager {
     @Override
     public void checkIsUserExists(String login, String password) {
         Log.d(LOG_TAG, "checkIsUserExists()");
+        onGetDataListener.onStart();
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
             Bundle bundle = new Bundle();
@@ -69,6 +71,7 @@ public class SQLiteManager implements DatabaseManager {
     @Override
     public void addNote(Note note) {
         Log.d(LOG_TAG, "addNote()");
+        onGetDataListener.onStart();
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
             Bundle bundle = new Bundle();
@@ -82,6 +85,7 @@ public class SQLiteManager implements DatabaseManager {
     @Override
     public void updateNote(Note note) {
         Log.d(LOG_TAG, "updateNote()");
+        onGetDataListener.onStart();
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
             Bundle bundle = new Bundle();
@@ -95,6 +99,7 @@ public class SQLiteManager implements DatabaseManager {
     @Override
     public void deleteNote(Note note) {
         Log.d(LOG_TAG, "deleteNote()");
+        onGetDataListener.onStart();
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
             Bundle bundle = new Bundle();
@@ -109,6 +114,7 @@ public class SQLiteManager implements DatabaseManager {
     public void requestNotes(String userLogin, int startNotesPosition,
                              Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "requestNotes()");
+        onGetDataListener.onStart();
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_RESULT_WITH_LIST);
             Bundle bundle = new Bundle();

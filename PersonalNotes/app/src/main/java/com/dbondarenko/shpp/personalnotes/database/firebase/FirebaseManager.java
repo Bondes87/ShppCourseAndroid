@@ -43,6 +43,7 @@ public class FirebaseManager implements DatabaseManager {
     @Override
     public void addUser(String login, String password) {
         Log.d(LOG_TAG, "addUser()");
+        onGetDataListener.onStart();
         Query queryForIsUserExists = firebaseDatabase
                 .getReference()
                 .child(Constants.TABLE_USERS)
@@ -55,6 +56,7 @@ public class FirebaseManager implements DatabaseManager {
     @Override
     public void checkIsUserExists(String login, String password) {
         Log.d(LOG_TAG, "checkIsUserExists()");
+        onGetDataListener.onStart();
         DatabaseReference referenceForIsUserExists = firebaseDatabase
                 .getReference()
                 .child(Constants.TABLE_USERS)
@@ -66,6 +68,7 @@ public class FirebaseManager implements DatabaseManager {
     @Override
     public void addNote(Note note) {
         Log.d(LOG_TAG, "addNote()");
+        onGetDataListener.onStart();
         firebaseDatabase.getReference()
                 .child(Constants.TABLE_NOTES)
                 .child(note.getUserLogin())
@@ -77,6 +80,7 @@ public class FirebaseManager implements DatabaseManager {
     @Override
     public void updateNote(Note note) {
         Log.d(LOG_TAG, "updateNote()");
+        onGetDataListener.onStart();
         firebaseDatabase.getReference()
                 .child(Constants.TABLE_NOTES)
                 .child(note.getUserLogin())
@@ -89,6 +93,7 @@ public class FirebaseManager implements DatabaseManager {
     @Override
     public void deleteNote(Note note) {
         Log.d(LOG_TAG, "deleteNote()");
+        onGetDataListener.onStart();
         firebaseDatabase.getReference()
                 .child(Constants.TABLE_NOTES)
                 .child(note.getUserLogin())
@@ -101,6 +106,7 @@ public class FirebaseManager implements DatabaseManager {
     public void requestNotes(String userLogin, int startNotesPosition,
                              Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "requestNotes()");
+        onGetDataListener.onStart();
         System.out.println(String.valueOf(startNotesPosition));
         Query queryToDownloadNotes = getQueryToDownloadNotes(
                 userLogin,
