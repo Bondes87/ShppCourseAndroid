@@ -10,6 +10,11 @@ public class Constants {
     // Information about the database.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "personalnotes.db";
+    public static final String TABLE_USERS = "users";
+    public static final String TABLE_NOTES = "notes";
+    public static final String COLUMN_USER_LOGIN = "login";
+    public static final String COLUMN_NOTES_USERLOGIN = "userLogin";
+    public static final String COLUMN_NOTES_MESSAGE = "message";
 
     // Key and tags for creating information dialog fragments.
     public static final String KEY_DIALOG_MESSAGE = "KeyDialogMessage";

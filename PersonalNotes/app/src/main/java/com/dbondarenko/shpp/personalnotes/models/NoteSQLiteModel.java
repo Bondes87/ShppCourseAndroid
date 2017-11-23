@@ -10,9 +10,10 @@ import android.os.Parcelable;
 import com.dbondarenko.shpp.personalnotes.Constants;
 
 /**
- * File: NoteModel.java
- * Created by Dmitro Bondarenko on 09.11.2017.
+ * File: NoteSQLiteModel.java
+ * Created by Dmitro Bondarenko on 17.11.2017.
  */
+
 @Entity(tableName = Constants.TABLE_NOTES,
         foreignKeys = @ForeignKey(
                 entity = UserSQLiteModel.class,
@@ -20,35 +21,64 @@ import com.dbondarenko.shpp.personalnotes.Constants;
                 childColumns = Constants.COLUMN_NOTES_USERLOGIN),
         indices = @Index(Constants.COLUMN_NOTES_USERLOGIN))
 
-public class NoteModel implements Parcelable {
+public class NoteSQLiteModel implements Note, Parcelable {
+    public static final Creator<NoteSQLiteModel> CREATOR =
+            new Creator<NoteSQLiteModel>() {
+                @Override
+                public NoteSQLiteModel createFromParcel(Parcel source) {
+                    return new NoteSQLiteModel(source);
+                }
 
-    public static final Parcelable.Creator<NoteModel> CREATOR = new Parcelable.Creator<NoteModel>() {
-        @Override
-        public NoteModel createFromParcel(Parcel source) {
-            return new NoteModel(source);
-        }
+                @Override
+                public NoteSQLiteModel[] newArray(int size) {
+                    return new NoteSQLiteModel[size];
+                }
+            };
 
-        @Override
-        public NoteModel[] newArray(int size) {
-            return new NoteModel[size];
-        }
-    };
-
-    private String userLogin;
     @PrimaryKey
     private long datetime;
+    private String userLogin;
     private String message;
 
-    public NoteModel(String userLogin, Long datetime, String message) {
-        this.userLogin = userLogin;
+    public NoteSQLiteModel(String userLogin, long datetime, String message) {
         this.datetime = datetime;
+        this.userLogin = userLogin;
         this.message = message;
     }
 
-    protected NoteModel(Parcel in) {
+    protected NoteSQLiteModel(Parcel in) {
         this.datetime = in.readLong();
         this.userLogin = in.readString();
         this.message = in.readString();
+    }
+
+    @Override
+    public long getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(long datetime) {
+        this.datetime = datetime;
+    }
+
+    @Override
+    public String getUserLogin() {
+        return userLogin;
+    }
+
+    @Override
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    @Override
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
@@ -61,29 +91,5 @@ public class NoteModel implements Parcelable {
         dest.writeLong(this.datetime);
         dest.writeString(this.userLogin);
         dest.writeString(this.message);
-    }
-
-    public String getUserLogin() {
-        return userLogin;
-    }
-
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
-    }
-
-    public Long getDatetime() {
-        return datetime;
-    }
-
-    public void setDatetime(Long datetime) {
-        this.datetime = datetime;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }

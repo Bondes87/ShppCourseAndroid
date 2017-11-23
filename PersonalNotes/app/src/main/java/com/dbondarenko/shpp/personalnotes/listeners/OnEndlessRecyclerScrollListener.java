@@ -36,7 +36,8 @@ public abstract class OnEndlessRecyclerScrollListener extends RecyclerView.OnScr
 
         }
         if (!isWaitForLoading && (totalItemCount - visibleItemCount)
-                <= (firstVisibleItem + Constants.VISIBLE_THRESHOLD)) {
+                <= (firstVisibleItem + Constants.VISIBLE_THRESHOLD)
+                && totalItemCountAfterLastLoad > 20 - 1) {
             onLoadMore();
             isWaitForLoading = true;
         }

@@ -1,6 +1,6 @@
 package com.dbondarenko.shpp.personalnotes.database;
 
-import com.dbondarenko.shpp.personalnotes.models.NoteModel;
+import com.dbondarenko.shpp.personalnotes.models.Note;
 
 /**
  * File: DatabaseManager.java
@@ -12,11 +12,12 @@ public interface DatabaseManager {
 
     void checkIsUserExists(String login, String password);
 
-    void requestNotes(String userLogin, int startNotesPosition);
+    void requestNotes(String userLogin, int startNotesPosition,
+                      Note lastNoteFromTheLastDownload);
 
-    void addNote(NoteModel note);
+    void addNote(Note note);
 
-    void updateNote(NoteModel note);
+    void updateNote(Note note);
 
-    void deleteNote(NoteModel note);
+    void deleteNote(Note note);
 }

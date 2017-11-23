@@ -10,7 +10,8 @@ import android.util.Log;
 import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
 import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
-import com.dbondarenko.shpp.personalnotes.models.NoteModel;
+import com.dbondarenko.shpp.personalnotes.models.Note;
+import com.dbondarenko.shpp.personalnotes.models.NoteSQLiteModel;
 import com.dbondarenko.shpp.personalnotes.models.UserSQLiteModel;
 
 import java.util.ArrayList;
@@ -67,12 +68,12 @@ public class SQLiteManager implements DatabaseManager {
     }
 
     @Override
-    public void addNote(NoteModel note) {
+    public void addNote(Note note) {
         Log.d(LOG_TAG, "addNote()");
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
             Bundle bundle = new Bundle();
-            sQLiteRoomDatabase.getNoteDao().insertNote(note);
+            sQLiteRoomDatabase.getNoteDao().insertNote((NoteSQLiteModel) note);
             bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT, true);
             message.setData(bundle);
             handler.sendMessage(message);
@@ -80,12 +81,12 @@ public class SQLiteManager implements DatabaseManager {
     }
 
     @Override
-    public void updateNote(NoteModel note) {
+    public void updateNote(Note note) {
         Log.d(LOG_TAG, "updateNote()");
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
             Bundle bundle = new Bundle();
-            sQLiteRoomDatabase.getNoteDao().updateNote(note);
+            sQLiteRoomDatabase.getNoteDao().updateNote((NoteSQLiteModel) note);
             bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT, true);
             message.setData(bundle);
             handler.sendMessage(message);
@@ -93,12 +94,12 @@ public class SQLiteManager implements DatabaseManager {
     }
 
     @Override
-    public void deleteNote(NoteModel note) {
+    public void deleteNote(Note note) {
         Log.d(LOG_TAG, "deleteNote()");
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
             Bundle bundle = new Bundle();
-            sQLiteRoomDatabase.getNoteDao().deleteNote(note);
+            sQLiteRoomDatabase.getNoteDao().deleteNote((NoteSQLiteModel) note);
             bundle.putBoolean(Constants.KEY_FOR_BOOLEAN_RESULT, true);
             message.setData(bundle);
             handler.sendMessage(message);
@@ -106,13 +107,14 @@ public class SQLiteManager implements DatabaseManager {
     }
 
     @Override
-    public void requestNotes(String userLogin, int startNotesPosition) {
+    public void requestNotes(String userLogin, int startNotesPosition,
+                             Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "requestNotes()");
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_RESULT_WITH_LIST);
             Bundle bundle = new Bundle();
-            ArrayList<NoteModel> notes =
-                    (ArrayList<NoteModel>) sQLiteRoomDatabase.getNoteDao()
+            ArrayList<NoteSQLiteModel> notes =
+                    (ArrayList<NoteSQLiteModel>) sQLiteRoomDatabase.getNoteDao()
                             .getNotes(userLogin, startNotesPosition);
             bundle.putParcelableArrayList(Constants.KEY_FOR_RESULT_WITH_LIST, notes);
             message.setData(bundle);
@@ -145,10 +147,10 @@ public class SQLiteManager implements DatabaseManager {
                     }
                     break;
                 case Constants.ID_OF_RESULT_WITH_LIST:
-                    ArrayList<NoteModel> notes = bundle.getParcelableArrayList(
-                            Constants.KEY_FOR_RESULT_WITH_LIST);
-                    if (notes != null) {
-                        onGetDataListener.onSuccess(notes);
+                    ArrayList<NoteSQLiteModel> notesArrayList = bundle
+                            .getParcelableArrayList(Constants.KEY_FOR_RESULT_WITH_LIST);
+                    if (notesArrayList != null) {
+                        onGetDataListener.onSuccess(new ArrayList<>(notesArrayList));
                     } else {
                         onGetDataListener.onFailed();
                     }

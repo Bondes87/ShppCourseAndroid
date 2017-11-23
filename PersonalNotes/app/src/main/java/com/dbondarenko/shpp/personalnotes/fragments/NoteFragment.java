@@ -25,7 +25,9 @@ import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
 import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
 import com.dbondarenko.shpp.personalnotes.listeners.OnEventNoteListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
-import com.dbondarenko.shpp.personalnotes.models.NoteModel;
+import com.dbondarenko.shpp.personalnotes.models.Note;
+import com.dbondarenko.shpp.personalnotes.models.NoteFirebaseModel;
+import com.dbondarenko.shpp.personalnotes.models.NoteSQLiteModel;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 import com.dbondarenko.shpp.personalnotes.utils.Util;
 
@@ -46,7 +48,7 @@ public class NoteFragment extends Fragment {
 
     private OnEventNoteListener onEventNoteListener;
     private DatabaseManager databaseManager;
-    private NoteModel note;
+    private Note note;
     private long datetime;
 
     public NoteFragment() {
@@ -107,7 +109,7 @@ public class NoteFragment extends Fragment {
                 if (note == null) {
                     String userLogin = SharedPreferencesManager.getSharedPreferencesManager()
                             .getUser(getContext().getApplicationContext()).getLogin();
-                    NoteModel newNote = new NoteModel(userLogin, datetime, message);
+                    Note newNote = createNote(message, userLogin);
                     databaseManager.addNote(newNote);
                     onEventNoteListener.onAddNote(newNote);
                 } else {
@@ -143,6 +145,18 @@ public class NoteFragment extends Fragment {
         }
     }
 
+    @NonNull
+    private Note createNote(String message, String userLogin) {
+        Note newNote;
+        if (SharedPreferencesManager.getSharedPreferencesManager()
+                .isUseFirebase(getContext().getApplicationContext())) {
+            newNote = new NoteFirebaseModel(userLogin, datetime, message);
+        } else {
+            newNote = new NoteSQLiteModel(userLogin, datetime, message);
+        }
+        return newNote;
+    }
+
     private void initDatabase() {
         Log.d(LOG_TAG, "initDatabase()");
         if (SharedPreferencesManager.getSharedPreferencesManager().isUseFirebase(
@@ -166,13 +180,13 @@ public class NoteFragment extends Fragment {
             }
 
             @Override
-            public void onSuccess(List<NoteModel> notes) {
-                Log.d(LOG_TAG, "onSuccess()");
+            public void onFailed() {
+                Log.d(LOG_TAG, "onFailed()");
             }
 
             @Override
-            public void onFailed() {
-                Log.d(LOG_TAG, "onFailed()");
+            public void onSuccess(List<Note> notes) {
+                Log.d(LOG_TAG, "onSuccess()");
             }
         };
     }

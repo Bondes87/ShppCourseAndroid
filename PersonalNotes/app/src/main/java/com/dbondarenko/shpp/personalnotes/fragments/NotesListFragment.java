@@ -2,6 +2,7 @@ package com.dbondarenko.shpp.personalnotes.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -25,7 +26,7 @@ import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
 import com.dbondarenko.shpp.personalnotes.listeners.OnEndlessRecyclerScrollListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnListItemClickListener;
-import com.dbondarenko.shpp.personalnotes.models.NoteModel;
+import com.dbondarenko.shpp.personalnotes.models.Note;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 
 import java.util.List;
@@ -99,7 +100,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         NoteFragment noteFragment = new NoteFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.KEY_NOTE,
-                noteAdapter.getNote(position));
+                (Parcelable) noteAdapter.getNote(position));
         noteFragment.setArguments(bundle);
         showNoteFragment(noteFragment);
     }
@@ -110,13 +111,17 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         showNoteFragment(new NoteFragment());
     }
 
-    public void addNoteToAdapter(NoteModel note) {
+    public void addNoteToAdapter(Note note) {
         Log.d(LOG_TAG, "addNoteToAdapter()");
+        if (noteAdapter == null) {
+            noteAdapter = new NoteAdapter(null,
+                    NotesListFragment.this);
+        }
         noteAdapter.addNote(note);
         noteAdapter.notifyDataSetChanged();
     }
 
-    public void deleteNoteFromAdapter(NoteModel note) {
+    public void deleteNoteFromAdapter(Note note) {
         Log.d(LOG_TAG, "deleteNoteFromAdapter()");
         noteAdapter.deleteNote(note);
         noteAdapter.notifyDataSetChanged();
@@ -137,10 +142,17 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
     }
 
     private void downloadNotes(int startNotesPosition) {
+        Note note = null;
+        if (startNotesPosition != 0) {
+            note = noteAdapter.getNote(startNotesPosition - 1);
+        }
         databaseManager.requestNotes(
-                SharedPreferencesManager.getSharedPreferencesManager()
+                SharedPreferencesManager
+                        .getSharedPreferencesManager()
                         .getUser(getContext().getApplicationContext())
-                        .getLogin(), startNotesPosition);
+                        .getLogin(),
+                startNotesPosition,
+                note);
     }
 
     private void showNoteFragment(NoteFragment noteFragment) {
@@ -174,7 +186,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
             }
 
             @Override
-            public void onSuccess(List<NoteModel> notes) {
+            public void onSuccess(List<Note> notes) {
                 Log.d(LOG_TAG, "onSuccess()");
                 if (noteAdapter == null) {
                     noteAdapter = new NoteAdapter(notes,

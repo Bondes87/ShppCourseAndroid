@@ -1,6 +1,6 @@
 package com.dbondarenko.shpp.personalnotes.listeners;
 
-import com.dbondarenko.shpp.personalnotes.models.NoteModel;
+import com.dbondarenko.shpp.personalnotes.models.Note;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface OnGetDataListener {
 
     void onSuccess();
 
-    void onSuccess(List<NoteModel> notes);
+    void onSuccess(List<Note> notes);
 
     void onFailed();
 }

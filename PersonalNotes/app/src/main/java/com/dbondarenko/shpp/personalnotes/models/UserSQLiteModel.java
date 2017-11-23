@@ -6,11 +6,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.dbondarenko.shpp.personalnotes.Constants;
+
 /**
  * File: UserSQLiteModel.java
  * Created by Dmitro Bondarenko on 14.11.2017.
  */
-@Entity(tableName = "users")
+@Entity(tableName = Constants.TABLE_USERS)
 public class UserSQLiteModel implements User, Parcelable {
 
     public static final Parcelable.Creator<UserSQLiteModel> CREATOR =

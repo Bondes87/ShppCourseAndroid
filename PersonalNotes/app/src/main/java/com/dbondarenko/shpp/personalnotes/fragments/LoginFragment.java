@@ -17,10 +17,10 @@ import android.widget.EditText;
 import com.dbondarenko.shpp.personalnotes.R;
 import com.dbondarenko.shpp.personalnotes.activities.ContentActivity;
 import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
-import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
 import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
-import com.dbondarenko.shpp.personalnotes.models.NoteModel;
+import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
+import com.dbondarenko.shpp.personalnotes.models.Note;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 import com.dbondarenko.shpp.personalnotes.utils.Util;
 
@@ -110,14 +110,14 @@ public class LoginFragment extends Fragment {
             }
 
             @Override
-            public void onSuccess(List<NoteModel> notes) {
+            public void onSuccess(List<Note> notes) {
                 Log.d(LOG_TAG, "onSuccess()");
             }
 
             @Override
             public void onFailed() {
                 Log.d(LOG_TAG, "onFailed()");
-                Util.hideSoftKeyboard(getContext().getApplicationContext(),getView());
+                Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                 reportIncorrectLoginOrPassword();
             }
         };

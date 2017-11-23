@@ -10,7 +10,7 @@ import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
 import com.dbondarenko.shpp.personalnotes.fragments.NotesListFragment;
 import com.dbondarenko.shpp.personalnotes.listeners.OnEventNoteListener;
-import com.dbondarenko.shpp.personalnotes.models.NoteModel;
+import com.dbondarenko.shpp.personalnotes.models.Note;
 
 public class ContentActivity extends AppCompatActivity implements OnEventNoteListener {
 
@@ -24,7 +24,7 @@ public class ContentActivity extends AppCompatActivity implements OnEventNoteLis
     }
 
     @Override
-    public void onAddNote(NoteModel note) {
+    public void onAddNote(Note note) {
         NotesListFragment notesListFragment = (NotesListFragment)
                 getSupportFragmentManager()
                         .findFragmentByTag(Constants.TAG_OF_NOTES_LIST_FRAGMENT);
@@ -32,7 +32,7 @@ public class ContentActivity extends AppCompatActivity implements OnEventNoteLis
     }
 
     @Override
-    public void onDeleteNote(NoteModel note) {
+    public void onDeleteNote(Note note) {
         NotesListFragment notesListFragment = (NotesListFragment)
                 getSupportFragmentManager()
                         .findFragmentByTag(Constants.TAG_OF_NOTES_LIST_FRAGMENT);

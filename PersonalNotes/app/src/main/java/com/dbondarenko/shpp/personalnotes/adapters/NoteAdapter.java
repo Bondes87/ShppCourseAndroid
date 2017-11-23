@@ -9,9 +9,10 @@ import android.widget.TextView;
 
 import com.dbondarenko.shpp.personalnotes.R;
 import com.dbondarenko.shpp.personalnotes.listeners.OnListItemClickListener;
-import com.dbondarenko.shpp.personalnotes.models.NoteModel;
+import com.dbondarenko.shpp.personalnotes.models.Note;
 import com.dbondarenko.shpp.personalnotes.utils.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,11 +28,15 @@ public class NoteAdapter extends
     private static final String LOG_TAG = NoteAdapter.class.getSimpleName();
 
     private OnListItemClickListener onListItemClickListener;
-    private List<NoteModel> notesList;
+    private List<Note> notesList;
 
-    public NoteAdapter(List<NoteModel> notesList,
+    public NoteAdapter(List<Note> notesList,
                        OnListItemClickListener onListItemClickListener) {
-        this.notesList = notesList;
+        if (notesList == null) {
+            this.notesList = new ArrayList<>();
+        } else {
+            this.notesList = notesList;
+        }
         this.onListItemClickListener = onListItemClickListener;
     }
 
@@ -46,7 +51,7 @@ public class NoteAdapter extends
     @Override
     public void onBindViewHolder(NoteHolder holder, int position) {
         Log.d(LOG_TAG, "onBindViewHolder()");
-        NoteModel note = notesList.get(position);
+        Note note = notesList.get(position);
         holder.textViewNoteMessage.setText(note.getMessage());
         holder.textViewNoteDate.setText(Util.getStringDate(note.getDatetime()));
         holder.textViewNoteTime.setText(Util.getStringTime(note.getDatetime()));
@@ -58,22 +63,22 @@ public class NoteAdapter extends
         return notesList.size();
     }
 
-    public void addNotes(List<NoteModel> notes) {
+    public void addNotes(List<Note> notes) {
         Log.d(LOG_TAG, "addNotes()");
         notesList.addAll(notes);
     }
 
-    public void addNote(NoteModel note) {
+    public void addNote(Note note) {
         Log.d(LOG_TAG, "addNote()");
         notesList.add(0, note);
     }
 
-    public void deleteNote(NoteModel note) {
+    public void deleteNote(Note note) {
         Log.d(LOG_TAG, "deleteNote()");
         notesList.remove(note);
     }
 
-    public NoteModel getNote(int position) {
+    public Note getNote(int position) {
         Log.d(LOG_TAG, "getNote()");
         return notesList.get(position);
     }

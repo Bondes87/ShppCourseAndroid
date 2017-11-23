@@ -6,7 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.dbondarenko.shpp.personalnotes.models.NoteModel;
+import com.dbondarenko.shpp.personalnotes.models.NoteSQLiteModel;
 
 import java.util.List;
 
@@ -22,14 +22,14 @@ public interface NoteDao {
             "ORDER BY datetime DESC " +
             "LIMIT 20 " +
             "OFFSET :startNotesPosition")
-    List<NoteModel> getNotes(String userLogin, int startNotesPosition);
+    List<NoteSQLiteModel> getNotes(String userLogin, int startNotesPosition);
 
     @Insert
-    void insertNote(NoteModel note);
+    void insertNote(NoteSQLiteModel note);
 
     @Update
-    void updateNote(NoteModel note);
+    void updateNote(NoteSQLiteModel note);
 
     @Delete
-    void deleteNote(NoteModel note);
+    void deleteNote(NoteSQLiteModel note);
 }

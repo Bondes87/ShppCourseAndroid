@@ -16,11 +16,12 @@ import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
 import com.dbondarenko.shpp.personalnotes.activities.ContentActivity;
 import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
-import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
 import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
-import com.dbondarenko.shpp.personalnotes.models.NoteModel;
+import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
+import com.dbondarenko.shpp.personalnotes.models.Note;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
+import com.dbondarenko.shpp.personalnotes.utils.Util;
 
 import java.util.List;
 import java.util.Objects;
@@ -77,6 +78,7 @@ public class RegisterFragment extends Fragment {
                 if (validateCredentials()) {
                     databaseManager.addUser(editTextLogin.getText().toString(),
                             editTextPassword.getText().toString());
+                    Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                 }
                 break;
             case R.id.imageViewLoginInfo:
@@ -120,7 +122,7 @@ public class RegisterFragment extends Fragment {
             }
 
             @Override
-            public void onSuccess(List<NoteModel> notes) {
+            public void onSuccess(List<Note> notes) {
                 Log.d(LOG_TAG, "onSuccess()");
             }
 

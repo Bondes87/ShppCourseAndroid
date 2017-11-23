@@ -51,7 +51,7 @@ public class Util {
                 (InputMethodManager) context.getApplicationContext()
                         .getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) {
-            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.dbondarenko.shpp.personalnotes.listeners;
 
-import com.dbondarenko.shpp.personalnotes.models.NoteModel;
+import com.dbondarenko.shpp.personalnotes.models.Note;
 
 /**
  * File: OnEventNoteListener.java
@@ -8,7 +8,7 @@ import com.dbondarenko.shpp.personalnotes.models.NoteModel;
  */
 public interface OnEventNoteListener {
 
-    void onAddNote(NoteModel note);
+    void onAddNote(Note note);
 
-    void onDeleteNote(NoteModel note);
+    void onDeleteNote(Note note);
 }
