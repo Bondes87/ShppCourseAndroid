@@ -2,6 +2,8 @@ package com.dbondarenko.shpp.personalnotes.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -65,5 +67,16 @@ public class Util {
         snackbarView.setBackgroundColor(
                 (context.getResources().getColor(R.color.colorPrimary)));
         snackbar.show();
+    }
+
+
+    public static boolean isInternetConnectionAvailable(Context context) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = null;
+        if (connectivityManager != null) {
+            activeNetwork = connectivityManager.getActiveNetworkInfo();
+        }
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

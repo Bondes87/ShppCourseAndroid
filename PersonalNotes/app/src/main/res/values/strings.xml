@@ -21,6 +21,7 @@
     <string name="error_login_is_busy">That login is taken. Try another.</string>
     <string name="error_invalid_login_or_password">Incorrect login or password. Try again.</string>
     <string name="error_note_is_empty">Note must not be empty.</string>
+    <string name="error_no_internet_connection">No internet connection. Use the local database.</string>
     <string name="text_use_local_database">local database</string>
     <string name="text_use_server_database">server database</string>
 </resources>

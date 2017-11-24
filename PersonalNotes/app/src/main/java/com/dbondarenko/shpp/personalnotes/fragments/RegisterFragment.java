@@ -78,6 +78,13 @@ public class RegisterFragment extends Fragment {
         switch (view.getId()) {
             case R.id.buttonRegister:
                 initDatabase();
+                if (databaseManager instanceof FirebaseManager &&
+                        !Util.isInternetConnectionAvailable(
+                                getContext().getApplicationContext())) {
+                    Util.reportAnError(getContext().getApplicationContext(),
+                            getView(), getString(R.string.error_no_internet_connection));
+                    return;
+                }
                 if (validateCredentials()) {
                     databaseManager.addUser(editTextLogin.getText().toString(),
                             editTextPassword.getText().toString());
