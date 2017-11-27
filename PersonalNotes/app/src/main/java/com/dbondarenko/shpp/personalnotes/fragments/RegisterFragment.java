@@ -92,11 +92,11 @@ public class RegisterFragment extends Fragment {
                 }
                 break;
             case R.id.imageViewLoginInfo:
-                showDialogFragment(getString(R.string.login_information),
+                showInfoDialogFragment(getString(R.string.login_information),
                         Constants.TAG_OF_INFO_DIALOG_FRAGMENT_FOR_LOGIN);
                 break;
             case R.id.imageViewPasswordInfo:
-                showDialogFragment(getString(R.string.password_information),
+                showInfoDialogFragment(getString(R.string.password_information),
                         Constants.TAG_OF_INFO_DIALOG_FRAGMENT_FOR_PASSWORD);
                 break;
         }
@@ -230,7 +230,6 @@ public class RegisterFragment extends Fragment {
         return true;
     }
 
-
     private boolean validateEmpty(String text) {
         Log.d(LOG_TAG, "validateEmpty()");
         return TextUtils.isEmpty(text);
@@ -254,10 +253,10 @@ public class RegisterFragment extends Fragment {
                 editTextConfirmedPassword.getText().toString());
     }
 
-    private void showDialogFragment(String dialogMessage, String fragmentTag) {
-        Log.d(LOG_TAG, "showDialogFragment()");
+    private void showInfoDialogFragment(String dialogMessage, String fragmentTag) {
+        Log.d(LOG_TAG, "showInfoDialogFragment()");
         InfoDialogFragment infoDialogFragment = InfoDialogFragment
                 .newInstance(dialogMessage);
-        infoDialogFragment.show(getActivity().getSupportFragmentManager(), fragmentTag);
+        infoDialogFragment.show(getFragmentManager(), fragmentTag);
     }
 }

@@ -16,13 +16,6 @@ public class Constants {
     public static final String COLUMN_NOTES_USERLOGIN = "userLogin";
     public static final String COLUMN_NOTES_MESSAGE = "message";
 
-    // Key and tags for creating information dialog fragments.
-    public static final String KEY_DIALOG_MESSAGE = "KeyDialogMessage";
-    public static final String TAG_OF_INFO_DIALOG_FRAGMENT_FOR_LOGIN =
-            "TagOfInfoDialogFragmentForLogin";
-    public static final String TAG_OF_INFO_DIALOG_FRAGMENT_FOR_PASSWORD =
-            "TagOfInfoDialogFragmentForPassword";
-
     // Information for validate of login and password.
     public static final String PATTERN_LOGIN_AND_PASSWORD = "[a-zA-Z0-9]{1,256}";
     public static final int MIN_LENGTH_LOGIN = 6;
@@ -54,6 +47,17 @@ public class Constants {
 
     // The tags of fragments.
     public static final String TAG_OF_NOTES_LIST_FRAGMENT = "TagNotesListFragment";
+
+    // Key and tags for creating information dialog fragments.
+    public static final String KEY_DIALOG_MESSAGE = "KeyDialogMessage";
+    public static final String TAG_OF_INFO_DIALOG_FRAGMENT_FOR_LOGIN =
+            "TagOfInfoDialogFragmentForLogin";
+    public static final String TAG_OF_INFO_DIALOG_FRAGMENT_FOR_PASSWORD =
+            "TagOfInfoDialogFragmentForPassword";
+
+    // Request code and tag for creating dialog fragment for confirmation to delete note.
+    public static final String TAG_OF_Delete_Note_Dialog_Fragment = "DeleteNoteDialogFragment";
+    public static final int REQUEST_CODE_FOR_DIALOG_FRAGMENT = 1;
 
     // The minimum number of items to have below your current scroll position
     // before loading more.

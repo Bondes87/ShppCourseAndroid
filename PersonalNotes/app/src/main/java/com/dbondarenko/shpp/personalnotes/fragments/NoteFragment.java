@@ -1,7 +1,9 @@
 package com.dbondarenko.shpp.personalnotes.fragments;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -93,9 +95,7 @@ public class NoteFragment extends Fragment {
             textViewDatetime.setText(Util.getStringDatetime(datetime));
         }
         editTextMessage.requestFocus();
-        if (editTextMessage.isFocused()) {
-            Util.showSoftKeyboard(getContext().getApplicationContext());
-        }
+        Util.showSoftKeyboard(getContext().getApplicationContext());
         return viewContent;
     }
 
@@ -113,11 +113,26 @@ public class NoteFragment extends Fragment {
                 Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                 return true;
             case R.id.itemDeleteNote:
-                deleteNote();
+                showDeleteNoteDialogFragment();
                 Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(LOG_TAG, "onActivityResult()");
+        if (requestCode == Constants.REQUEST_CODE_FOR_DIALOG_FRAGMENT) {
+            if (resultCode == Activity.RESULT_OK) {
+                deleteNote();
+                return;
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                Util.showSoftKeyboard(getContext().getApplicationContext());
+            }
         }
     }
 
@@ -135,6 +150,16 @@ public class NoteFragment extends Fragment {
         if (note == null) {
             menu.findItem(R.id.itemDeleteNote).setVisible(false);
         }
+    }
+
+    private void showDeleteNoteDialogFragment() {
+        Log.d(LOG_TAG, "showDeleteNoteDialogFragment()");
+        DeleteNoteDialogFragment deleteNoteDialogFragmentFrag =
+                new DeleteNoteDialogFragment();
+        deleteNoteDialogFragmentFrag.setTargetFragment(
+                this, Constants.REQUEST_CODE_FOR_DIALOG_FRAGMENT);
+        deleteNoteDialogFragmentFrag.show(
+                getFragmentManager(), Constants.TAG_OF_Delete_Note_Dialog_Fragment);
     }
 
     private void deleteNote() {
@@ -188,13 +213,14 @@ public class NoteFragment extends Fragment {
         return new OnGetDataListener() {
             @Override
             public void onStart() {
+                Log.d(LOG_TAG, "onStart()");
                 progressBarActionsWithNote.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onSuccess() {
-                progressBarActionsWithNote.setVisibility(View.GONE);
                 Log.d(LOG_TAG, "onSuccess()");
+                progressBarActionsWithNote.setVisibility(View.GONE);
                 getFragmentManager().popBackStack();
             }
 
