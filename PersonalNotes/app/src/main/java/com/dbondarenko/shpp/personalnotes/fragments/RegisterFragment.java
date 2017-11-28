@@ -3,6 +3,8 @@ package com.dbondarenko.shpp.personalnotes.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,6 +70,7 @@ public class RegisterFragment extends Fragment {
         View viewContent = inflater.inflate(
                 R.layout.fragment_register, container, false);
         ButterKnife.bind(this, viewContent);
+        initActionBar();
         return viewContent;
     }
 
@@ -100,6 +103,12 @@ public class RegisterFragment extends Fragment {
                         Constants.TAG_OF_INFO_DIALOG_FRAGMENT_FOR_PASSWORD);
                 break;
         }
+    }
+
+    private void initActionBar() {
+        ActionBar actionBar = ((AppCompatActivity) getContext()).getSupportActionBar();
+        Util.enableBackStackButton(actionBar, true);
+        Util.setTitleForActionBar(actionBar, getString(R.string.text_register));
     }
 
     private void initDatabase() {

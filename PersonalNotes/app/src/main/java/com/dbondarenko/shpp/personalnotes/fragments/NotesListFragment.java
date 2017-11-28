@@ -7,6 +7,8 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,6 +32,7 @@ import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnListItemClickListener;
 import com.dbondarenko.shpp.personalnotes.models.Note;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
+import com.dbondarenko.shpp.personalnotes.utils.Util;
 
 import java.util.List;
 
@@ -70,6 +73,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
                 false);
         ButterKnife.bind(this, viewContent);
         initDatabase();
+        initActionBar();
         if (noteAdapter == null) {
             downloadNotes(0);
         }
@@ -129,6 +133,12 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         Log.d(LOG_TAG, "deleteNoteFromAdapter()");
         noteAdapter.deleteNote(note);
         noteAdapter.notifyDataSetChanged();
+    }
+
+    private void initActionBar() {
+        ActionBar actionBar = ((AppCompatActivity) getContext()).getSupportActionBar();
+        Util.enableBackStackButton(actionBar, false);
+        Util.setTitleForActionBar(actionBar, getString(R.string.app_name));
     }
 
     private void initRecyclerView() {

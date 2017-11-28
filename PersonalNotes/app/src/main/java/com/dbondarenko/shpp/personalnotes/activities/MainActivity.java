@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
                         .saveInformationAboutDatabase(getApplicationContext(),
                                 true);
                 return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

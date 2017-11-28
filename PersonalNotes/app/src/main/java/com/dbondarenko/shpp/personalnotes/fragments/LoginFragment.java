@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,6 +63,7 @@ public class LoginFragment extends Fragment {
         View viewContent = inflater.inflate(R.layout.fragment_login, container,
                 false);
         ButterKnife.bind(this, viewContent);
+        initActionBar();
         return viewContent;
     }
 
@@ -87,6 +90,12 @@ public class LoginFragment extends Fragment {
                 showRegisterFragment();
                 break;
         }
+    }
+
+    private void initActionBar() {
+        ActionBar actionBar = ((AppCompatActivity) getContext()).getSupportActionBar();
+        Util.enableBackStackButton(actionBar, false);
+        Util.setTitleForActionBar(actionBar, getString(R.string.app_name));
     }
 
     private void initDatabase() {

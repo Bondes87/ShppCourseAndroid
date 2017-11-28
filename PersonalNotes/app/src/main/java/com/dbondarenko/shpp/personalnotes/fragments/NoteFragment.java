@@ -1,14 +1,13 @@
 package com.dbondarenko.shpp.personalnotes.fragments;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -76,6 +75,9 @@ public class NoteFragment extends Fragment {
         if (bundle != null) {
             note = getArguments().getParcelable(Constants.KEY_NOTE);
         }
+        Util.enableBackStackButton(
+                ((AppCompatActivity) getContext()).getSupportActionBar(),
+                true);
         setHasOptionsMenu(true);
     }
 
@@ -88,11 +90,15 @@ public class NoteFragment extends Fragment {
         ButterKnife.bind(this, viewContent);
         initDatabase();
         if (note != null) {
-            textViewDatetime.setText(Util.getStringDatetime(note.getDatetime()));
+            Util.setTitleForActionBar(
+                    ((AppCompatActivity) getContext()).getSupportActionBar(),
+                    Util.getStringDatetime(note.getDatetime()));
             editTextMessage.setText(note.getMessage());
         } else {
             datetime = Calendar.getInstance().getTimeInMillis();
-            textViewDatetime.setText(Util.getStringDatetime(datetime));
+            Util.setTitleForActionBar(
+                    ((AppCompatActivity) getContext()).getSupportActionBar(),
+                    Util.getStringDatetime(datetime));
         }
         editTextMessage.requestFocus();
         Util.showSoftKeyboard(getContext().getApplicationContext());
@@ -106,15 +112,20 @@ public class NoteFragment extends Fragment {
             case R.id.itemSaveNote:
                 String message = editTextMessage.getText().toString();
                 if (TextUtils.isEmpty(message)) {
-                    reportNoteIsEmpty();
+                    Util.reportAnError(getContext().getApplicationContext(),
+                            getView(), getString(R.string.error_note_is_empty));
                     return true;
                 }
                 saveNote(message);
                 Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                 return true;
             case R.id.itemDeleteNote:
-                showDeleteNoteDialogFragment();
                 Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
+                showDeleteNoteDialogFragment();
+                return true;
+            case android.R.id.home:
+                Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
+                getActivity().onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -234,19 +245,5 @@ public class NoteFragment extends Fragment {
                 Log.d(LOG_TAG, "onSuccess()");
             }
         };
-    }
-
-    private void reportNoteIsEmpty() {
-        Log.d(LOG_TAG, "reportAnError()");
-        View layoutView = getView();
-        Snackbar snackbar;
-        if (layoutView != null) {
-            snackbar = Snackbar.make(layoutView,
-                    getString(R.string.error_note_is_empty),
-                    Snackbar.LENGTH_LONG);
-            View snackbarView = snackbar.getView();
-            snackbarView.setBackgroundColor((getResources().getColor(R.color.colorPrimary)));
-            snackbar.show();
-        }
     }
 }

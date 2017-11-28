@@ -41,7 +41,7 @@ public class Constants {
     public static final String KEY_NOTE = "KeyNote";
 
     // The patterns for displaying the date and time on the screen.
-    public static final String PATTERN_DATETIME = "MMMM d, yyyy h:mm a";
+    public static final String PATTERN_DATETIME = "MMM dd yyyy, HH:mm";
     public static final String PATTERN_DATE = "dd-MM-yyyy";
     public static final String PATTERN_TIME = "HH:mm";
 

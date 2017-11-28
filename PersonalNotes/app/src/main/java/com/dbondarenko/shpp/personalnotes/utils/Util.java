@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -78,5 +79,17 @@ public class Util {
             activeNetwork = connectivityManager.getActiveNetworkInfo();
         }
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    public static void enableBackStackButton(ActionBar actionBar, boolean showBackStackButton) {
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(showBackStackButton);
+        }
+    }
+
+    public static void setTitleForActionBar(ActionBar actionBar, String titleForActionBar) {
+        if (actionBar != null) {
+            actionBar.setTitle(titleForActionBar);
+        }
     }
 }
