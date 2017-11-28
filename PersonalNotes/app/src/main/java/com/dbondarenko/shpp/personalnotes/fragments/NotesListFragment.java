@@ -72,10 +72,11 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         View viewContent = inflater.inflate(R.layout.fragment_notes_list, container,
                 false);
         ButterKnife.bind(this, viewContent);
-        initDatabase();
         initActionBar();
+        initDatabase();
         if (noteAdapter == null) {
             downloadNotes(0);
+            progressBarNotesLoading.setVisibility(View.VISIBLE);
         }
         initRecyclerView();
         return viewContent;
@@ -126,13 +127,11 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
                     NotesListFragment.this);
         }
         noteAdapter.addNote(note);
-        noteAdapter.notifyDataSetChanged();
     }
 
     public void deleteNoteFromAdapter(Note note) {
         Log.d(LOG_TAG, "deleteNoteFromAdapter()");
         noteAdapter.deleteNote(note);
-        noteAdapter.notifyDataSetChanged();
     }
 
     private void initActionBar() {
@@ -222,7 +221,9 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         return new OnGetDataListener() {
             @Override
             public void onStart() {
-                progressBarNotesLoading.setVisibility(View.VISIBLE);
+                if (noteAdapter != null) {
+                    noteAdapter.setEnabledFooter(true);
+                }
             }
 
             @Override
@@ -242,13 +243,14 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
                     }
                 } else {
                     noteAdapter.addNotes(notes);
-                    noteAdapter.notifyDataSetChanged();
                 }
+                noteAdapter.setEnabledFooter(false);
             }
 
             @Override
             public void onFailed() {
                 Log.d(LOG_TAG, "onFailed()");
+                progressBarNotesLoading.setVisibility(View.GONE);
             }
         };
     }

@@ -30,16 +30,14 @@ public abstract class OnEndlessRecyclerScrollListener extends RecyclerView.OnScr
         int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager())
                 .findFirstVisibleItemPosition();
 
-        if (isWaitForLoading && totalItemCount > totalItemCountAfterLastLoad) {
+        if (isWaitForLoading && totalItemCount > totalItemCountAfterLastLoad + 1) {
             isWaitForLoading = false;
             totalItemCountAfterLastLoad = totalItemCount;
-
         }
+
         if (!isWaitForLoading &&
                 (totalItemCount - visibleItemCount)
-                        <= (firstVisibleItem + Constants.VISIBLE_THRESHOLD) &&
-                totalItemCountAfterLastLoad
-                        > Constants.MAXIMUM_COUNT_OF_NOTES_TO_LOAD - 1) {
+                        <= (firstVisibleItem + Constants.VISIBLE_THRESHOLD)) {
             onLoadMore();
             isWaitForLoading = true;
         }
