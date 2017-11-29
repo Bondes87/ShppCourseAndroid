@@ -9,6 +9,7 @@ import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.models.Note;
 import com.dbondarenko.shpp.personalnotes.models.NoteFirebaseModel;
 import com.dbondarenko.shpp.personalnotes.models.UserFirebaseModel;
+import com.dbondarenko.shpp.personalnotes.utils.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +41,7 @@ public class FirebaseManager implements DatabaseManager {
     private OnGetDataListener onGetDataListener;
 
     public FirebaseManager(OnGetDataListener onGetDataListener) {
+        Util.checkForNull(onGetDataListener);
         firebaseDatabase = FirebaseDatabase.getInstance();
         this.onGetDataListener = onGetDataListener;
     }
@@ -47,6 +49,7 @@ public class FirebaseManager implements DatabaseManager {
     @Override
     public void addUser(String login, String password) {
         Log.d(LOG_TAG, "addUser()");
+        Util.checkForNull(login, password);
         onGetDataListener.onStart();
         Query queryForIsUserExists = firebaseDatabase
                 .getReference()
@@ -60,6 +63,7 @@ public class FirebaseManager implements DatabaseManager {
     @Override
     public void checkIsUserExists(String login, String password) {
         Log.d(LOG_TAG, "checkIsUserExists()");
+        Util.checkForNull(login, password);
         onGetDataListener.onStart();
         DatabaseReference referenceForIsUserExists = firebaseDatabase
                 .getReference()
@@ -72,6 +76,7 @@ public class FirebaseManager implements DatabaseManager {
     @Override
     public void addNote(Note note) {
         Log.d(LOG_TAG, "addNote()");
+        Util.checkForNull(note);
         onGetDataListener.onStart();
         firebaseDatabase.getReference()
                 .child(Constants.TABLE_NOTES)
@@ -84,6 +89,7 @@ public class FirebaseManager implements DatabaseManager {
     @Override
     public void updateNote(Note note) {
         Log.d(LOG_TAG, "updateNote()");
+        Util.checkForNull(note);
         onGetDataListener.onStart();
         firebaseDatabase.getReference()
                 .child(Constants.TABLE_NOTES)
@@ -97,6 +103,7 @@ public class FirebaseManager implements DatabaseManager {
     @Override
     public void deleteNote(Note note) {
         Log.d(LOG_TAG, "deleteNote()");
+        Util.checkForNull(note);
         onGetDataListener.onStart();
         firebaseDatabase.getReference()
                 .child(Constants.TABLE_NOTES)
@@ -110,6 +117,7 @@ public class FirebaseManager implements DatabaseManager {
     public void requestNotes(String userLogin, int startNotesPosition,
                              Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "requestNotes()");
+        Util.checkForNull(userLogin, lastNoteFromTheLastDownload);
         if (startNotesPosition != 0) {
             onGetDataListener.onStart();
         }
@@ -124,6 +132,7 @@ public class FirebaseManager implements DatabaseManager {
     @NonNull
     private ValueEventListener getValueEventListenerToCheckIsUserExists(String password) {
         Log.d(LOG_TAG, "getValueEventListenerToCheckIsUserExists()");
+        Util.checkForNull(password);
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -148,6 +157,7 @@ public class FirebaseManager implements DatabaseManager {
     @NonNull
     private ValueEventListener getValueEventListenerToAddUser(String login, String password) {
         Log.d(LOG_TAG, "getValueEventListenerToAddUser()");
+        Util.checkForNull(login, password);
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -204,6 +214,7 @@ public class FirebaseManager implements DatabaseManager {
     private Query getQueryToDownloadNotes(String userLogin, int startNotesPosition,
                                           Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "getQueryToDownloadNotes()");
+        Util.checkForNull(userLogin, lastNoteFromTheLastDownload);
         if (startNotesPosition == 0) {
             return firebaseDatabase
                     .getReference()
@@ -224,6 +235,7 @@ public class FirebaseManager implements DatabaseManager {
 
     private void sortNotes(List<Note> notesList) {
         Log.d(LOG_TAG, "sortNotes()");
+        Util.checkForNull(notesList);
         Collections.sort(notesList, (note1, note2) -> {
             if (note1.getDatetime() == note2.getDatetime()) {
                 return 0;

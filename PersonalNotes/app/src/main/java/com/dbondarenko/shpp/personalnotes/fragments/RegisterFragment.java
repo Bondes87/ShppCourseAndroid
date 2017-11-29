@@ -246,12 +246,14 @@ public class RegisterFragment extends Fragment {
 
     private boolean validateMatchingCharacters(String text) {
         Log.d(LOG_TAG, "validateMatchingCharacters()");
+        Util.checkForNull(text);
         return !Pattern.compile(Constants.PATTERN_LOGIN_AND_PASSWORD)
                 .matcher(text).matches();
     }
 
     private boolean validateLength(String text, int minLength) {
         Log.d(LOG_TAG, "validateLength()");
+        Util.checkForNull(text);
         int textLength = text.length();
         return textLength < minLength || textLength > Constants.MAX_LENGTH_LOGIN_OR_PASSWORD;
     }
@@ -264,6 +266,7 @@ public class RegisterFragment extends Fragment {
 
     private void showInfoDialogFragment(String dialogMessage, String fragmentTag) {
         Log.d(LOG_TAG, "showInfoDialogFragment()");
+        Util.checkForNull(dialogMessage, fragmentTag);
         InfoDialogFragment infoDialogFragment = InfoDialogFragment
                 .newInstance(dialogMessage);
         infoDialogFragment.show(getFragmentManager(), fragmentTag);

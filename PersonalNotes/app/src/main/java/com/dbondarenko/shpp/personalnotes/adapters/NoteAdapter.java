@@ -35,6 +35,7 @@ public class NoteAdapter extends
 
     public NoteAdapter(List<Note> notesList,
                        OnListItemClickListener onListItemClickListener) {
+        Util.checkForNull(onListItemClickListener);
         if (notesList == null) {
             this.notesList = new ArrayList<>();
         } else {
@@ -98,18 +99,21 @@ public class NoteAdapter extends
 
     public void addNotes(List<Note> notes) {
         Log.d(LOG_TAG, "addNotes()");
+        Util.checkForNull(notes);
         notesList.addAll(notes);
         notifyDataSetChanged();
     }
 
     public void addNote(Note note) {
         Log.d(LOG_TAG, "addNote()");
+        Util.checkForNull(note);
         notesList.add(0, note);
         notifyDataSetChanged();
     }
 
     public void deleteNote(Note note) {
         Log.d(LOG_TAG, "deleteNote()");
+        Util.checkForNull(note);
         notesList.remove(note);
         notifyDataSetChanged();
     }

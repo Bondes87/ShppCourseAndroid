@@ -172,16 +172,6 @@ public class LoginFragment extends Fragment {
         return TextUtils.isEmpty(text);
     }
 
-    private void reportIncorrectLoginOrPassword() {
-        Log.d(LOG_TAG, "reportAnError()");
-        Snackbar snackbar = Snackbar.make(buttonLogIn,
-                getString(R.string.error_invalid_login_or_password),
-                Snackbar.LENGTH_LONG);
-        View snackbarView = snackbar.getView();
-        snackbarView.setBackgroundColor((getResources().getColor(R.color.colorPrimary)));
-        snackbar.show();
-    }
-
     private void showRegisterFragment() {
         Log.d(LOG_TAG, "showRegisterFragment()");
         getFragmentManager()

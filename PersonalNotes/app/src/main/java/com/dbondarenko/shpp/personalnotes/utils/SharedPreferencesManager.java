@@ -54,6 +54,7 @@ public class SharedPreferencesManager {
     }
 
     public User getUser(Context context) {
+        Log.d(LOG_TAG, "getUser()");
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
         String login = sharedPreferences.getString(Constants.KEY_USER_LOGIN, null);
@@ -70,6 +71,7 @@ public class SharedPreferencesManager {
     }
 
     public void deleteInformationAboutUser(Context context) {
+        Log.d(LOG_TAG, "deleteInformationAboutUser()");
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .remove(Constants.KEY_USER_LOGIN)

@@ -61,6 +61,7 @@ public class NoteFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         Log.d(LOG_TAG, "onAttach()");
+        Util.checkForNull(context);
         super.onAttach(context);
         if (context instanceof OnEventNoteListener) {
             onEventNoteListener = (OnEventNoteListener) context;
@@ -183,6 +184,7 @@ public class NoteFragment extends Fragment {
 
     private void saveNote(String message) {
         Log.d(LOG_TAG, "saveNote()");
+        Util.checkForNull(message);
         if (note == null) {
             String userLogin = SharedPreferencesManager.getSharedPreferencesManager()
                     .getUser(getContext().getApplicationContext()).getLogin();
@@ -198,6 +200,7 @@ public class NoteFragment extends Fragment {
     @NonNull
     private Note createNote(String message, String userLogin) {
         Log.d(LOG_TAG, "createNote()");
+        Util.checkForNull(message, userLogin);
         if (SharedPreferencesManager.getSharedPreferencesManager()
                 .isUseFirebase(getContext().getApplicationContext())) {
             return new NoteFirebaseModel(userLogin, datetime, message);

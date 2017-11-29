@@ -13,6 +13,7 @@ import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.models.Note;
 import com.dbondarenko.shpp.personalnotes.models.NoteSQLiteModel;
 import com.dbondarenko.shpp.personalnotes.models.UserSQLiteModel;
+import com.dbondarenko.shpp.personalnotes.utils.Util;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class SQLiteManager implements DatabaseManager {
     private Handler handler;
 
     public SQLiteManager(Context context, OnGetDataListener listener) {
+        Util.checkForNull(context, listener);
         sQLiteRoomDatabase = Room.databaseBuilder(context,
                 SQLiteRoomDatabase.class, Constants.DATABASE_NAME).build();
         onGetDataListener = listener;
@@ -38,6 +40,7 @@ public class SQLiteManager implements DatabaseManager {
     @Override
     public void addUser(String login, String password) {
         Log.d(LOG_TAG, "addUser()");
+        Util.checkForNull(login, password);
         onGetDataListener.onStart();
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
@@ -57,6 +60,7 @@ public class SQLiteManager implements DatabaseManager {
     @Override
     public void checkIsUserExists(String login, String password) {
         Log.d(LOG_TAG, "checkIsUserExists()");
+        Util.checkForNull(login, password);
         onGetDataListener.onStart();
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
@@ -71,6 +75,7 @@ public class SQLiteManager implements DatabaseManager {
     @Override
     public void addNote(Note note) {
         Log.d(LOG_TAG, "addNote()");
+        Util.checkForNull(note);
         onGetDataListener.onStart();
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
@@ -85,6 +90,7 @@ public class SQLiteManager implements DatabaseManager {
     @Override
     public void updateNote(Note note) {
         Log.d(LOG_TAG, "updateNote()");
+        Util.checkForNull(note);
         onGetDataListener.onStart();
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
@@ -99,6 +105,7 @@ public class SQLiteManager implements DatabaseManager {
     @Override
     public void deleteNote(Note note) {
         Log.d(LOG_TAG, "deleteNote()");
+        Util.checkForNull(note);
         onGetDataListener.onStart();
         runJobInNewThread(() -> {
             Message message = handler.obtainMessage(Constants.ID_OF_BOOLEAN_RESULT);
@@ -114,7 +121,8 @@ public class SQLiteManager implements DatabaseManager {
     public void requestNotes(String userLogin, int startNotesPosition,
                              Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "requestNotes()");
-        if (startNotesPosition!=0){
+        Util.checkForNull(userLogin, lastNoteFromTheLastDownload);
+        if (startNotesPosition != 0) {
             onGetDataListener.onStart();
         }
         runJobInNewThread(() -> {
@@ -131,6 +139,7 @@ public class SQLiteManager implements DatabaseManager {
 
     private void runJobInNewThread(Runnable runnable) {
         Log.d(LOG_TAG, "runJobInNewThread()");
+        Util.checkForNull(runnable);
         Thread thread = new Thread(runnable);
         thread.start();
     }
@@ -142,6 +151,7 @@ public class SQLiteManager implements DatabaseManager {
         @Override
         public void handleMessage(Message message) {
             Log.d(LOG_TAG, "handleMessage()");
+            Util.checkForNull(message);
             Bundle bundle = message.getData();
             switch (message.what) {
                 case Constants.ID_OF_BOOLEAN_RESULT:
@@ -156,7 +166,7 @@ public class SQLiteManager implements DatabaseManager {
                 case Constants.ID_OF_RESULT_WITH_LIST:
                     ArrayList<NoteSQLiteModel> notesArrayList = bundle
                             .getParcelableArrayList(Constants.KEY_FOR_RESULT_WITH_LIST);
-                    if (notesArrayList != null && notesArrayList.size()!=0) {
+                    if (notesArrayList != null && notesArrayList.size() != 0) {
                         onGetDataListener.onSuccess(new ArrayList<>(notesArrayList));
                     } else {
                         onGetDataListener.onFailed();

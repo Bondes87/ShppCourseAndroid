@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
+import com.dbondarenko.shpp.personalnotes.utils.Util;
 
 /**
  * File: InfoDialogFragment.java
@@ -48,6 +49,7 @@ public class InfoDialogFragment extends DialogFragment {
 
     public static InfoDialogFragment newInstance(String dialogMessage) {
         Log.d(LOG_TAG, "newInstance()");
+        Util.checkForNull(dialogMessage);
         InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
         Bundle args = new Bundle();
         args.putString(Constants.KEY_DIALOG_MESSAGE, dialogMessage);

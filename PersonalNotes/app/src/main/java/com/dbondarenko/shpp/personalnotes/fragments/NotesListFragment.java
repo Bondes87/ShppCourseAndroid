@@ -128,6 +128,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
 
     public void addNoteToAdapter(Note note) {
         Log.d(LOG_TAG, "addNoteToAdapter()");
+        Util.checkForNull(note);
         if (noteAdapter == null) {
             noteAdapter = new NoteAdapter(null,
                     NotesListFragment.this);
@@ -137,6 +138,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
 
     public void deleteNoteFromAdapter(Note note) {
         Log.d(LOG_TAG, "deleteNoteFromAdapter()");
+        Util.checkForNull(note);
         noteAdapter.deleteNote(note);
     }
 
@@ -202,6 +204,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
 
     private void showNoteFragment(NoteFragment noteFragment) {
         Log.d(LOG_TAG, "showNoteFragment()");
+        Util.checkForNull(noteFragment);
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frameLayoutContainerForContent, noteFragment)
@@ -240,6 +243,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
             @Override
             public void onSuccess(List<Note> notes) {
                 Log.d(LOG_TAG, "onSuccess()");
+                Util.checkForNull(notes);
                 progressBarNotesLoading.setVisibility(View.GONE);
                 textViewNoNotes.setVisibility(View.GONE);
                 if (noteAdapter == null) {
