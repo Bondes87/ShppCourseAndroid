@@ -32,6 +32,10 @@ public class FirebaseManager implements DatabaseManager {
 
     private static final String LOG_TAG = FirebaseManager.class.getSimpleName();
 
+    static {
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }
+
     private FirebaseDatabase firebaseDatabase;
     private OnGetDataListener onGetDataListener;
 
@@ -109,7 +113,6 @@ public class FirebaseManager implements DatabaseManager {
         if (startNotesPosition != 0) {
             onGetDataListener.onStart();
         }
-        System.out.println(String.valueOf(startNotesPosition));
         Query queryToDownloadNotes = getQueryToDownloadNotes(
                 userLogin,
                 startNotesPosition,

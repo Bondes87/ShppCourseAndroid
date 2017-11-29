@@ -11,4 +11,5 @@
     <dimen name="card_evelation">3dp</dimen>
     <dimen name="message_text_size">16sp</dimen>
     <dimen name="datetime_text_size">18sp</dimen>
+    <dimen name="big_text_size">30sp</dimen>
 </resources>

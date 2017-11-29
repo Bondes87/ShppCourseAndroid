@@ -63,4 +63,8 @@ public class Constants {
     // before loading more.
     public static final int VISIBLE_THRESHOLD = 5;
     public static final int MAXIMUM_COUNT_OF_NOTES_TO_LOAD = 20;
+
+    // The identifiers of holders type.
+    public static final int TYPE_ITEM = 0;
+    public static final int TYPE_FOOTER = 1;
 }

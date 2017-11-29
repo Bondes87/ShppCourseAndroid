@@ -156,7 +156,7 @@ public class SQLiteManager implements DatabaseManager {
                 case Constants.ID_OF_RESULT_WITH_LIST:
                     ArrayList<NoteSQLiteModel> notesArrayList = bundle
                             .getParcelableArrayList(Constants.KEY_FOR_RESULT_WITH_LIST);
-                    if (notesArrayList != null) {
+                    if (notesArrayList != null && notesArrayList.size()!=0) {
                         onGetDataListener.onSuccess(new ArrayList<>(notesArrayList));
                     } else {
                         onGetDataListener.onFailed();

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
 import com.dbondarenko.shpp.personalnotes.listeners.OnListItemClickListener;
 import com.dbondarenko.shpp.personalnotes.models.Note;
@@ -28,9 +29,6 @@ public class NoteAdapter extends
 
     private static final String LOG_TAG = NoteAdapter.class.getSimpleName();
 
-    private static final int TYPE_ITEM = 0;
-    private static final int TYPE_FOOTER = 1;
-
     private OnListItemClickListener onListItemClickListener;
     private List<Note> notesList;
     private boolean isEnabledFooter;
@@ -50,11 +48,11 @@ public class NoteAdapter extends
         Log.d(LOG_TAG, "onCreateViewHolder()");
         View itemView;
         switch (viewType) {
-            case TYPE_ITEM:
+            case Constants.TYPE_ITEM:
                 itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.notes_list_item, parent, false);
                 return new NoteHolder(itemView, onListItemClickListener);
-            case TYPE_FOOTER:
+            case Constants.TYPE_FOOTER:
                 itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.notes_list_footer, parent, false);
                 return new FooterHolder(itemView);
@@ -65,11 +63,13 @@ public class NoteAdapter extends
     @Override
     public void onBindViewHolder(BaseHolder holder, int position) {
         Log.d(LOG_TAG, "onBindViewHolder()");
-        if (holder.getItemViewType() == TYPE_ITEM) {
+        if (holder.getItemViewType() == Constants.TYPE_ITEM) {
             Note note = notesList.get(position);
             ((NoteHolder) holder).textViewNoteMessage.setText(note.getMessage());
-            ((NoteHolder) holder).textViewNoteDate.setText(Util.getStringDate(note.getDatetime()));
-            ((NoteHolder) holder).textViewNoteTime.setText(Util.getStringTime(note.getDatetime()));
+            ((NoteHolder) holder).textViewNoteDate.setText(
+                    Util.getStringDate(note.getDatetime()));
+            ((NoteHolder) holder).textViewNoteTime.setText(
+                    Util.getStringTime(note.getDatetime()));
         }
     }
 
@@ -86,9 +86,9 @@ public class NoteAdapter extends
     @Override
     public int getItemViewType(int position) {
         if (isPositionFooter(position)) {
-            return TYPE_FOOTER;
+            return Constants.TYPE_FOOTER;
         }
-        return TYPE_ITEM;
+        return Constants.TYPE_ITEM;
     }
 
     public void setEnabledFooter(boolean enabled) {
@@ -116,8 +116,8 @@ public class NoteAdapter extends
 
     public Note getNote(int position) {
         Log.d(LOG_TAG, "getNote()");
-        if (isEnabledFooter){
-            return notesList.get(position-1);
+        if (isEnabledFooter) {
+            return notesList.get(position - 1);
         }
         return notesList.get(position);
     }
@@ -135,7 +135,6 @@ public class NoteAdapter extends
 
         @Override
         public void onClick(View v) {
-
         }
     }
 

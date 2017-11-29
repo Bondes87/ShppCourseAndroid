@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
@@ -50,6 +51,8 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
     RecyclerView recyclerViewNotesList;
     @BindView(R.id.progressBarNotesLoading)
     ProgressBar progressBarNotesLoading;
+    @BindView(R.id.textViewNoNotes)
+    TextView textViewNoNotes;
 
     NoteAdapter noteAdapter;
     DatabaseManager databaseManager;
@@ -79,6 +82,9 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
             progressBarNotesLoading.setVisibility(View.VISIBLE);
         }
         initRecyclerView();
+        if (noteAdapter != null && noteAdapter.getItemCount() == 0) {
+            textViewNoNotes.setVisibility(View.VISIBLE);
+        }
         return viewContent;
     }
 
@@ -235,6 +241,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
             public void onSuccess(List<Note> notes) {
                 Log.d(LOG_TAG, "onSuccess()");
                 progressBarNotesLoading.setVisibility(View.GONE);
+                textViewNoNotes.setVisibility(View.GONE);
                 if (noteAdapter == null) {
                     noteAdapter = new NoteAdapter(notes,
                             NotesListFragment.this);
@@ -251,6 +258,9 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
             public void onFailed() {
                 Log.d(LOG_TAG, "onFailed()");
                 progressBarNotesLoading.setVisibility(View.GONE);
+                if (noteAdapter == null || noteAdapter.getItemCount() == 0) {
+                    textViewNoNotes.setVisibility(View.VISIBLE);
+                }
             }
         };
     }
