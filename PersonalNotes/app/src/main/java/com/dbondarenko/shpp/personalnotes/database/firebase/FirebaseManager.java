@@ -117,7 +117,7 @@ public class FirebaseManager implements DatabaseManager {
     public void requestNotes(String userLogin, int startNotesPosition,
                              Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "requestNotes()");
-        Util.checkForNull(userLogin, lastNoteFromTheLastDownload);
+        Util.checkForNull(userLogin);
         if (startNotesPosition != 0) {
             onGetDataListener.onStart();
         }
@@ -214,7 +214,7 @@ public class FirebaseManager implements DatabaseManager {
     private Query getQueryToDownloadNotes(String userLogin, int startNotesPosition,
                                           Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "getQueryToDownloadNotes()");
-        Util.checkForNull(userLogin, lastNoteFromTheLastDownload);
+        Util.checkForNull(userLogin);
         if (startNotesPosition == 0) {
             return firebaseDatabase
                     .getReference()

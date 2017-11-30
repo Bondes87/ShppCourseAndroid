@@ -43,8 +43,6 @@ public class NoteFragment extends Fragment {
 
     private static final String LOG_TAG = NoteFragment.class.getSimpleName();
 
-    @BindView(R.id.textViewDatetime)
-    TextView textViewDatetime;
     @BindView(R.id.editTextMessage)
     EditText editTextMessage;
     @BindView(R.id.progressBarActionsWithNote)

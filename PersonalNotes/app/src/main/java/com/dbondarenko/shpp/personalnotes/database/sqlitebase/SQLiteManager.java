@@ -121,7 +121,7 @@ public class SQLiteManager implements DatabaseManager {
     public void requestNotes(String userLogin, int startNotesPosition,
                              Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "requestNotes()");
-        Util.checkForNull(userLogin, lastNoteFromTheLastDownload);
+        Util.checkForNull(userLogin);
         if (startNotesPosition != 0) {
             onGetDataListener.onStart();
         }
