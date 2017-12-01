@@ -8,7 +8,7 @@
     <dimen name="very_small_margin_between_content">2dp</dimen>
     <dimen name="small_margin_between_content">4dp</dimen>
     <dimen name="small_padding_before_content">4dp</dimen>
-    <dimen name="card_evelation">3dp</dimen>
+    <dimen name="card_elevation">3dp</dimen>
     <dimen name="message_text_size">16sp</dimen>
     <dimen name="datetime_text_size">18sp</dimen>
     <dimen name="big_text_size">30sp</dimen>

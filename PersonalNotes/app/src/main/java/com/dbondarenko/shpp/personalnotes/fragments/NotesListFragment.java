@@ -9,8 +9,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,9 +30,11 @@ import com.dbondarenko.shpp.personalnotes.adapters.NoteAdapter;
 import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
 import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
 import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
+import com.dbondarenko.shpp.personalnotes.helpers.RecyclerItemTouchHelper;
 import com.dbondarenko.shpp.personalnotes.listeners.OnEndlessRecyclerScrollListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnListItemClickListener;
+import com.dbondarenko.shpp.personalnotes.listeners.RecyclerItemTouchHelperListener;
 import com.dbondarenko.shpp.personalnotes.models.Note;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 import com.dbondarenko.shpp.personalnotes.utils.Util;
@@ -151,6 +155,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewNotesList.setLayoutManager(linearLayoutManager);
+        recyclerViewNotesList.setItemAnimator(new DefaultItemAnimator());
         recyclerViewNotesList.addItemDecoration(getMarginDecoration());
         recyclerViewNotesList.setAdapter(noteAdapter);
         recyclerViewNotesList.addOnScrollListener(
@@ -161,6 +166,17 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
                         downloadNotes(noteAdapter.getItemCount());
                     }
                 });
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
+                new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,
+                        new RecyclerItemTouchHelperListener() {
+                            @Override
+                            public void onSwiped(RecyclerView.ViewHolder viewHolder,
+                                                 int direction, int position) {
+                                noteAdapter.deleteNote(position);
+                            }
+                        });
+        new ItemTouchHelper(itemTouchHelperCallback)
+                .attachToRecyclerView(recyclerViewNotesList);
     }
 
     @NonNull

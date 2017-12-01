@@ -1,11 +1,13 @@
 package com.dbondarenko.shpp.personalnotes.adapters;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
@@ -118,6 +120,12 @@ public class NoteAdapter extends
         notifyDataSetChanged();
     }
 
+    public void deleteNote(int notePosition){
+        Log.d(LOG_TAG, "deleteNote()");
+        notesList.remove(notePosition);
+        notifyDataSetChanged();
+    }
+
     public Note getNote(int position) {
         Log.d(LOG_TAG, "getNote()");
         if (isEnabledFooter) {
@@ -142,10 +150,14 @@ public class NoteAdapter extends
         }
     }
 
-    static class NoteHolder extends BaseHolder {
+    public static class NoteHolder extends BaseHolder {
 
         private static final String LOG_TAG = NoteHolder.class.getSimpleName();
 
+        @BindView(R.id.cardViewForeground)
+        public CardView cardViewForeground;
+        @BindView(R.id.relativeLayoutBackground)
+        public RelativeLayout relativeLayoutBackground;
         @BindView(R.id.textViewNoteMessage)
         TextView textViewNoteMessage;
         @BindView(R.id.textViewNoteDate)

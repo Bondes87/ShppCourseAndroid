@@ -33,9 +33,9 @@ public class FirebaseManager implements DatabaseManager {
 
     private static final String LOG_TAG = FirebaseManager.class.getSimpleName();
 
-    static {
+   /* static {
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-    }
+    }*/
 
     private FirebaseDatabase firebaseDatabase;
     private OnGetDataListener onGetDataListener;
