@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
@@ -111,8 +110,8 @@ public class NoteFragment extends Fragment {
             case R.id.itemSaveNote:
                 String message = editTextMessage.getText().toString();
                 if (TextUtils.isEmpty(message)) {
-                    Util.reportAnError(getContext().getApplicationContext(),
-                            getView(), getString(R.string.error_note_is_empty));
+                    Util.reportAnError(getView(),
+                            getString(R.string.error_note_is_empty));
                     return true;
                 }
                 saveNote(message);

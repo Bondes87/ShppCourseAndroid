@@ -84,8 +84,8 @@ public class RegisterFragment extends Fragment {
                 if (databaseManager instanceof FirebaseManager &&
                         !Util.isInternetConnectionAvailable(
                                 getContext().getApplicationContext())) {
-                    Util.reportAnError(getContext().getApplicationContext(),
-                            getView(), getString(R.string.error_no_internet_connection));
+                    Util.reportAnError(getView(),
+                            getString(R.string.error_no_internet_connection));
                     return;
                 }
                 if (validateCredentials()) {

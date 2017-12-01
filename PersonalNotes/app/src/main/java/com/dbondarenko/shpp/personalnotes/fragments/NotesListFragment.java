@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -34,7 +35,6 @@ import com.dbondarenko.shpp.personalnotes.helpers.RecyclerItemTouchHelper;
 import com.dbondarenko.shpp.personalnotes.listeners.OnEndlessRecyclerScrollListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnListItemClickListener;
-import com.dbondarenko.shpp.personalnotes.listeners.RecyclerItemTouchHelperListener;
 import com.dbondarenko.shpp.personalnotes.models.Note;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 import com.dbondarenko.shpp.personalnotes.utils.Util;
@@ -147,12 +147,14 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
     }
 
     private void initActionBar() {
+        Log.d(LOG_TAG, "initActionBar()");
         ActionBar actionBar = ((AppCompatActivity) getContext()).getSupportActionBar();
         Util.enableBackStackButton(actionBar, false);
         Util.setTitleForActionBar(actionBar, getString(R.string.app_name));
     }
 
     private void initRecyclerView() {
+        Log.d(LOG_TAG, "initRecyclerView()");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerViewNotesList.setLayoutManager(linearLayoutManager);
         recyclerViewNotesList.setItemAnimator(new DefaultItemAnimator());
@@ -166,17 +168,37 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
                         downloadNotes(noteAdapter.getItemCount());
                     }
                 });
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
-                new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,
-                        new RecyclerItemTouchHelperListener() {
-                            @Override
-                            public void onSwiped(RecyclerView.ViewHolder viewHolder,
-                                                 int direction, int position) {
-                                noteAdapter.deleteNote(position);
-                            }
-                        });
-        new ItemTouchHelper(itemTouchHelperCallback)
+        new ItemTouchHelper(getRecyclerItemTouchHelper())
                 .attachToRecyclerView(recyclerViewNotesList);
+    }
+
+    @NonNull
+    private RecyclerItemTouchHelper getRecyclerItemTouchHelper() {
+        Log.d(LOG_TAG, "getRecyclerItemTouchHelper()");
+        return new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,
+                (viewHolder, direction, position) -> {
+                    Note note = noteAdapter.getNote(position);
+                    noteAdapter.deleteNote(note);
+                    databaseManager.deleteNote(note);
+                    reportOnDeletingNote(note, position);
+                });
+    }
+
+    private void reportOnDeletingNote(Note note, int position) {
+        Log.d(LOG_TAG, "reportOnDeletingNote()");
+        Util.checkForNull(note);
+        View view = getView();
+        if (view != null) {
+            Snackbar snackbar = Snackbar.make(view,
+                    getString(R.string.text_delete_note),
+                    Snackbar.LENGTH_LONG);
+            snackbar.setAction(getString(R.string.button_cancel), view1 -> {
+                noteAdapter.addNote(note, position);
+                databaseManager.addNote(note);
+            });
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
+            snackbar.show();
+        }
     }
 
     @NonNull
@@ -254,6 +276,12 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
             @Override
             public void onSuccess() {
                 Log.d(LOG_TAG, "onSuccess()");
+                if (noteAdapter != null) {
+                    noteAdapter.setEnabledFooter(false);
+                    if (noteAdapter.getItemCount() == 0) {
+                        textViewNoNotes.setVisibility(View.VISIBLE);
+                    }
+                }
             }
 
             @Override
@@ -270,8 +298,8 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
                     }
                 } else {
                     noteAdapter.addNotes(notes);
+                    noteAdapter.setEnabledFooter(false);
                 }
-                noteAdapter.setEnabledFooter(false);
             }
 
             @Override
@@ -280,6 +308,9 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
                 progressBarNotesLoading.setVisibility(View.GONE);
                 if (noteAdapter == null || noteAdapter.getItemCount() == 0) {
                     textViewNoNotes.setVisibility(View.VISIBLE);
+                }
+                if (noteAdapter != null) {
+                    noteAdapter.setEnabledFooter(false);
                 }
             }
         };

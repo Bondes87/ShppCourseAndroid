@@ -2,7 +2,6 @@ package com.dbondarenko.shpp.personalnotes.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -76,8 +75,8 @@ public class LoginFragment extends Fragment {
                 if (databaseManager instanceof FirebaseManager &&
                         !Util.isInternetConnectionAvailable(
                                 getContext().getApplicationContext())) {
-                    Util.reportAnError(getContext().getApplicationContext(),
-                            getView(), getString(R.string.error_no_internet_connection));
+                    Util.reportAnError(getView(),
+                            getString(R.string.error_no_internet_connection));
                     return;
                 }
                 if (validateCredentials()) {
@@ -143,9 +142,8 @@ public class LoginFragment extends Fragment {
                 Log.d(LOG_TAG, "onFailed()");
                 progressBarLoginUser.setVisibility(View.GONE);
                 Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
-                Util.reportAnError(getContext().getApplicationContext(),
-                        getView(), getString(R.string.error_invalid_login_or_password));
-                //reportAnError();
+                Util.reportAnError(getView(),
+                        getString(R.string.error_invalid_login_or_password));
             }
         };
     }

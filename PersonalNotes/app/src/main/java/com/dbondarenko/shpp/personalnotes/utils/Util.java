@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
-import com.dbondarenko.shpp.personalnotes.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -70,14 +69,9 @@ public class Util {
         }
     }
 
-    public static void reportAnError(Context context,
-                                     View view,
-                                     String errorMessage) {
+    public static void reportAnError(View view, String errorMessage) {
         Log.d(LOG_TAG, "reportAnError()");
         Snackbar snackbar = Snackbar.make(view, errorMessage, Snackbar.LENGTH_LONG);
-        View snackbarView = snackbar.getView();
-        snackbarView.setBackgroundColor(
-                (context.getResources().getColor(R.color.colorPrimary)));
         snackbar.show();
     }
 

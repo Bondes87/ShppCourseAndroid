@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
@@ -109,7 +108,13 @@ public class NoteAdapter extends
     public void addNote(Note note) {
         Log.d(LOG_TAG, "addNote()");
         Util.checkForNull(note);
-        notesList.add(0, note);
+        addNote(note, 0);
+    }
+
+    public void addNote(Note note, int position) {
+        Log.d(LOG_TAG, "addNote()");
+        Util.checkForNull(note);
+        notesList.add(position, note);
         notifyDataSetChanged();
     }
 
@@ -117,12 +122,6 @@ public class NoteAdapter extends
         Log.d(LOG_TAG, "deleteNote()");
         Util.checkForNull(note);
         notesList.remove(note);
-        notifyDataSetChanged();
-    }
-
-    public void deleteNote(int notePosition){
-        Log.d(LOG_TAG, "deleteNote()");
-        notesList.remove(notePosition);
         notifyDataSetChanged();
     }
 
@@ -156,8 +155,6 @@ public class NoteAdapter extends
 
         @BindView(R.id.cardViewForeground)
         public CardView cardViewForeground;
-        @BindView(R.id.relativeLayoutBackground)
-        public RelativeLayout relativeLayoutBackground;
         @BindView(R.id.textViewNoteMessage)
         TextView textViewNoteMessage;
         @BindView(R.id.textViewNoteDate)
