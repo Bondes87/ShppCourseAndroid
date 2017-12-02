@@ -1,6 +1,6 @@
 package com.dbondarenko.shpp.personalnotes.adapters;
 
-import android.support.v7.widget.CardView;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -153,8 +153,8 @@ public class NoteAdapter extends
 
         private static final String LOG_TAG = NoteHolder.class.getSimpleName();
 
-        @BindView(R.id.cardViewForeground)
-        public CardView cardViewForeground;
+        @BindView(R.id.constraintLayoutForeground)
+        public ConstraintLayout constraintLayoutForeground;
         @BindView(R.id.textViewNoteMessage)
         TextView textViewNoteMessage;
         @BindView(R.id.textViewNoteDate)

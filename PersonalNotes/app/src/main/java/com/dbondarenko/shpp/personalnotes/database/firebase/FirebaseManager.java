@@ -33,10 +33,6 @@ public class FirebaseManager implements DatabaseManager {
 
     private static final String LOG_TAG = FirebaseManager.class.getSimpleName();
 
-   /* static {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-    }*/
-
     private FirebaseDatabase firebaseDatabase;
     private OnGetDataListener onGetDataListener;
 
@@ -125,6 +121,7 @@ public class FirebaseManager implements DatabaseManager {
                 userLogin,
                 startNotesPosition,
                 lastNoteFromTheLastDownload);
+        queryToDownloadNotes.keepSynced(true);
         queryToDownloadNotes.addListenerForSingleValueEvent(
                 getValueEventListenerToDownloadNotes(startNotesPosition));
     }

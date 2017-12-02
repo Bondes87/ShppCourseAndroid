@@ -36,7 +36,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         Log.d(LOG_TAG, "onSelectedChanged()");
         if (viewHolder != null) {
             final View foregroundView =
-                    ((NoteAdapter.NoteHolder) viewHolder).cardViewForeground;
+                    ((NoteAdapter.NoteHolder) viewHolder).constraintLayoutForeground;
             getDefaultUIUtil().onSelected(foregroundView);
         }
     }
@@ -48,7 +48,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
                                 boolean isCurrentlyActive) {
         Log.d(LOG_TAG, "onChildDrawOver()");
         final View foregroundView =
-                ((NoteAdapter.NoteHolder) viewHolder).cardViewForeground;
+                ((NoteAdapter.NoteHolder) viewHolder).constraintLayoutForeground;
         getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView,
                 dX, dY, actionState, isCurrentlyActive);
     }
@@ -57,7 +57,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         Log.d(LOG_TAG, "clearView()");
         final View foregroundView =
-                ((NoteAdapter.NoteHolder) viewHolder).cardViewForeground;
+                ((NoteAdapter.NoteHolder) viewHolder).constraintLayoutForeground;
         getDefaultUIUtil().clearView(foregroundView);
     }
 
@@ -68,7 +68,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
                             boolean isCurrentlyActive) {
         Log.d(LOG_TAG, "onChildDraw()");
         final View foregroundView =
-                ((NoteAdapter.NoteHolder) viewHolder).cardViewForeground;
+                ((NoteAdapter.NoteHolder) viewHolder).constraintLayoutForeground;
         getDefaultUIUtil().onDraw(c, recyclerView, foregroundView,
                 dX, dY, actionState, isCurrentlyActive);
     }
