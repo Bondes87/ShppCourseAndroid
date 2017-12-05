@@ -135,7 +135,7 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onSuccess() {
                 Log.d(LOG_TAG, "onSuccess()");
-                progressBarRegisterUser.setVisibility(View.GONE);
+                progressBarRegisterUser.setVisibility(View.INVISIBLE);
                 SharedPreferencesManager
                         .getSharedPreferencesManager()
                         .saveInformationAboutUser(
@@ -154,7 +154,7 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onFailed() {
                 Log.d(LOG_TAG, "onFailed()");
-                progressBarRegisterUser.setVisibility(View.GONE);
+                progressBarRegisterUser.setVisibility(View.INVISIBLE);
                 editTextLogin.setError(getString(R.string.error_login_is_busy));
                 editTextLogin.requestFocus();
             }

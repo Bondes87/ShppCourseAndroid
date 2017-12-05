@@ -121,7 +121,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onSuccess() {
                 Log.d(LOG_TAG, "onSuccess()");
-                progressBarLoginUser.setVisibility(View.GONE);
+                progressBarLoginUser.setVisibility(View.INVISIBLE);
                 SharedPreferencesManager
                         .getSharedPreferencesManager()
                         .saveInformationAboutUser(
@@ -140,7 +140,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onFailed() {
                 Log.d(LOG_TAG, "onFailed()");
-                progressBarLoginUser.setVisibility(View.GONE);
+                progressBarLoginUser.setVisibility(View.INVISIBLE);
                 Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                 Util.reportAnError(getView(),
                         getString(R.string.error_invalid_login_or_password));
