@@ -228,11 +228,18 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
                     Snackbar.LENGTH_LONG);
             snackbar.setAction(getString(R.string.button_cancel), view1 -> {
                 noteAdapter.addNote(note, position);
+                if (isStartOrEndNotePosition(position)) {
+                    recyclerViewNotesList.scrollToPosition(position);
+                }
                 databaseManager.addNote(note);
             });
             snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
             snackbar.show();
         }
+    }
+
+    private boolean isStartOrEndNotePosition(int currentPosition) {
+        return currentPosition == 0 || currentPosition == noteAdapter.getItemCount() - 1;
     }
 
     @NonNull
