@@ -95,14 +95,18 @@ public class NoteAdapter extends
 
     public void setEnabledFooter(boolean enabled) {
         isEnabledFooter = enabled;
-        notifyDataSetChanged();
+        if (enabled){
+            notifyItemInserted(notesList.size());
+        }else {
+            notifyItemRemoved(notesList.size()-1);
+        }
     }
 
     public void addNotes(List<Note> notes) {
         Log.d(LOG_TAG, "addNotes()");
         Util.checkForNull(notes);
         notesList.addAll(notes);
-        notifyDataSetChanged();
+        notifyItemRangeInserted(notesList.size(), notes.size());
     }
 
     public void addNote(Note note) {
@@ -115,14 +119,13 @@ public class NoteAdapter extends
         Log.d(LOG_TAG, "addNote()");
         Util.checkForNull(note);
         notesList.add(position, note);
-        notifyDataSetChanged();
+        notifyItemInserted(position);
     }
 
-    public void deleteNote(Note note) {
+    public void deleteNote(int notePosition) {
         Log.d(LOG_TAG, "deleteNote()");
-        Util.checkForNull(note);
-        notesList.remove(note);
-        notifyDataSetChanged();
+        notesList.remove(notePosition);
+        notifyItemRemoved(notePosition);
     }
 
     public Note getNote(int position) {

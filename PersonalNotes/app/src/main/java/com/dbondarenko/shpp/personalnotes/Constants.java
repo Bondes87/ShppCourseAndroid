@@ -37,8 +37,9 @@ public class Constants {
     public static final String KEY_FOR_RESULT_WITH_LIST = "KeyForResultWithList";
     public static final String KEY_FOR_BOOLEAN_RESULT = "KeyForBooleanResult";
 
-    // The key for getting a note from the arguments of the fragment.
+    // The keys for getting a note and note position from the arguments of the fragment.
     public static final String KEY_NOTE = "KeyNote";
+    public static final String KEY_NOTE_POSITION = "KeyNotePosition";
 
     // The patterns for displaying the date and time on the screen.
     public static final String PATTERN_DATETIME = "MMM dd yyyy, HH:mm";
@@ -61,7 +62,7 @@ public class Constants {
 
     // The minimum number of items to have below your current scroll position
     // before loading more.
-    public static final int VISIBLE_THRESHOLD = 5;
+    public static final int VISIBLE_THRESHOLD = 10;
     public static final int MAXIMUM_COUNT_OF_NOTES_TO_LOAD = 20;
 
     // The identifiers of holders type.

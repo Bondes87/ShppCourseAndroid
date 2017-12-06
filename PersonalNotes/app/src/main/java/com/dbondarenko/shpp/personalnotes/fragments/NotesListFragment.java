@@ -21,6 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -44,6 +46,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 public class NotesListFragment extends Fragment implements OnListItemClickListener {
 
@@ -120,6 +124,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.KEY_NOTE,
                 (Parcelable) noteAdapter.getNote(position));
+        bundle.putInt(Constants.KEY_NOTE_POSITION, position);
         noteFragment.setArguments(bundle);
         showNoteFragment(noteFragment);
     }
@@ -140,10 +145,9 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         noteAdapter.addNote(note);
     }
 
-    public void deleteNoteFromAdapter(Note note) {
+    public void deleteNoteFromAdapter(int notePosition) {
         Log.d(LOG_TAG, "deleteNoteFromAdapter()");
-        Util.checkForNull(note);
-        noteAdapter.deleteNote(note);
+        noteAdapter.deleteNote(notePosition);
     }
 
     private void initActionBar() {
@@ -160,16 +164,46 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         recyclerViewNotesList.setItemAnimator(new DefaultItemAnimator());
         recyclerViewNotesList.addItemDecoration(getMarginDecoration());
         recyclerViewNotesList.setAdapter(noteAdapter);
-        recyclerViewNotesList.addOnScrollListener(
-                new OnEndlessRecyclerScrollListener() {
-                    @Override
-                    public void onLoadMore() {
-                        Log.d(LOG_TAG, "onLoadMore()");
-                        downloadNotes(noteAdapter.getItemCount());
-                    }
-                });
+        recyclerViewNotesList.addOnScrollListener(getEndlessRecyclerScrollListener());
         new ItemTouchHelper(getRecyclerItemTouchHelper())
                 .attachToRecyclerView(recyclerViewNotesList);
+    }
+
+    @NonNull
+    private OnEndlessRecyclerScrollListener getEndlessRecyclerScrollListener() {
+        return new OnEndlessRecyclerScrollListener() {
+            @Override
+            public void onLoadMore() {
+                Log.d(LOG_TAG, "onLoadMore()");
+                downloadNotes(noteAdapter.getItemCount());
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState != SCROLL_STATE_IDLE) {
+                    hideFloatingActionButtonAddNote();
+                } else {
+                    showFloatingActionButtonAddNote();
+                }
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        };
+    }
+
+    private void showFloatingActionButtonAddNote() {
+        floatingActionButtonAddNote.animate()
+                .translationY(0)
+                .alpha(1)
+                .setInterpolator(new DecelerateInterpolator())
+                .start();
+    }
+
+    private void hideFloatingActionButtonAddNote() {
+        floatingActionButtonAddNote.animate()
+                .y(((View) floatingActionButtonAddNote.getParent()).getHeight())
+                .alpha(0)
+                .setInterpolator(new AccelerateInterpolator())
+                .start();
     }
 
     @NonNull
@@ -178,7 +212,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         return new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,
                 (viewHolder, direction, position) -> {
                     Note note = noteAdapter.getNote(position);
-                    noteAdapter.deleteNote(note);
+                    noteAdapter.deleteNote(position);
                     databaseManager.deleteNote(note);
                     reportOnDeletingNote(note, position);
                 });

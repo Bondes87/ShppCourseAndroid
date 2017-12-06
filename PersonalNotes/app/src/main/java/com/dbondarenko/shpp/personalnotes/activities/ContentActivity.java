@@ -51,11 +51,10 @@ public class ContentActivity extends AppCompatActivity implements OnEventNoteLis
     }
 
     @Override
-    public void onDeleteNote(Note note) {
-        Util.checkForNull(note);
+    public void onDeleteNote(int notePosition) {
         NotesListFragment notesListFragment = (NotesListFragment)
                 getSupportFragmentManager()
                         .findFragmentByTag(Constants.TAG_OF_NOTES_LIST_FRAGMENT);
-        notesListFragment.deleteNoteFromAdapter(note);
+        notesListFragment.deleteNoteFromAdapter(notePosition);
     }
 }

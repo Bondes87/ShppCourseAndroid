@@ -51,6 +51,7 @@ public class NoteFragment extends Fragment {
     private DatabaseManager databaseManager;
     private Note note;
     private long datetime;
+    private int notePosition;
 
     public NoteFragment() {
     }
@@ -71,7 +72,8 @@ public class NoteFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            note = getArguments().getParcelable(Constants.KEY_NOTE);
+            note = bundle.getParcelable(Constants.KEY_NOTE);
+            notePosition = bundle.getInt(Constants.KEY_NOTE_POSITION);
         }
         Util.enableBackStackButton(
                 ((AppCompatActivity) getContext()).getSupportActionBar(),
@@ -174,7 +176,7 @@ public class NoteFragment extends Fragment {
     private void deleteNote() {
         Log.d(LOG_TAG, "deleteNote()");
         if (note != null) {
-            onEventNoteListener.onDeleteNote(note);
+            onEventNoteListener.onDeleteNote(notePosition);
             databaseManager.deleteNote(note);
         }
     }

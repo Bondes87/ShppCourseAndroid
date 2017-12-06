@@ -10,5 +10,5 @@ public interface OnEventNoteListener {
 
     void onAddNote(Note note);
 
-    void onDeleteNote(Note note);
+    void onDeleteNote(int notePosition);
 }
