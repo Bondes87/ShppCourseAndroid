@@ -19,3 +19,21 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Remove Logging statements
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+}
+
+# For Butterknife:
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+
+# Version 8
+-keep class **_ViewBinding { *; }
+-keepclasseswithmembernames class * { @butterknife.* <fields>; }
+-keepclasseswithmembernames class * { @butterknife.* <methods>; }
+
+# For Firebase:
+-keepattributes Signature
+-keepclassmembers class com.dbondarenko.shpp.personalnotes.models.** { *; }
