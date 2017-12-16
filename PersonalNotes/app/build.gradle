@@ -12,6 +12,7 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
@@ -55,5 +56,16 @@ dependencies {
     // Room
     compile 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+
+    // Espresso and Junit
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
 }
 apply plugin: 'com.google.gms.google-services'
