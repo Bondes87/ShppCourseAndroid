@@ -84,6 +84,7 @@ public class RegisterFragment extends Fragment {
                 if (databaseManager instanceof FirebaseManager &&
                         !Util.isInternetConnectionAvailable(
                                 getContext().getApplicationContext())) {
+                    Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                     Util.reportAnError(getView(),
                             getString(R.string.error_no_internet_connection));
                     return;
