@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
@@ -28,6 +29,9 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
+import static android.support.test.espresso.action.ViewActions.swipeLeft;
+import static android.support.test.espresso.action.ViewActions.swipeUp;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
@@ -40,6 +44,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.runner.lifecycle.Stage.RESUMED;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.startsWith;
 
 /**
  * File: ApplicationUITest.java
@@ -48,20 +54,8 @@ import static org.hamcrest.Matchers.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class ApplicationUITest {
-    private static final String INCORRECT_LOGIN = "linux";
-    private static final String INCORRECT_PASSWORD = "123456";
 
-    private static final String INCORRECT_LOGIN_WRONG_FORMAT = "a.n,droid";
-    private static final String INCORRECT_PASSWORD_WRONG_FORMAT = "1.2,3456789";
 
-    private static final String INCORRECT_LOGIN_INSUFFICIENT_CHARACTERS = "mvp";
-    private static final String INCORRECT_PASSWORD_INSUFFICIENT_CHARACTERS = "mvvm";
-
-    private static final String CORRECT_LOGIN = "android";
-    private static final String CORRECT_PASSWORD = "123456789";
-
-    private static final String USED_LOGIN = "bondes";
-    private static final String USED_PASSWORD = "12345678";
     private static String[] notesTexts;
 
     @Rule
@@ -100,10 +94,10 @@ public class ApplicationUITest {
         runToMainActivity();
         ViewInteraction editTextLogin = getViewInteraction(R.id.editTextLogin);
         editTextLogin.check(matches(isDisplayed()))
-                .perform(typeText(INCORRECT_LOGIN));
+                .perform(typeText(ConstantsTest.INCORRECT_LOGIN));
         makePause();
         setScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        editTextLogin.check(matches(withText(INCORRECT_LOGIN)));
+        editTextLogin.check(matches(withText(ConstantsTest.INCORRECT_LOGIN)));
         makePause();
     }
 
@@ -138,15 +132,15 @@ public class ApplicationUITest {
         runToRegisterWindow();
         ViewInteraction editTextLogin = getViewInteraction(R.id.editTextLogin);
         editTextLogin.check(matches(isDisplayed()))
-                .perform(typeText(CORRECT_LOGIN));
+                .perform(typeText(ConstantsTest.CORRECT_LOGIN));
         ViewInteraction editTextPassword = getViewInteraction(R.id.editTextPassword);
         editTextPassword.check(matches(isDisplayed()))
-                .perform(typeText(CORRECT_PASSWORD));
+                .perform(typeText(ConstantsTest.CORRECT_PASSWORD));
         makePause();
         setScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         makePause();
-        editTextLogin.check(matches(withText(CORRECT_LOGIN)));
-        editTextPassword.check(matches(withText(CORRECT_PASSWORD)));
+        editTextLogin.check(matches(withText(ConstantsTest.CORRECT_LOGIN)));
+        editTextPassword.check(matches(withText(ConstantsTest.CORRECT_PASSWORD)));
         makePause();
     }
 
@@ -163,12 +157,7 @@ public class ApplicationUITest {
     public void testPressingBackButtonToLoginFromRegisterWindow() {
         runToMainActivity();
         runToRegisterWindow();
-        onView(allOf(isAssignableFrom(ImageView.class),
-                withParent(isAssignableFrom(Toolbar.class)),
-                withContentDescription(R.string.abc_action_bar_up_description)))
-                .check(matches(isDisplayed()))
-                .perform(click());
-        makePause();
+        checkPressingBackButton();
         getViewInteraction(R.id.buttonLogIn).check(matches(isDisplayed()));
     }
 
@@ -202,6 +191,106 @@ public class ApplicationUITest {
         checkLoginUserWithCorrectCredentials(true);
     }
 
+    @Test
+    public void testAddNoteUsedSQL() {
+        testLoginUserWithCorrectCredentialsUsedSQL();
+        if (getActivityInstance() instanceof ContentActivity) {
+            for (String noteText : notesTexts) {
+                checkAddNote(noteText);
+                getViewInteraction(R.id.floatingActionButtonAddNote)
+                        .check(matches(isDisplayed()));
+            }
+        }
+    }
+
+    @Test
+    public void testCorrectDisplayingNotesInListUsedSQL() {
+        testLoginUserWithCorrectCredentialsUsedSQL();
+        checkCorrectDisplayingNotesInList();
+    }
+
+    @Test
+    public void testPressingBackButtonToNotesListFromNoteWindowUsedSQL() {
+        testLoginUserWithCorrectCredentialsUsedSQL();
+        checkPressingBackButtonToNotesListFromNoteWindow();
+    }
+
+    @Test
+    public void testPressingLogOutButtonUsedSQL() {
+        testLoginUserWithCorrectCredentialsUsedSQL();
+        checkPressingLogOutButton();
+    }
+
+    @Test
+    public void testFloatingActionButtonAnimationsUsedSQL() {
+        testLoginUserWithCorrectCredentialsUsedSQL();
+        checkFloatingActionButtonAnimations();
+    }
+
+    @Test
+    public void testChangeNoteUsedSQL() {
+        testLoginUserWithCorrectCredentialsUsedSQL();
+        checkChangeNote(0);
+        makePause();
+        checkChangeNote(16);
+        makePause();
+        checkChangeNote(4);
+        makePause();
+        checkChangeNote(14);
+        makePause();
+    }
+
+    @Test
+    public void testDeleteNoteUsedSQL() {
+        testLoginUserWithCorrectCredentialsUsedSQL();
+        checkDeleteNote(16);
+        makePause();
+        checkDeleteNote(12);
+        makePause();
+        checkDeleteNoteUsedSwipe(0);
+        makePause();
+        checkDeleteNoteUsedSwipe(4);
+    }
+
+    @Test
+    public void testUndoDeleteNoteUsedSQL() {
+        testLoginUserWithCorrectCredentialsUsedSQL();
+        checkUndoDeleteNoteUsedSwipe(0);
+        makePause();
+        checkUndoDeleteNote(16);
+        makePause();
+        checkUndoDeleteNoteUsedSwipe(4);
+        makePause();
+        checkUndoDeleteNote(12);
+        makePause();
+    }
+
+    @Test
+    public void testAddEmptyNoteUsedSQL() {
+        testLoginUserWithCorrectCredentialsUsedSQL();
+        checkAddNote("");
+        getViewInteraction(getStringForResources(R.string.error_note_is_empty))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testSavingNoteTextWhenChangedScreenOrientationUsedSQL() {
+        testLoginUserWithCorrectCredentialsUsedSQL();
+        checkAddNote("ScreenOrientation");
+        ViewInteraction recyclerViewNotesList =
+                getViewInteraction(R.id.recyclerViewNotesList);
+        checkDisplayViewInteraction(recyclerViewNotesList);
+        clickOnRecyclerViewItem(recyclerViewNotesList, 0);
+        ViewInteraction editTextMessage = getViewInteraction(R.id.editTextMessage);
+        checkDisplayViewInteraction(editTextMessage);
+        setScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        makePause();
+        editTextMessage.check(matches(withText("ScreenOrientation")));
+        setScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        makePause();
+        editTextMessage.check(matches(withText("ScreenOrientation")));
+    }
+
     private static Activity getActivityInstance() {
         final Activity[] activity = new Activity[1];
         InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> {
@@ -216,6 +305,175 @@ public class ApplicationUITest {
         return activity[0];
     }
 
+    private void checkUndoDeleteNoteUsedSwipe(int notePosition) {
+        checkDeleteNoteUsedSwipe(notePosition);
+
+        makePause();
+        onView(withId(android.support.design.R.id.snackbar_action))
+                .check(matches(isDisplayed())).perform(click());
+    }
+
+    private void checkUndoDeleteNote(int notePosition) {
+        ViewInteraction recyclerViewNotesList =
+                getViewInteraction(R.id.recyclerViewNotesList);
+        checkDisplayViewInteraction(recyclerViewNotesList);
+
+        clickOnRecyclerViewItem(recyclerViewNotesList, notePosition);
+
+        clickDeleteNoteButton();
+
+        getViewInteraction(getStringForResources(R.string.text_delete_note))
+                .check(matches(isDisplayed()));
+        makePause();
+        getViewInteraction(android.R.id.button2).check(matches(isDisplayed()))
+                .perform(click());
+        checkPressingBackButton();
+        makePause();
+        checkDisplayViewInteraction(recyclerViewNotesList);
+    }
+
+    private void checkDeleteNoteUsedSwipe(int notePosition) {
+        ViewInteraction recyclerViewNotesList =
+                getViewInteraction(R.id.recyclerViewNotesList);
+        checkDisplayViewInteraction(recyclerViewNotesList);
+        recyclerViewNotesList.perform(RecyclerViewActions.scrollToPosition(notePosition - 1));
+        makePause();
+        swipeOnRecyclerViewItem(recyclerViewNotesList, notePosition);
+    }
+
+    private void checkDeleteNote(int notePosition) {
+        ViewInteraction recyclerViewNotesList =
+                getViewInteraction(R.id.recyclerViewNotesList);
+        checkDisplayViewInteraction(recyclerViewNotesList);
+        recyclerViewNotesList.perform(RecyclerViewActions.scrollToPosition(notePosition));
+        clickOnRecyclerViewItem(recyclerViewNotesList, notePosition);
+
+        clickDeleteNoteButton();
+
+        getViewInteraction(getStringForResources(R.string.text_delete_note))
+                .check(matches(isDisplayed()));
+        makePause();
+        getViewInteraction(android.R.id.button1).check(matches(isDisplayed()))
+                .perform(click());
+        makePause();
+        checkDisplayViewInteraction(recyclerViewNotesList);
+        clickOnRecyclerViewItem(recyclerViewNotesList, notePosition);
+        String deletedNoteMessage = notesTexts[notesTexts.length - notePosition - 1];
+        getViewInteraction(R.id.editTextMessage).check(matches(not(
+                withText(deletedNoteMessage))));
+        checkPressingBackButton();
+    }
+
+    private void clickDeleteNoteButton() {
+        ViewInteraction itemDeleteNote = getViewInteraction(R.id.itemDeleteNote);
+        checkDisplayViewInteraction(itemDeleteNote);
+        itemDeleteNote.perform(click());
+    }
+
+    private void checkChangeNote(int notePosition) {
+        ViewInteraction recyclerViewNotesList =
+                getViewInteraction(R.id.recyclerViewNotesList);
+        checkDisplayViewInteraction(recyclerViewNotesList);
+        clickOnRecyclerViewItem(recyclerViewNotesList, notePosition);
+        ViewInteraction editTextMessage = getViewInteraction(R.id.editTextMessage);
+        ViewInteraction itemSaveNote = getViewInteraction(R.id.itemSaveNote);
+        checkDisplayViewInteraction(editTextMessage, itemSaveNote);
+        editTextMessage.perform(clearText(), typeText(ConstantsTest.NEW_TEXT_NOTE));
+        notesTexts[notePosition] = ConstantsTest.NEW_TEXT_NOTE;
+        itemSaveNote.perform(click());
+        closeSoftKeyboard();
+        makePause();
+        checkDisplayViewInteraction(recyclerViewNotesList);
+        clickOnRecyclerViewItem(recyclerViewNotesList, notePosition);
+        checkDisplayViewInteraction(editTextMessage);
+        editTextMessage.check(matches(withText(ConstantsTest.NEW_TEXT_NOTE)));
+        checkPressingBackButton();
+    }
+
+    private void checkFloatingActionButtonAnimations() {
+        ViewInteraction recyclerViewNotesList =
+                getViewInteraction(R.id.recyclerViewNotesList);
+        checkDisplayViewInteraction(recyclerViewNotesList);
+        ViewInteraction floatingActionButtonAddNote =
+                getViewInteraction(R.id.floatingActionButtonAddNote);
+        checkDisplayViewInteraction(floatingActionButtonAddNote);
+        recyclerViewNotesList.perform(swipeUp());
+        floatingActionButtonAddNote.check(matches(not(isDisplayed())));
+        makePause();
+        recyclerViewNotesList.perform(swipeDown());
+        floatingActionButtonAddNote.check(matches(not(isDisplayed())));
+        makePause();
+        checkDisplayViewInteraction(floatingActionButtonAddNote);
+    }
+
+    private void checkPressingLogOutButton() {
+        runToMainActivity();
+        getViewInteraction(R.id.buttonLogIn).check(matches(isDisplayed()));
+    }
+
+    private void checkAddNote(String noteText) {
+        getViewInteraction(R.id.floatingActionButtonAddNote)
+                .check(matches(isDisplayed()))
+                .perform(click());
+        ViewInteraction editTextMessage = getViewInteraction(R.id.editTextMessage);
+        ViewInteraction itemSaveNote = getViewInteraction(R.id.itemSaveNote);
+        checkDisplayViewInteraction(editTextMessage, itemSaveNote);
+        editTextMessage.perform(typeText(noteText));
+        itemSaveNote.perform(click());
+        closeSoftKeyboard();
+    }
+
+    private void checkCorrectDisplayingNotesInList() {
+        ViewInteraction recyclerViewNotesList =
+                getViewInteraction(R.id.recyclerViewNotesList);
+        checkDisplayViewInteraction(recyclerViewNotesList);
+        for (int i = 0; i < notesTexts.length; i += 5) {
+            clickOnRecyclerViewItem(recyclerViewNotesList, i);
+            makePause();
+            onView(withText(startsWith(notesTexts[notesTexts.length - i - 1])))
+                    .check(matches(isDisplayed()));
+            checkPressingBackButton();
+        }
+    }
+
+    private void clickOnRecyclerViewItem(ViewInteraction recyclerViewNotesList,
+                                         int itemPosition) {
+        recyclerViewNotesList.perform(RecyclerViewActions
+                .actionOnItemAtPosition(itemPosition, click()));
+    }
+
+    private void swipeOnRecyclerViewItem(ViewInteraction recyclerViewNotesList,
+                                         int itemPosition) {
+        recyclerViewNotesList.perform(RecyclerViewActions
+                .actionOnItemAtPosition(itemPosition, swipeLeft()));
+    }
+
+    private void checkPressingBackButtonToNotesListFromNoteWindow() {
+        ViewInteraction recyclerViewNotesList =
+                getViewInteraction(R.id.recyclerViewNotesList);
+        checkDisplayViewInteraction(recyclerViewNotesList);
+        clickOnRecyclerViewItem(recyclerViewNotesList, 0);
+        onView(withText(startsWith(notesTexts[notesTexts.length - 1])))
+                .check(matches(isDisplayed()));
+        checkPressingBackButton();
+        makePause();
+        ViewInteraction floatingActionButtonAddNote =
+                getViewInteraction(R.id.floatingActionButtonAddNote);
+        checkDisplayViewInteraction(floatingActionButtonAddNote);
+        floatingActionButtonAddNote.perform(click());
+        checkPressingBackButton();
+        checkDisplayViewInteraction(floatingActionButtonAddNote);
+    }
+
+    private void checkPressingBackButton() {
+        onView(allOf(isAssignableFrom(ImageView.class),
+                withParent(isAssignableFrom(Toolbar.class)),
+                withContentDescription(R.string.abc_action_bar_up_description)))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        makePause();
+    }
+
     private void checkLoginUserWithCorrectCredentials(boolean isUsedFirebase) {
         ViewInteraction editTextLogin = getViewInteraction(R.id.editTextLogin);
         ViewInteraction editTextPassword = getViewInteraction(R.id.editTextPassword);
@@ -223,8 +481,8 @@ public class ApplicationUITest {
 
         checkDisplayViewInteraction(editTextLogin, editTextPassword, buttonLogin);
 
-        editTextLogin.perform(typeText(CORRECT_LOGIN));
-        editTextPassword.perform(typeText(CORRECT_PASSWORD));
+        editTextLogin.perform(typeText(ConstantsTest.CORRECT_LOGIN));
+        editTextPassword.perform(typeText(ConstantsTest.CORRECT_PASSWORD));
         closeSoftKeyboard();
         makePause();
         buttonLogin.perform(click());
@@ -253,9 +511,9 @@ public class ApplicationUITest {
         checkDisplayViewInteraction(editTextLogin, editTextPassword,
                 editTextConfirmedPassword, buttonRegister);
 
-        editTextLogin.perform(typeText(CORRECT_LOGIN));
-        editTextPassword.perform(typeText(CORRECT_PASSWORD));
-        editTextConfirmedPassword.perform(typeText(CORRECT_PASSWORD));
+        editTextLogin.perform(typeText(ConstantsTest.CORRECT_LOGIN));
+        editTextPassword.perform(typeText(ConstantsTest.CORRECT_PASSWORD));
+        editTextConfirmedPassword.perform(typeText(ConstantsTest.CORRECT_PASSWORD));
         closeSoftKeyboard();
         makePause();
         buttonRegister.perform(click());
@@ -378,23 +636,23 @@ public class ApplicationUITest {
             ViewInteraction editTextLogin, ViewInteraction editTextPassword,
             ViewInteraction editTextConfirmedPassword, ViewInteraction buttonRegister) {
         clearTextViewInteraction(editTextLogin, editTextPassword, editTextConfirmedPassword);
-        editTextLogin.perform(typeText(USED_LOGIN));
-        editTextPassword.perform(typeText(CORRECT_PASSWORD));
+        editTextLogin.perform(typeText(ConstantsTest.USED_LOGIN));
+        editTextPassword.perform(typeText(ConstantsTest.CORRECT_PASSWORD));
         editTextConfirmedPassword.perform(
-                typeText(CORRECT_PASSWORD));
+                typeText(ConstantsTest.CORRECT_PASSWORD));
         closeSoftKeyboard();
         buttonRegister.perform(click());
-        editTextLogin.check(matches(withText(USED_LOGIN)));
+        editTextLogin.check(matches(withText(ConstantsTest.USED_LOGIN)));
     }
 
     private void checkPasswordMatchingInCredentialsWhenRegister(
             ViewInteraction editTextLogin, ViewInteraction editTextPassword,
             ViewInteraction editTextConfirmedPassword, ViewInteraction buttonRegister) {
         clearTextViewInteraction(editTextLogin, editTextPassword, editTextConfirmedPassword);
-        editTextLogin.perform(typeText(USED_LOGIN));
-        editTextPassword.perform(typeText(USED_PASSWORD));
+        editTextLogin.perform(typeText(ConstantsTest.USED_LOGIN));
+        editTextPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
         editTextConfirmedPassword.perform(
-                typeText(CORRECT_PASSWORD));
+                typeText(ConstantsTest.CORRECT_PASSWORD));
         closeSoftKeyboard();
         buttonRegister.perform(click());
         editTextConfirmedPassword.check(matches(hasErrorText(getStringForResources(
@@ -422,10 +680,10 @@ public class ApplicationUITest {
             (ViewInteraction editTextLogin, ViewInteraction editTextPassword,
              ViewInteraction editTextConfirmedPassword, ViewInteraction buttonRegister) {
         clearTextViewInteraction(editTextLogin, editTextPassword, editTextConfirmedPassword);
-        editTextLogin.perform(typeText(USED_LOGIN));
-        editTextPassword.perform(typeText(USED_PASSWORD));
+        editTextLogin.perform(typeText(ConstantsTest.USED_LOGIN));
+        editTextPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
         editTextConfirmedPassword.perform(
-                typeText(INCORRECT_PASSWORD_INSUFFICIENT_CHARACTERS));
+                typeText(ConstantsTest.INCORRECT_PASSWORD_INSUFFICIENT_CHARACTERS));
         closeSoftKeyboard();
         buttonRegister.perform(click());
         editTextConfirmedPassword.check(matches(hasErrorText(getStringForResources(
@@ -436,9 +694,9 @@ public class ApplicationUITest {
             ViewInteraction editTextLogin, ViewInteraction editTextPassword,
             ViewInteraction editTextConfirmedPassword, ViewInteraction buttonRegister) {
         clearTextViewInteraction(editTextLogin, editTextPassword, editTextConfirmedPassword);
-        editTextLogin.perform(typeText(USED_LOGIN));
-        editTextPassword.perform(typeText(INCORRECT_PASSWORD_INSUFFICIENT_CHARACTERS));
-        editTextConfirmedPassword.perform(typeText(USED_PASSWORD));
+        editTextLogin.perform(typeText(ConstantsTest.USED_LOGIN));
+        editTextPassword.perform(typeText(ConstantsTest.INCORRECT_PASSWORD_INSUFFICIENT_CHARACTERS));
+        editTextConfirmedPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
         closeSoftKeyboard();
         buttonRegister.perform(click());
         editTextPassword.check(matches(hasErrorText(getStringForResources(
@@ -450,9 +708,9 @@ public class ApplicationUITest {
             ViewInteraction editTextLogin, ViewInteraction editTextPassword,
             ViewInteraction editTextConfirmedPassword, ViewInteraction buttonRegister) {
         clearTextViewInteraction(editTextLogin, editTextPassword, editTextConfirmedPassword);
-        editTextLogin.perform(typeText(INCORRECT_LOGIN_INSUFFICIENT_CHARACTERS));
-        editTextPassword.perform(typeText(USED_PASSWORD));
-        editTextConfirmedPassword.perform(typeText(USED_PASSWORD));
+        editTextLogin.perform(typeText(ConstantsTest.INCORRECT_LOGIN_INSUFFICIENT_CHARACTERS));
+        editTextPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
+        editTextConfirmedPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
         closeSoftKeyboard();
         buttonRegister.perform(click());
         editTextLogin.check(matches(hasErrorText(getStringForResources(
@@ -480,9 +738,9 @@ public class ApplicationUITest {
             ViewInteraction editTextLogin, ViewInteraction editTextPassword,
             ViewInteraction editTextConfirmedPassword, ViewInteraction buttonRegister) {
         clearTextViewInteraction(editTextLogin, editTextPassword, editTextConfirmedPassword);
-        editTextLogin.perform(typeText(USED_LOGIN));
-        editTextPassword.perform(typeText(USED_PASSWORD));
-        editTextConfirmedPassword.perform(typeText(INCORRECT_PASSWORD_WRONG_FORMAT));
+        editTextLogin.perform(typeText(ConstantsTest.USED_LOGIN));
+        editTextPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
+        editTextConfirmedPassword.perform(typeText(ConstantsTest.INCORRECT_PASSWORD_WRONG_FORMAT));
         closeSoftKeyboard();
         buttonRegister.perform(click());
         editTextConfirmedPassword.check(matches(hasErrorText(getStringForResources(
@@ -493,9 +751,9 @@ public class ApplicationUITest {
             ViewInteraction editTextLogin, ViewInteraction editTextPassword,
             ViewInteraction editTextConfirmedPassword, ViewInteraction buttonRegister) {
         clearTextViewInteraction(editTextLogin, editTextPassword, editTextConfirmedPassword);
-        editTextLogin.perform(typeText(USED_LOGIN));
-        editTextPassword.perform(typeText(INCORRECT_PASSWORD_WRONG_FORMAT));
-        editTextConfirmedPassword.perform(typeText(USED_PASSWORD));
+        editTextLogin.perform(typeText(ConstantsTest.USED_LOGIN));
+        editTextPassword.perform(typeText(ConstantsTest.INCORRECT_PASSWORD_WRONG_FORMAT));
+        editTextConfirmedPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
         closeSoftKeyboard();
         buttonRegister.perform(click());
         editTextPassword.check(matches(hasErrorText(getStringForResources(
@@ -507,9 +765,9 @@ public class ApplicationUITest {
             ViewInteraction editTextLogin, ViewInteraction editTextPassword,
             ViewInteraction editTextConfirmedPassword, ViewInteraction buttonRegister) {
         clearTextViewInteraction(editTextLogin, editTextPassword, editTextConfirmedPassword);
-        editTextLogin.perform(typeText(INCORRECT_LOGIN_WRONG_FORMAT));
-        editTextPassword.perform(typeText(USED_PASSWORD));
-        editTextConfirmedPassword.perform(typeText(USED_PASSWORD));
+        editTextLogin.perform(typeText(ConstantsTest.INCORRECT_LOGIN_WRONG_FORMAT));
+        editTextPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
+        editTextConfirmedPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
         closeSoftKeyboard();
         buttonRegister.perform(click());
         editTextLogin.check(matches(hasErrorText(getStringForResources(
@@ -541,8 +799,8 @@ public class ApplicationUITest {
             ViewInteraction editTextLogin, ViewInteraction editTextPassword,
             ViewInteraction editTextConfirmedPassword, ViewInteraction buttonRegister) {
         clearTextViewInteraction(editTextLogin, editTextPassword, editTextConfirmedPassword);
-        editTextLogin.perform(typeText(USED_LOGIN));
-        editTextPassword.perform(typeText(USED_PASSWORD));
+        editTextLogin.perform(typeText(ConstantsTest.USED_LOGIN));
+        editTextPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
         closeSoftKeyboard();
         buttonRegister.perform(click());
         editTextConfirmedPassword.check(matches(hasErrorText(getStringForResources(
@@ -553,8 +811,8 @@ public class ApplicationUITest {
             ViewInteraction editTextLogin, ViewInteraction editTextPassword,
             ViewInteraction editTextConfirmedPassword, ViewInteraction buttonRegister) {
         clearTextViewInteraction(editTextLogin, editTextPassword, editTextConfirmedPassword);
-        editTextLogin.perform(typeText(USED_LOGIN));
-        editTextConfirmedPassword.perform(typeText(USED_PASSWORD));
+        editTextLogin.perform(typeText(ConstantsTest.USED_LOGIN));
+        editTextConfirmedPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
         closeSoftKeyboard();
         buttonRegister.perform(click());
         editTextPassword.check(matches(hasErrorText(getStringForResources(
@@ -565,8 +823,8 @@ public class ApplicationUITest {
             ViewInteraction editTextLogin, ViewInteraction editTextPassword,
             ViewInteraction editTextConfirmedPassword, ViewInteraction buttonRegister) {
         clearTextViewInteraction(editTextLogin, editTextPassword, editTextConfirmedPassword);
-        editTextPassword.perform(typeText(USED_PASSWORD));
-        editTextConfirmedPassword.perform(typeText(USED_PASSWORD));
+        editTextPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
+        editTextConfirmedPassword.perform(typeText(ConstantsTest.USED_PASSWORD));
         closeSoftKeyboard();
         buttonRegister.perform(click());
         editTextLogin.check(matches(hasErrorText(getStringForResources(
@@ -594,8 +852,8 @@ public class ApplicationUITest {
                                                     ViewInteraction editTextPassword,
                                                     ViewInteraction buttonLogIn) {
         clearTextViewInteraction(editTextLogin, editTextPassword);
-        editTextLogin.perform(typeText(INCORRECT_LOGIN));
-        editTextPassword.perform(typeText(INCORRECT_PASSWORD));
+        editTextLogin.perform(typeText(ConstantsTest.INCORRECT_LOGIN));
+        editTextPassword.perform(typeText(ConstantsTest.INCORRECT_PASSWORD));
         closeSoftKeyboard();
         buttonLogIn.perform(click());
         onView(allOf(withId(android.support.design.R.id.snackbar_text),
@@ -607,7 +865,7 @@ public class ApplicationUITest {
                                           ViewInteraction editTextPassword,
                                           ViewInteraction buttonLogIn) {
         clearTextViewInteraction(editTextLogin);
-        editTextPassword.perform(typeText(INCORRECT_PASSWORD));
+        editTextPassword.perform(typeText(ConstantsTest.INCORRECT_PASSWORD));
         closeSoftKeyboard();
         buttonLogIn.perform(click());
         editTextLogin.check(matches(isFocusable()));
@@ -618,7 +876,7 @@ public class ApplicationUITest {
     private void checkEmptyPasswordWhenLogin(ViewInteraction editTextLogin,
                                              ViewInteraction editTextPassword,
                                              ViewInteraction buttonLogIn) {
-        editTextLogin.perform(typeText(INCORRECT_LOGIN));
+        editTextLogin.perform(typeText(ConstantsTest.INCORRECT_LOGIN));
         closeSoftKeyboard();
         buttonLogIn.perform(click());
         editTextPassword.check(matches(isFocusable()));
