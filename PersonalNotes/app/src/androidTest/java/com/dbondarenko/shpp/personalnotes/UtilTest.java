@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 
 import java.util.Collection;
+import java.util.Random;
 
 import static android.support.test.runner.lifecycle.Stage.RESUMED;
 
@@ -42,5 +43,17 @@ class UtilTest {
 
     static String getStringForResources(int stringId) {
         return getActivityInstance().getString(stringId);
+    }
+
+    static String getRandomString(int length) {
+        StringBuilder result = new StringBuilder();
+        while (length > 0) {
+            Random rand = new Random();
+            result.append(ConstantsTest.CHARACTERS_FOR_CREATING_LOGIN_OR_PASSWORD
+                    .charAt(rand.nextInt(
+                            ConstantsTest.CHARACTERS_FOR_CREATING_LOGIN_OR_PASSWORD.length())));
+            length--;
+        }
+        return result.toString();
     }
 }

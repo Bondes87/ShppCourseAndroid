@@ -4,8 +4,6 @@ import android.content.pm.ActivityInfo;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
 
 import com.dbondarenko.shpp.personalnotes.activities.MainActivity;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
@@ -20,17 +18,14 @@ import org.junit.runners.MethodSorters;
 
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
-import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isFocusable;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
@@ -40,12 +35,11 @@ import static org.hamcrest.Matchers.allOf;
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class LoginUserUITest {
+public class LoginUserUITest extends BaseUITest {
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule =
             new ActivityTestRule<>(MainActivity.class);
-    private boolean isSelectedFirebase;
 
     @Before
     public void prepareForTesting() {
@@ -56,7 +50,7 @@ public class LoginUserUITest {
     }
 
     @Test
-    public void test1IncorrectCredentialsUsingSQLite() {
+    public void test01IncorrectCredentialsUsingSQLite() {
         runToMainActivity();
         useSQLite();
         UtilTest.makePause();
@@ -65,7 +59,7 @@ public class LoginUserUITest {
     }
 
     @Test
-    public void test2SavingCredentialsWhenChangedScreenOrientationUsingSQLite() {
+    public void test02SavingCredentialsWhenChangedScreenOrientationUsingSQLite() {
         runToMainActivity();
         useSQLite();
         UtilTest.makePause();
@@ -74,7 +68,7 @@ public class LoginUserUITest {
     }
 
     @Test
-    public void test3RunToRegisterWindowUsedSQLite() {
+    public void test03RunToRegisterWindowUsedSQLite() {
         runToMainActivity();
         useSQLite();
         UtilTest.makePause();
@@ -83,7 +77,7 @@ public class LoginUserUITest {
     }
 
     @Test
-    public void test4LoginUserWithCorrectCredentialsUsedSQLite() {
+    public void test04LoginUserWithCorrectCredentialsUsedSQLite() {
         runToMainActivity();
         useSQLite();
         UtilTest.makePause();
@@ -92,63 +86,39 @@ public class LoginUserUITest {
     }
 
     @Test
-    public void test5IncorrectCredentialsUsingFirebase() {
+    public void test05IncorrectCredentialsUsingFirebase() {
         runToMainActivity();
         useFirebase();
         UtilTest.makePause();
         checkIncorrectCredentials();
+        UtilTest.makePause();
     }
 
     @Test
-    public void test6SavingCredentialsWhenChangedScreenOrientationUsingFirebase() {
+    public void test06SavingCredentialsWhenChangedScreenOrientationUsingFirebase() {
         runToMainActivity();
         useFirebase();
         UtilTest.makePause();
         checkSavingCredentialsWhenChangedScreenOrientation();
+        UtilTest.makePause();
     }
 
     @Test
-    public void test7RunToRegisterWindowUsedFirebase() {
+    public void test07RunToRegisterWindowUsedFirebase() {
         runToMainActivity();
         useFirebase();
         UtilTest.makePause();
         runToRegisterWindow();
+        UtilTest.makePause();
     }
 
     @Test
-    public void test8LoginUserWithCorrectCredentialsUsedFirebase() {
+    public void test08LoginUserWithCorrectCredentialsUsedFirebase() {
         runToMainActivity();
         useFirebase();
         UtilTest.makePause();
         checkLoginUserWithCorrectCredentials();
-    }
-
-    private void runToMainActivity() {
-        if (!(UtilTest.getActivityInstance() instanceof MainActivity)) {
-            ViewInteraction actionMenuItemLogOut = onView(withId(R.id.itemLogOut));
-            actionMenuItemLogOut.check(matches(isDisplayed()));
-            actionMenuItemLogOut.perform(click());
-        }
-    }
-
-    private void useSQLite() {
-        if (isSelectedFirebase) {
-            openActionBarOverflowOrOptionsMenu(UtilTest.getActivityInstance());
-            selectMenuItem(R.string.text_use_local_database);
-        }
-    }
-
-    private void useFirebase() {
-        if (!isSelectedFirebase) {
-            openActionBarOverflowOrOptionsMenu(UtilTest.getActivityInstance());
-            selectMenuItem(R.string.text_use_server_database);
-        }
-    }
-
-    private void selectMenuItem(int stringId) {
-        onView(withText(UtilTest.getStringForResources(stringId)))
-                .check(matches(isDisplayed()))
-                .perform(click());
+        UtilTest.makePause();
     }
 
     private void checkSavingCredentialsWhenChangedScreenOrientation() {
@@ -199,13 +169,13 @@ public class LoginUserUITest {
         editTextPassword.check(matches(isDisplayed()));
         buttonLogIn.check(matches(isDisplayed()));
 
-        checkEmptyCredentialsWhenLogin(editTextLogin, buttonLogIn);
+        checkEmptyCredentials(editTextLogin, buttonLogIn);
         UtilTest.makePause();
 
-        checkEmptyPasswordWhenLogin(editTextLogin, editTextPassword, buttonLogIn);
+        checkEmptyPassword(editTextLogin, editTextPassword, buttonLogIn);
         UtilTest.makePause();
 
-        checkEmptyLoginWhenLogin(editTextLogin, editTextPassword, buttonLogIn);
+        checkEmptyLogin(editTextLogin, editTextPassword, buttonLogIn);
         UtilTest.makePause();
 
         if (isSelectedFirebase &&
@@ -232,16 +202,9 @@ public class LoginUserUITest {
                 .check(matches(isDisplayed()));
     }
 
-    private void checkSnackbarWithMessageNoInternetConection() {
-        onView(allOf(withId(android.support.design.R.id.snackbar_text),
-                withText(UtilTest.getStringForResources(
-                        R.string.error_no_internet_connection))))
-                .check(matches(isDisplayed()));
-    }
-
-    private void checkEmptyLoginWhenLogin(ViewInteraction editTextLogin,
-                                          ViewInteraction editTextPassword,
-                                          ViewInteraction buttonLogIn) {
+    private void checkEmptyLogin(ViewInteraction editTextLogin,
+                                 ViewInteraction editTextPassword,
+                                 ViewInteraction buttonLogIn) {
         editTextLogin.perform(clearText());
         editTextPassword.perform(typeText(ConstantsTest.INCORRECT_PASSWORD));
         closeSoftKeyboard();
@@ -253,9 +216,9 @@ public class LoginUserUITest {
                         R.string.error_empty_field))));
     }
 
-    private void checkEmptyPasswordWhenLogin(ViewInteraction editTextLogin,
-                                             ViewInteraction editTextPassword,
-                                             ViewInteraction buttonLogIn) {
+    private void checkEmptyPassword(ViewInteraction editTextLogin,
+                                    ViewInteraction editTextPassword,
+                                    ViewInteraction buttonLogIn) {
         editTextLogin.perform(typeText(ConstantsTest.INCORRECT_LOGIN));
         closeSoftKeyboard();
 
@@ -266,26 +229,12 @@ public class LoginUserUITest {
                         R.string.error_empty_field))));
     }
 
-    private void checkEmptyCredentialsWhenLogin(ViewInteraction editTextLogin,
-                                                ViewInteraction buttonLogIn) {
+    private void checkEmptyCredentials(ViewInteraction editTextLogin,
+                                       ViewInteraction buttonLogIn) {
         buttonLogIn.perform(click());
 
         editTextLogin.check(matches(isFocusable()))
                 .check(matches(hasErrorText(UtilTest.getStringForResources(
                         R.string.error_empty_field))));
-    }
-
-    private void runToRegisterWindow() {
-        onView(withId((R.id.buttonRegister)))
-                .check(matches(isDisplayed()))
-                .perform(click());
-
-        onView(withId((R.id.editTextConfirmedPassword)))
-                .check(matches(isDisplayed()));
-
-        onView(allOf(isAssignableFrom(TextView.class),
-                withParent(isAssignableFrom(Toolbar.class))))
-                .check(matches(withText(UtilTest.getStringForResources(
-                        R.string.text_register))));
     }
 }
