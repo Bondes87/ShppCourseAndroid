@@ -1,10 +1,15 @@
-package com.dbondarenko.shpp.personalnotes;
+package com.dbondarenko.shpp.personalnotes.tests;
 
 import android.content.pm.ActivityInfo;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.dbondarenko.shpp.personalnotes.BaseUITest;
+import com.dbondarenko.shpp.personalnotes.ConstantsTest;
+import com.dbondarenko.shpp.personalnotes.R;
+import com.dbondarenko.shpp.personalnotes.UtilTest;
 import com.dbondarenko.shpp.personalnotes.activities.MainActivity;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 import com.dbondarenko.shpp.personalnotes.utils.Util;
@@ -122,7 +127,7 @@ public class LoginUserUITest extends BaseUITest {
     }
 
     private void checkSavingCredentialsWhenChangedScreenOrientation() {
-        ViewInteraction editTextLogin = onView(withId((R.id.editTextLogin)));
+        ViewInteraction editTextLogin = onView(ViewMatchers.withId((R.id.editTextLogin)));
         editTextLogin.check(matches(isDisplayed()))
                 .perform(typeText(ConstantsTest.INCORRECT_LOGIN));
 
@@ -131,32 +136,6 @@ public class LoginUserUITest extends BaseUITest {
         UtilTest.setScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         editTextLogin.check(matches(withText(ConstantsTest.INCORRECT_LOGIN)));
-    }
-
-    private void checkLoginUserWithCorrectCredentials() {
-        onView(withId((R.id.editTextLogin)))
-                .check(matches(isDisplayed()))
-                .perform(typeText(ConstantsTest.CORRECT_LOGIN));
-
-        onView(withId((R.id.editTextPassword)))
-                .check(matches(isDisplayed()))
-                .perform(typeText(ConstantsTest.CORRECT_PASSWORD));
-
-        closeSoftKeyboard();
-        UtilTest.makePause();
-
-        onView(withId((R.id.buttonLogIn)))
-                .check(matches(isDisplayed()))
-                .perform(click());
-
-        if (isSelectedFirebase &&
-                !(Util.isInternetConnectionAvailable(UtilTest.getActivityInstance()))) {
-            checkSnackbarWithMessageNoInternetConection();
-        } else {
-            UtilTest.makePause();
-            onView(withId((R.id.floatingActionButtonAddNote)))
-                    .check(matches(isDisplayed()));
-        }
     }
 
     private void checkIncorrectCredentials() {

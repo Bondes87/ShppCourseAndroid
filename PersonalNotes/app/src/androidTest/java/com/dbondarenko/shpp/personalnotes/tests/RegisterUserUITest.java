@@ -1,10 +1,15 @@
-package com.dbondarenko.shpp.personalnotes;
+package com.dbondarenko.shpp.personalnotes.tests;
 
 import android.content.pm.ActivityInfo;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.dbondarenko.shpp.personalnotes.BaseUITest;
+import com.dbondarenko.shpp.personalnotes.ConstantsTest;
+import com.dbondarenko.shpp.personalnotes.R;
+import com.dbondarenko.shpp.personalnotes.UtilTest;
 import com.dbondarenko.shpp.personalnotes.activities.MainActivity;
 import com.dbondarenko.shpp.personalnotes.utils.SharedPreferencesManager;
 import com.dbondarenko.shpp.personalnotes.utils.Util;
@@ -96,7 +101,7 @@ public class RegisterUserUITest extends BaseUITest {
     }
 
     @Test
-    public void test05RegisterUserWithCorrectCredentialsUsedSQL() {
+    public void test05RegisterUserWithCorrectCredentialsUsedSQLite() {
         runToMainActivity();
         runToRegisterWindow();
         useSQLite();
@@ -152,7 +157,7 @@ public class RegisterUserUITest extends BaseUITest {
     private void checkPressingBackButtonToLoginFromRegisterWindow() {
         checkPressingBackButton();
         UtilTest.makePause();
-        onView(withId(R.id.buttonLogIn)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.buttonLogIn)).check(matches(isDisplayed()));
     }
 
     private void checkInfoDialogWindows() {
