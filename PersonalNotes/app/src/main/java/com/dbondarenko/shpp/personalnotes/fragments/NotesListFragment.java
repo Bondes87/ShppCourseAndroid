@@ -235,8 +235,8 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         if (view != null) {
             Snackbar snackbar = Snackbar.make(view,
                     getString(R.string.text_delete_note),
-                    Snackbar.LENGTH_LONG);
-            snackbar.setAction(getString(R.string.button_cancel), view1 -> {
+                    Snackbar.LENGTH_SHORT);
+            snackbar.setAction(getString(R.string.button_cancel), cancelButton -> {
                 noteAdapter.addNote(note, position);
                 if (isStartOrEndNotePosition(position)) {
                     recyclerViewNotesList.scrollToPosition(position);
@@ -319,17 +319,12 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         return new OnGetDataListener() {
             @Override
             public void onStart() {
-                if (noteAdapter != null) {
-                    noteAdapter.setEnabledFooter(true);
-                }
+                noteAdapter.setEnabledFooter(true);
             }
 
             @Override
             public void onSuccess() {
                 Log.d(LOG_TAG, "onSuccess()");
-                if (noteAdapter != null) {
-                    noteAdapter.setEnabledFooter(false);
-                }
             }
 
             @Override

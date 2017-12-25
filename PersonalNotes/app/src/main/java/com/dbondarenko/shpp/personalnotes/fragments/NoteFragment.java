@@ -116,8 +116,8 @@ public class NoteFragment extends Fragment {
                             getString(R.string.error_note_is_empty));
                     return true;
                 }
+                Util.hideSoftKeyboard(getContext(), getView());
                 saveNote(message);
-                Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());
                 return true;
             case R.id.itemDeleteNote:
                 Util.hideSoftKeyboard(getContext().getApplicationContext(), getView());

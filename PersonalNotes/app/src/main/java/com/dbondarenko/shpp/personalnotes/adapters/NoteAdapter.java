@@ -93,13 +93,14 @@ public class NoteAdapter extends
     }
 
     public void setEnabledFooter(boolean enabled) {
-        isEnabledFooter = enabled;
-        //Todo: see this if()
         if (enabled) {
             notifyItemInserted(notesList.size());
         } else {
-            notifyItemRemoved(notesList.size() - 1);
+            if (isEnabledFooter) {
+                notifyItemRemoved(notesList.size() - 1);
+            }
         }
+        isEnabledFooter = enabled;
     }
 
     public void addNotes(List<Note> notes) {

@@ -73,7 +73,6 @@ public class FirebaseManager implements DatabaseManager {
     public void addNote(Note note) {
         Log.d(LOG_TAG, "addNote()");
         Util.checkForNull(note);
-        onGetDataListener.onStart();
         firebaseDatabase.getReference()
                 .child(Constants.TABLE_NOTES)
                 .child(note.getUserLogin())
@@ -86,7 +85,6 @@ public class FirebaseManager implements DatabaseManager {
     public void updateNote(Note note) {
         Log.d(LOG_TAG, "updateNote()");
         Util.checkForNull(note);
-        onGetDataListener.onStart();
         firebaseDatabase.getReference()
                 .child(Constants.TABLE_NOTES)
                 .child(note.getUserLogin())
@@ -100,7 +98,6 @@ public class FirebaseManager implements DatabaseManager {
     public void deleteNote(Note note) {
         Log.d(LOG_TAG, "deleteNote()");
         Util.checkForNull(note);
-        onGetDataListener.onStart();
         firebaseDatabase.getReference()
                 .child(Constants.TABLE_NOTES)
                 .child(note.getUserLogin())
@@ -114,7 +111,8 @@ public class FirebaseManager implements DatabaseManager {
                              Note lastNoteFromTheLastDownload) {
         Log.d(LOG_TAG, "requestNotes()");
         Util.checkForNull(userLogin);
-        if (startNotesPosition != 0) {
+        if (startNotesPosition != 0 &&
+                startNotesPosition % Constants.MAXIMUM_COUNT_OF_NOTES_TO_LOAD == 0) {
             onGetDataListener.onStart();
         }
         Query queryToDownloadNotes = getQueryToDownloadNotes(
