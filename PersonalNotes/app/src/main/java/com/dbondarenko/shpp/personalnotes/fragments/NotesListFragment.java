@@ -34,6 +34,7 @@ import com.dbondarenko.shpp.personalnotes.database.DatabaseManager;
 import com.dbondarenko.shpp.personalnotes.database.firebase.FirebaseManager;
 import com.dbondarenko.shpp.personalnotes.database.sqlitebase.SQLiteManager;
 import com.dbondarenko.shpp.personalnotes.helpers.RecyclerItemTouchHelper;
+import com.dbondarenko.shpp.personalnotes.listeners.OnEmptyListListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnEndlessRecyclerScrollListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnGetDataListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnListItemClickListener;
@@ -49,7 +50,7 @@ import butterknife.OnClick;
 
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
-public class NotesListFragment extends Fragment implements OnListItemClickListener {
+public class NotesListFragment extends Fragment implements OnListItemClickListener, OnEmptyListListener {
 
     private static final String LOG_TAG = NotesListFragment.class.getSimpleName();
 
@@ -85,14 +86,7 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         ButterKnife.bind(this, viewContent);
         initActionBar();
         initDatabase();
-        if (noteAdapter == null) {
-            downloadNotes(0);
-            progressBarNotesLoading.setVisibility(View.VISIBLE);
-        }
         initRecyclerView();
-        if (noteAdapter != null && noteAdapter.getItemCount() == 0) {
-            textViewNoNotes.setVisibility(View.VISIBLE);
-        }
         return viewContent;
     }
 
@@ -129,6 +123,15 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         showNoteFragment(noteFragment);
     }
 
+    @Override
+    public void onEmptyList(boolean isEmptyList) {
+        if (isEmptyList) {
+            textViewNoNotes.setVisibility(View.VISIBLE);
+        } else {
+            textViewNoNotes.setVisibility(View.INVISIBLE);
+        }
+    }
+
     @OnClick(R.id.floatingActionButtonAddNote)
     public void onViewClicked() {
         Log.d(LOG_TAG, "onViewClicked()");
@@ -138,10 +141,6 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
     public void addNoteToAdapter(Note note) {
         Log.d(LOG_TAG, "addNoteToAdapter()");
         Util.checkForNull(note);
-        if (noteAdapter == null) {
-            noteAdapter = new NoteAdapter(null,
-                    NotesListFragment.this);
-        }
         noteAdapter.addNote(note);
     }
 
@@ -163,10 +162,21 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
         recyclerViewNotesList.setLayoutManager(linearLayoutManager);
         recyclerViewNotesList.setItemAnimator(new DefaultItemAnimator());
         recyclerViewNotesList.addItemDecoration(getMarginDecoration());
+        initRecyclerViewAdapter();
         recyclerViewNotesList.setAdapter(noteAdapter);
         recyclerViewNotesList.addOnScrollListener(getEndlessRecyclerScrollListener());
         new ItemTouchHelper(getRecyclerItemTouchHelper())
                 .attachToRecyclerView(recyclerViewNotesList);
+    }
+
+    private void initRecyclerViewAdapter() {
+        if (noteAdapter == null) {
+            noteAdapter = new NoteAdapter(
+                    NotesListFragment.this,
+                    NotesListFragment.this);
+            downloadNotes(0);
+            progressBarNotesLoading.setVisibility(View.VISIBLE);
+        }
     }
 
     @NonNull
@@ -319,9 +329,6 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
                 Log.d(LOG_TAG, "onSuccess()");
                 if (noteAdapter != null) {
                     noteAdapter.setEnabledFooter(false);
-                    if (noteAdapter.getItemCount() == 0) {
-                        textViewNoNotes.setVisibility(View.VISIBLE);
-                    }
                 }
             }
 
@@ -330,28 +337,17 @@ public class NotesListFragment extends Fragment implements OnListItemClickListen
                 Log.d(LOG_TAG, "onSuccess()");
                 Util.checkForNull(notes);
                 progressBarNotesLoading.setVisibility(View.GONE);
-                textViewNoNotes.setVisibility(View.GONE);
-                if (noteAdapter == null) {
-                    noteAdapter = new NoteAdapter(notes,
-                            NotesListFragment.this);
-                    if (recyclerViewNotesList != null) {
-                        recyclerViewNotesList.setAdapter(noteAdapter);
-                    }
-                } else {
-                    noteAdapter.addNotes(notes);
-                    noteAdapter.setEnabledFooter(false);
-                }
+                noteAdapter.addNotes(notes);
+                noteAdapter.setEnabledFooter(false);
             }
 
             @Override
             public void onFailed() {
                 Log.d(LOG_TAG, "onFailed()");
                 progressBarNotesLoading.setVisibility(View.GONE);
-                if (noteAdapter == null || noteAdapter.getItemCount() == 0) {
-                    textViewNoNotes.setVisibility(View.VISIBLE);
-                }
                 if (noteAdapter != null) {
                     noteAdapter.setEnabledFooter(false);
+                    noteAdapter.checkListForEmptiness();
                 }
             }
         };

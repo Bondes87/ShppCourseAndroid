@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.dbondarenko.shpp.personalnotes.Constants;
 import com.dbondarenko.shpp.personalnotes.R;
+import com.dbondarenko.shpp.personalnotes.listeners.OnEmptyListListener;
 import com.dbondarenko.shpp.personalnotes.listeners.OnListItemClickListener;
 import com.dbondarenko.shpp.personalnotes.models.Note;
 import com.dbondarenko.shpp.personalnotes.utils.Util;
@@ -31,18 +32,16 @@ public class NoteAdapter extends
     private static final String LOG_TAG = NoteAdapter.class.getSimpleName();
 
     private OnListItemClickListener onListItemClickListener;
+    private OnEmptyListListener onEmptyListListener;
     private List<Note> notesList;
     private boolean isEnabledFooter;
 
-    public NoteAdapter(List<Note> notesList,
-                       OnListItemClickListener onListItemClickListener) {
-        Util.checkForNull(onListItemClickListener);
-        if (notesList == null) {
-            this.notesList = new ArrayList<>();
-        } else {
-            this.notesList = notesList;
-        }
+    public NoteAdapter(OnListItemClickListener onListItemClickListener,
+                       OnEmptyListListener onEmptyListListener) {
+        Util.checkForNull(onListItemClickListener, onEmptyListListener);
+        notesList = new ArrayList<>();
         this.onListItemClickListener = onListItemClickListener;
+        this.onEmptyListListener = onEmptyListListener;
     }
 
     @Override
@@ -95,10 +94,11 @@ public class NoteAdapter extends
 
     public void setEnabledFooter(boolean enabled) {
         isEnabledFooter = enabled;
-        if (enabled){
+        //Todo: see this if()
+        if (enabled) {
             notifyItemInserted(notesList.size());
-        }else {
-            notifyItemRemoved(notesList.size()-1);
+        } else {
+            notifyItemRemoved(notesList.size() - 1);
         }
     }
 
@@ -107,6 +107,7 @@ public class NoteAdapter extends
         Util.checkForNull(notes);
         notesList.addAll(notes);
         notifyItemRangeInserted(notesList.size(), notes.size());
+        checkListForEmptiness();
     }
 
     public void addNote(Note note) {
@@ -120,12 +121,14 @@ public class NoteAdapter extends
         Util.checkForNull(note);
         notesList.add(position, note);
         notifyItemInserted(position);
+        checkListForEmptiness();
     }
 
     public void deleteNote(int notePosition) {
         Log.d(LOG_TAG, "deleteNote()");
         notesList.remove(notePosition);
         notifyItemRemoved(notePosition);
+        checkListForEmptiness();
     }
 
     public Note getNote(int position) {
@@ -134,6 +137,10 @@ public class NoteAdapter extends
             return notesList.get(position - 1);
         }
         return notesList.get(position);
+    }
+
+    public void checkListForEmptiness() {
+        onEmptyListListener.onEmptyList(notesList.size() == 0);
     }
 
     private boolean isPositionFooter(int position) {
