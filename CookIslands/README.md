@@ -1,0 +1,1 @@
+The application displays information about the islands of Cook (shows a web page about the island). To view the information you need to login or go through a simple registration. Information about the user is stored in the SQLite.
