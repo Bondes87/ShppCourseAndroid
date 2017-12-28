@@ -1,0 +1,1 @@
+The application screen shows three views. The role of views is played by fragments. In the options menu, you can enable/disable the view. Using the context menu, you can change the color of the view (the used color is not in the menu).
